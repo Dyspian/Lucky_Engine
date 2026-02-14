@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import Logo from './Logo';
 import { Sparkles } from 'lucide-react';
+import AnimatedOrb from './AnimatedOrb'; // Import the new AnimatedOrb component
 
 interface HeroLuckProps {
   onGenerateClick: () => void;
@@ -15,7 +16,6 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
   const logoUrl = "https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/lucky_engine.png";
 
   const handleGenerateClick = () => {
-    // Confetti effect moved to GeneratorPanel
     onGenerateClick();
   };
 
@@ -35,8 +35,6 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 }
   };
-
-  // Removed cloverChipVariants as the floating clovers are being removed
   
   return (
     <motion.section
@@ -86,15 +84,9 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
 
         {/* Right: Luck Core Visual */}
         <div className="relative flex items-center justify-center h-80 lg:h-auto min-h-[300px] z-0">
-          <motion.div
-            className="absolute w-64 h-64 md:w-80 md:h-80 rounded-full bg-gradient-to-br from-primary/30 to-indigo-700/30 blur-2xl opacity-70"
-            animate={{
-              scale: [1, 1.05, 1],
-              opacity: [0.7, 0.8, 0.7],
-              rotate: [0, 10, 0]
-            }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          />
+          {/* Replaced the old motion.div with the new AnimatedOrb component */}
+          <AnimatedOrb className="w-64 h-64 md:w-80 md:h-80" /> 
+          
           <motion.div
             className="absolute w-56 h-56 md:w-72 md:h-72 rounded-full border border-primary/50 flex items-center justify-center"
             initial={{ scale: 0.8, opacity: 0 }}
@@ -110,8 +102,6 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
               />
             </div>
           </motion.div>
-
-          {/* Removed Floating Clover Chips */}
         </div>
       </div>
     </motion.section>
