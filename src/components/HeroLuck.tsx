@@ -58,7 +58,7 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
           <motion.div variants={itemVariants} className="pt-6 flex flex-col sm:flex-row justify-center md:justify-start gap-4">
             <Button
               onClick={handleGenerateClick}
-              className="bg-emerald hover:bg-emerald-hover text-primary-foreground font-bold py-7 px-8 rounded-md text-lg emerald-glow transition-all duration-120 active:scale-[0.98] relative overflow-hidden group"
+              className="bg-emerald hover:bg-emerald-hover text-primary-foreground font-bold py-5 px-6 sm:py-7 sm:px-8 rounded-md text-base sm:text-lg emerald-glow transition-all duration-120 active:scale-[0.98] relative overflow-hidden group"
               style={{ boxShadow: '0 4px 15px rgba(0, 200, 83, 0.4), 0 1px 5px rgba(0, 200, 83, 0.2)' }}
             >
               <Sparkles className="absolute -top-2 -left-2 w-8 h-8 text-white/20 group-hover:rotate-180 transition-transform duration-700" />
@@ -68,7 +68,7 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
             <Button
               onClick={handleHowItWorksClick}
               variant="outline"
-              className="border-border/20 text-secondary-foreground hover:bg-card/50 hover:text-foreground font-semibold py-7 px-8 rounded-md text-lg transition-colors duration-120"
+              className="border-border/20 text-secondary-foreground hover:bg-card/50 hover:text-foreground font-semibold py-5 px-6 sm:py-7 sm:px-8 rounded-md text-base sm:text-lg transition-colors duration-120"
             >
               Hoe het werkt
             </Button>

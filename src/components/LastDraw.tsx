@@ -26,9 +26,9 @@ const LastDraw = ({ draw }: LastDrawProps) => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6"> {/* Aangepaste gap */}
           <div>
-            <p className="text-2xl font-bold capitalize mb-1 text-foreground">{formattedDate}</p>
+            <p className="text-xl sm:text-2xl font-bold capitalize mb-1 text-foreground">{formattedDate}</p> {/* Aangepaste tekstgrootte */}
             <p className="text-muted-foreground text-sm">Officiële resultaten van de laatste trekking</p>
           </div>
           <div className="flex flex-wrap gap-2 items-center">

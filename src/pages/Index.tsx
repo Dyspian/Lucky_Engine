@@ -87,7 +87,7 @@ const Index = () => {
       });
       
       setTimeout(() => {
-        document.getElementById('generator-section')?.scrollBy({ top: 200, behavior: 'smooth' }); // Scroll slightly down to show results
+        document.getElementById('results')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Scroll to results section
       }, 100);
     } catch (err) {
       showError("Generatie mislukt. Controleer de instellingen.");
