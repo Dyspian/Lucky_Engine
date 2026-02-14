@@ -21,7 +21,7 @@ const LoadingScreen = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const logoUrl = "https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/lucky_engine.png"; 
+  const logoUrl = "/lucky_engine.png"; // Updated to local asset
 
   return (
     <motion.div 

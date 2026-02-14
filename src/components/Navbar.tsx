@@ -4,7 +4,7 @@ import React from 'react';
 import Logo from './Logo';
 
 const Navbar = () => {
-  const logoUrl = "https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/lucky_engine.png"; 
+  const logoUrl = "/lucky_engine.png"; // Updated to local asset
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border/5 bg-background/80 backdrop-blur-md">

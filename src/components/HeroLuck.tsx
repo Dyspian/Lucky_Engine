@@ -12,7 +12,7 @@ interface HeroLuckProps {
 }
 
 const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
-  const logoUrl = "https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/lucky_engine.png";
+  const logoUrl = "/lucky_engine.png"; // Updated to local asset
 
   const handleGenerateClick = () => {
     onGenerateClick();
