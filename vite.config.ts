@@ -8,12 +8,6 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     proxy: {
-      '/api/euromillions': {
-        target: 'https://euromillions.api.pedromealha.dev',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/euromillions/, ''),
-        secure: false,
-      },
       '/api/apiverve': {
         target: 'https://api.apiverve.com/v1',
         changeOrigin: true,

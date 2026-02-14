@@ -9,9 +9,9 @@ const ApiVerveResponseSchema = z.object({
   error: z.unknown().nullable(),
   data: z.object({
     date: z.string(),
-    numbers: z.array(z.coerce.number()), // Coerce strings to numbers if needed
-    stars: z.array(z.coerce.number()).optional().default([]), // Stars might be named differently or missing
-    bonus: z.array(z.coerce.number()).optional(), // Sometimes stars are called bonus
+    numbers: z.array(z.coerce.number()), 
+    stars: z.array(z.coerce.number()).optional().default([]), 
+    bonus: z.array(z.coerce.number()).optional(), 
     jackpot: z.string().optional(),
     currency: z.string().optional(),
   }).passthrough()
@@ -26,6 +26,7 @@ export async function fetchLatestDrawFromApiVerve() {
   }
 
   try {
+    // Specifically fetching EuroMillions
     const response = await fetch('/api/apiverve/lottery?lottery=euromillions', {
       method: 'GET',
       headers: {
@@ -48,20 +49,23 @@ export async function fetchLatestDrawFromApiVerve() {
 
     const data = result.data.data;
 
-    // Transform to our internal Draw format
-    // Note: APIVerve structure for EuroMillions puts stars in 'stars' or 'bonus'.
-    // We try to be robust here.
-    const stars = (data.stars && data.stars.length > 0) 
-      ? data.stars 
-      : (data.bonus || []);
+    // Handle the stars/bonus ambiguity
+    // EuroMillions always has 2 stars. APIVerve might put them in 'stars' or 'bonus'.
+    let stars = (data.stars && data.stars.length > 0) ? data.stars : (data.bonus || []);
+    
+    // Sort numbers for display consistency
+    const sortedNumbers = [...data.numbers].sort((a, b) => a - b);
+    const sortedStars = [...stars].sort((a, b) => a - b);
+
+    console.log(`[APIVerve] Fetched Live Draw: ${data.date}`);
 
     return {
-      id: 99999, // Temporary ID for the latest live draw
-      draw_id: 99999,
-      date: data.date,
-      numbers: data.numbers,
-      stars: stars,
-      has_winner: false, // API doesn't always strictly say, assume false or unknown
+      id: 999999, // High ID to ensure it appears as recent/unique
+      draw_id: 999999, // Placeholder ID
+      date: data.date, // Should be YYYY-MM-DD
+      numbers: sortedNumbers,
+      stars: sortedStars,
+      has_winner: false, // API doesn't provide this specific boolean reliably
       prizes: []
     };
 

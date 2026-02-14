@@ -1,6 +1,6 @@
 // src/services/euromillions.ts
 
-import { LOCAL_HISTORY } from "@/data/history";
+import { fetchDraws } from "@/lib/euromillions-provider";
 import { Draw } from "@/lib/euromillions/schemas";
 import { z } from "zod";
 import { parseISO, isAfter, isBefore, startOfDay, endOfDay } from "date-fns";
@@ -21,13 +21,15 @@ export const EuromillionsQueryParamsBaseSchema = z.object({
 export type EuromillionsQueryParams = z.infer<typeof EuromillionsQueryParamsBaseSchema>;
 
 /**
- * Retrieves draws from the local archive with filtering.
+ * Retrieves draws using the unified provider (Live API + Local History).
+ * Applies filtering based on query parameters.
  */
 export async function getEuromillionsDraws(params?: EuromillionsQueryParams): Promise<Draw[]> {
-  // Start with full history
-  let results = [...LOCAL_HISTORY];
+  // 1. Fetch unified data (Live + Local)
+  const { draws } = await fetchDraws();
+  let results = [...draws];
 
-  // Apply filters in memory
+  // 2. Apply filters in memory
   if (params) {
     if (params.year) {
       results = results.filter(d => new Date(d.date).getFullYear() === params.year);
