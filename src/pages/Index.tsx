@@ -7,13 +7,15 @@ import { cache } from "@/lib/cache";
 import { buildStats } from "@/lib/stats-engine";
 import { generateTickets, GenerateConfig, Ticket } from "@/lib/generator";
 import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
+import HeroLuck from "@/components/HeroLuck"; // Changed from Hero to HeroLuck
 import GeneratorPanel from "@/components/GeneratorPanel";
 import TicketCard from "@/components/TicketCard";
 import { ExplanationSection, DisclaimerSection } from "@/components/InfoSections";
 import { showSuccess, showError } from "@/utils/toast";
 import { motion, AnimatePresence } from "framer-motion";
 import LoadingScreen from '@/components/LoadingScreen';
+import CloverParticles from '@/components/CloverParticles'; // New import
+import TrustStatsStrip from '@/components/TrustStatsStrip'; // New import
 
 const CACHE_KEY = "draws:v1";
 const TTL_12H = 12 * 60 * 60 * 1000;
@@ -59,7 +61,7 @@ const Index = () => {
       
       // Scroll to results
       setTimeout(() => {
-        document.getElementById('results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.getElementById('generator-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 100);
     } catch (err) {
       showError("Generation failed. Please check settings.");
@@ -68,20 +70,38 @@ const Index = () => {
     }
   };
 
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
     <>
       <AnimatePresence>
         {isDataLoading && !drawsData && <LoadingScreen />}
       </AnimatePresence>
 
-      <div className="min-h-screen bg-background text-foreground selection:bg-primary/30">
+      <div className="relative min-h-screen bg-background text-foreground selection:bg-primary/30">
+        <CloverParticles /> {/* Particle background */}
+        <div className="absolute inset-0 bg-background/80 z-[-1]" /> {/* Dark overlay for readability */}
+
         <Navbar />
         
-        <main className="container mx-auto px-4 pb-24">
-          <Hero />
+        <main className="container mx-auto px-4 pb-24 relative z-10"> {/* Ensure content is above particles */}
+          <HeroLuck
+            onGenerateClick={() => scrollToSection('generator-section')}
+            onHowItWorksClick={() => scrollToSection('explanation-section')}
+          />
+          
+          <TrustStatsStrip />
+
+          {/* Soft glow section divider */}
+          <div className="relative my-16 md:my-24 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent">
+            <div className="absolute inset-x-0 -top-2 h-4 bg-primary/10 blur-md" />
+            <div className="absolute inset-x-0 -bottom-2 h-4 bg-primary/10 blur-md" />
+          </div>
           
           <div className="max-w-4xl mx-auto space-y-24">
-            <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            <section id="generator-section" className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
               <div className="lg:col-span-5 sticky top-24">
                 <GeneratorPanel onGenerate={handleGenerate} isLoading={isGenerating || isDataLoading} />
               </div>
@@ -126,13 +146,15 @@ const Index = () => {
               </div>
             </section>
 
-            <ExplanationSection />
+            <section id="explanation-section"> {/* Added ID for scrolling */}
+              <ExplanationSection />
+            </section>
             
             <DisclaimerSection />
           </div>
         </main>
 
-        <footer className="py-12 border-t border-white/5 text-center">
+        <footer className="py-12 border-t border-white/5 text-center relative z-10">
           <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground/40">
             © 2024 Lucky Engine • Analytical Systems Division
           </p>
