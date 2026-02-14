@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 222 47% 6%; /* Richer deep blue */
+    --background: 220 60% 10%; /* Richer, slightly more vibrant deep blue */
     --foreground: 210 40% 98%;
 
     --card: 222 47% 8%; /* Slightly lighter card background */
@@ -33,6 +33,8 @@
     --ring: 40 95% 55%;
 
     --radius: 1rem; /* Increased border-radius for rounded shapes */
+
+    --particle-green: 142 76% 36%; /* A vibrant green for particles */
   }
 }
 
@@ -43,7 +45,6 @@
   body {
     @apply bg-background text-foreground antialiased selection:bg-primary/30;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-    /* Removed old background-image styles */
     background-attachment: fixed;
   }
 }

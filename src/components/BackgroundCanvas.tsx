@@ -25,7 +25,7 @@ const BackgroundCanvas = () => {
 
     let particles: Particle[] = [];
     const particleCount = 150; // Increased particle count
-    const colors = ['hsl(var(--primary))', 'hsl(var(--muted-foreground))', 'rgba(255,255,255,0.8)'];
+    const colors = ['hsl(var(--particle-green))', 'hsl(var(--primary))', 'rgba(255,255,255,0.8)']; // Green, Gold, White
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
