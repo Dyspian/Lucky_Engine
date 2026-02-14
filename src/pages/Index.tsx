@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useQuery } from "@tanstack/react-query";
 import { fetchDraws, Draw } from "@/lib/euromillions-provider";
 import { cache } from "@/lib/cache";
-import { buildStats, FrequencyData } from "@/lib/stats-engine"; // Import FrequencyData
+import { buildStats, FrequencyData } from "@/lib/stats-engine";
 import { generateTickets, GenerateConfig, Ticket } from "@/lib/generator";
 import Navbar from "@/components/Navbar";
 import HeroLuck from "@/components/HeroLuck";
@@ -14,7 +14,6 @@ import { ExplanationSection, DisclaimerSection } from "@/components/InfoSections
 import { showSuccess, showError } from "@/utils/toast";
 import { motion, AnimatePresence } from "framer-motion";
 import LoadingScreen from '@/components/LoadingScreen';
-import CloverParticles from '@/components/CloverParticles';
 import TrustStatsStrip from '@/components/TrustStatsStrip';
 import LastDraw from '@/components/LastDraw';
 import FrequencyChart from '@/components/FrequencyChart';
@@ -93,7 +92,7 @@ const Index = () => {
       </AnimatePresence>
 
       <div className="relative min-h-screen bg-background text-foreground selection:bg-primary/30">
-        <CloverParticles />
+        {/* Removed CloverParticles component */}
         <div className="absolute inset-0 bg-background/80 z-[-1]" />
 
         <Navbar />
@@ -157,7 +156,7 @@ const Index = () => {
                         ))}
                       </div>
 
-                      <div className="p-6 rounded-2xl bg-primary/[0.03] border border-primary/10 shadow-lg"> {/* Added shadow-lg */}
+                      <div className="p-6 rounded-2xl bg-primary/[0.03] border border-primary/10 shadow-lg">
                         <p className="text-xs text-primary/80 leading-relaxed font-medium italic">
                           {results.explanation}
                         </p>
