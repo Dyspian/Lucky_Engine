@@ -124,7 +124,7 @@ const Index = () => {
         <main className="relative z-10">
           <HeroLuck
             onGenerateClick={() => scrollToSection('generator-section')}
-            onHowItWorksClick={()={() => scrollToSection('explanation-section')}}
+            onHowItWorksClick={() => scrollToSection('explanation-section')}
           />
           
           <TrustStatsStrip />
