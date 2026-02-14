@@ -21,7 +21,7 @@ export const ExplanationSection = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {points.map((p, i) => (
-          <div key={i} className="p-6 rounded-lg bg-card border border-border/20 space-y-2 shadow-lg transition-all duration-120 hover:border-emerald/50 hover:-translate-y-1"
+          <div key={i} className="p-6 rounded-lg bg-card border border-border/20 space-y-2 shadow-lg"
             style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.3), 0 1px 5px rgba(0,0,0,0.1)' }} // Deeper shadow for cards
           >
             <div className="flex items-center gap-2 text-emerald">

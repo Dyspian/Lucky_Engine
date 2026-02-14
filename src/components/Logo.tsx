@@ -24,7 +24,7 @@ const Logo = ({
         src={imageUrl} 
         alt={alt} 
         aria-label={ariaLabel}
-        className={cn("w-auto transition-transform duration-500 ease-in-out group-hover:scale-105", imgClassName)}
+        className={cn("w-auto", imgClassName)}
       />
     </div>
   );

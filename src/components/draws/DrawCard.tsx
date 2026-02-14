@@ -31,7 +31,7 @@ const DrawCard = ({ draw, index }: DrawCardProps) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.4 }}
     >
-      <Card className="bg-card border border-border/20 shadow-xl rounded-lg overflow-hidden transition-all duration-120 hover:border-emerald/50 hover:-translate-y-1"
+      <Card className="bg-card border border-border/20 shadow-xl rounded-lg overflow-hidden"
         style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.3), 0 1px 5px rgba(0,0,0,0.1)' }}
       >
         <CardHeader className="pb-3">
