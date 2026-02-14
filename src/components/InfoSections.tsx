@@ -45,6 +45,7 @@ export const DisclaimerSection = () => {
         <p>
           Lucky Engine is een statistische analysetool die uitsluitend voor informatieve en amusementsdoeleinden wordt aangeboden. 
           De gegenereerde getallen zijn gebaseerd op historische frequentiepatronen en garanderen geen winnende uitkomst.
+          Het weergegeven "slaagkans percentage" is een interne statistische score die de waarschijnlijkheid van een getal of ster in een trekking aangeeft, gebaseerd op onze algoritmen, en is geen voorspelling van daadwerkelijke winst.
         </p>
         <p>
           EuroMillions-trekkingen zijn onafhankelijke gebeurtenissen die worden beheerst door willekeurig toeval. Eerdere prestaties zijn geen indicator voor toekomstige resultaten. 

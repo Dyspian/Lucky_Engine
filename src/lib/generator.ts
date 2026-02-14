@@ -19,6 +19,7 @@ export type GenerateConfig = z.infer<typeof GenerateConfigSchema>;
 export type Ticket = {
   numbers: number[];
   stars: number[];
+  chancePercentage: number; // Nieuwe eigenschap voor het slaagkans percentage
 };
 
 /**
@@ -121,9 +122,29 @@ export function generateTickets(
 
     // Attempt to generate a unique ticket within the batch
     do {
+      const numbers = weightedPickUnique(candidatesMain, 5, rng);
+      const stars = weightedPickUnique(candidatesStars, 2, rng);
+
+      // Calculate chancePercentage
+      const totalNumberScore = numbers.reduce((sum, num) => {
+        const statItem = candidatesMain.find(item => item.value === num);
+        return sum + (statItem?.score || 0);
+      }, 0);
+
+      const totalStarScore = stars.reduce((sum, star) => {
+        const statItem = candidatesStars.find(item => item.value === star);
+        return sum + (statItem?.score || 0);
+      }, 0);
+
+      // Max possible score for 5 numbers + 2 stars is 7 (if all have score 1)
+      const maxPossibleScore = 7; 
+      const rawChance = (totalNumberScore + totalStarScore) / maxPossibleScore;
+      const chancePercentage = Math.round(rawChance * 100); // Scale to 0-100 and round
+
       ticket = {
-        numbers: weightedPickUnique(candidatesMain, 5, rng),
-        stars: weightedPickUnique(candidatesStars, 2, rng)
+        numbers,
+        stars,
+        chancePercentage,
       };
       serialized = `${ticket.numbers.join(',')}|${ticket.stars.join(',')}`;
       attempts++;

@@ -5,7 +5,7 @@ import { Ticket } from "@/lib/generator";
 import Ball from "./Ball";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Copy, Check } from "lucide-react";
+import { Copy, Check, TrendingUp } from "lucide-react"; // Added TrendingUp icon
 import { motion } from "framer-motion";
 import { copyTicketToClipboard } from "@/utils/clipboard";
 import { useState } from "react";
@@ -47,15 +47,21 @@ const TicketCard = ({ ticket, index }: TicketCardProps) => {
                 ))}
               </div>
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full hover:bg-white/5 text-muted-foreground hover:text-primary transition-colors"
-              onClick={handleCopy}
-              aria-label="Kopieer ticket"
-            >
-              {copied ? <Check size={18} className="text-primary" /> : <Copy size={18} />}
-            </Button>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1 text-sm font-semibold text-primary">
+                <TrendingUp size={16} />
+                <span>{ticket.chancePercentage}%</span>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full hover:bg-white/5 text-muted-foreground hover:text-primary transition-colors"
+                onClick={handleCopy}
+                aria-label="Kopieer ticket"
+              >
+                {copied ? <Check size={18} className="text-primary" /> : <Copy size={18} />}
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
