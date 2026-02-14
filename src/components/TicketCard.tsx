@@ -1,14 +1,12 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Ticket } from "@/lib/generator";
 import Ball from "./Ball";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Copy, Check, TrendingUp, ShieldCheck } from "lucide-react";
-import { motion } from "framer-motion";
 import { copyTicketToClipboard } from "@/utils/clipboard";
-import { useState } from "react";
 
 interface TicketCardProps {
   ticket: Ticket;
@@ -25,12 +23,8 @@ const TicketCard = ({ ticket, index }: TicketCardProps) => {
   };
 
   return (
-    <motion.div
-      initial={{ y: 6, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: index * 0.05, duration: 0.3 }}
-    >
-      <Card className="bg-card border border-border/20 overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:border-emerald/50 hover:shadow-xl hover:shadow-emerald/5"
+    <div>
+      <Card className="bg-card border border-border/20 overflow-hidden rounded-lg shadow-lg"
         style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.3), 0 1px 5px rgba(0,0,0,0.1)' }} 
       >
         <CardContent className="p-3 sm:p-4 space-y-3">
@@ -41,11 +35,11 @@ const TicketCard = ({ ticket, index }: TicketCardProps) => {
               </span>
               <div className="flex items-center gap-1 sm:gap-2">
                 {ticket.numbers.map((n, i) => (
-                  <Ball key={`n-${i}`} value={n} delay={index * 0.05 + i * 0.03} />
+                  <Ball key={`n-${i}`} value={n} delay={0} />
                 ))}
                 <div className="w-px h-6 bg-border/50 mx-1 hidden sm:block" />
                 {ticket.stars.map((s, i) => (
-                  <Ball key={`s-${i}`} value={s} variant="star" delay={index * 0.05 + 0.2 + i * 0.03} />
+                  <Ball key={`s-${i}`} value={s} variant="star" delay={0} />
                 ))}
               </div>
             </div>
@@ -81,7 +75,7 @@ const TicketCard = ({ ticket, index }: TicketCardProps) => {
           )}
         </CardContent>
       </Card>
-    </motion.div>
+    </div>
   );
 };
 

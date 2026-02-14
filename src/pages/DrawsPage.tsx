@@ -25,7 +25,6 @@ import { showSuccess, showError } from "@/utils/toast";
 import DrawCard from "@/components/draws/DrawCard";
 import { AnimatePresence, motion } from "framer-motion";
 import BackgroundGrid from "@/components/BackgroundGrid";
-import BackgroundCanvas from "@/components/BackgroundCanvas";
 
 // Extend the base query schema for form validation
 const FilterFormSchema = EuromillionsQueryParamsBaseSchema.extend({
@@ -116,7 +115,6 @@ const DrawsPage = () => {
   return (
     <div className="relative min-h-screen text-foreground selection:bg-emerald/30 font-sans">
       <BackgroundGrid />
-      <BackgroundCanvas />
       <div className="radial-spotlight" />
 
       <Navbar />

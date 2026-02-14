@@ -17,7 +17,6 @@ import LoadingScreen from '@/components/LoadingScreen';
 import TrustStatsStrip from '@/components/TrustStatsStrip';
 import LastDraw from '@/components/LastDraw';
 import FrequencyChart from '@/components/FrequencyChart';
-import BackgroundCanvas from '@/components/BackgroundCanvas';
 import BackgroundGrid from '@/components/BackgroundGrid';
 import { trackEvent } from "@/utils/analytics";
 import { Database, WifiOff, AlertTriangle } from 'lucide-react';
@@ -105,7 +104,6 @@ const Index = () => {
 
       <div className="relative min-h-screen text-foreground selection:bg-emerald/30 font-sans">
         <BackgroundGrid />
-        <BackgroundCanvas />
         <div className="radial-spotlight" />
 
         <Navbar />
@@ -166,7 +164,8 @@ const Index = () => {
                 )}
 
                 <section id="generator-section" className="grid grid-cols-1 lg:col-span-12 gap-6 md:gap-12 items-start pt-12 md:pt-16">
-                  <div className="lg:col-span-5 sticky top-24 z-30">
+                  {/* Changed to lg:sticky so it doesn't stick on mobile */}
+                  <div className="lg:col-span-5 lg:sticky lg:top-24 z-30">
                     <GeneratorPanel onGenerate={handleGenerate} isLoading={isGenerating} />
                   </div>
                   

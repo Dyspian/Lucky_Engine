@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Settings2, Sparkles, ChevronDown, Loader2, Gauge } from "lucide-react";
 import { Period } from "@/lib/stats-engine";
-import confetti from 'canvas-confetti';
 
 interface GeneratorPanelProps {
   onGenerate: (config: any) => void;
@@ -23,7 +22,6 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
   const [recent, setRecent] = useState("50");
   const [riskFactor, setRiskFactor] = useState([1.5]); // Default Balanced
   const [isOpen, setIsOpen] = useState(false);
-  const [isPulsing, setIsPulsing] = useState(false);
 
   const getRiskLabel = (val: number) => {
     if (val > 2.5) return { label: "Conservatief", color: "text-blue-400" };
@@ -34,17 +32,6 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
   const riskInfo = getRiskLabel(riskFactor[0]);
 
   const handleGenerate = () => {
-    setIsPulsing(true);
-    setTimeout(() => setIsPulsing(false), 800); // Pulse duration
-
-    confetti({
-      particleCount: 50,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors: ['#00C853', '#00E676', '#C6A95F'], // Emerald and gold
-      shapes: ['circle', 'square'],
-      scalar: 0.8,
-    });
     onGenerate({
       tickets: tickets[0],
       period,
@@ -55,7 +42,7 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
   };
 
   return (
-    <Card className={`bg-card border border-border/20 shadow-xl rounded-lg transition-all duration-300 ${isPulsing ? 'animate-pulse-emerald' : ''}`}>
+    <Card className="bg-card border border-border/20 shadow-xl rounded-lg">
       <CardHeader className="pb-4 border-b border-border/20">
         <CardTitle className="text-xs font-bold uppercase tracking-extra-wide text-muted-foreground flex items-center gap-2 text-small-caps">
           <Sparkles size={16} className="text-emerald" />

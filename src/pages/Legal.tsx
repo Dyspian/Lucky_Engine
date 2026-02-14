@@ -4,7 +4,6 @@ import React from 'react';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BackgroundGrid from "@/components/BackgroundGrid";
-import BackgroundCanvas from "@/components/BackgroundCanvas";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ShieldAlert, Lock, Scale, FileText } from "lucide-react";
@@ -14,7 +13,6 @@ const Legal = () => {
   return (
     <div className="relative min-h-screen text-foreground selection:bg-emerald/30 font-sans">
       <BackgroundGrid />
-      <BackgroundCanvas />
       <div className="radial-spotlight" />
 
       <Navbar />
