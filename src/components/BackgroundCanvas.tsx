@@ -9,7 +9,7 @@ interface Particle {
   speedX: number;
   speedY: number;
   opacity: number;
-  image: HTMLImageElement | null; // Now holds the image element
+  image: HTMLImageElement | null;
 }
 
 const BackgroundCanvas = () => {
@@ -25,13 +25,14 @@ const BackgroundCanvas = () => {
     if (!ctx) return;
 
     let particles: Particle[] = [];
-    const particleCount = 100; // Adjusted particle count for image performance
+    const particleCount = 200; // Increased particle count for more clovers
 
     // Preload the clover image
     const preloadImage = new Image();
-    preloadImage.src = '/clovereffect.svg'; // Assuming clovereffect.svg is in the public folder
+    preloadImage.src = '/clovereffect.svg'; // Assumes clovereffect.svg is in the public folder
     preloadImage.onload = () => {
       cloverImageRef.current = preloadImage;
+      console.log("Clover image loaded successfully!"); // Confirm image load
       resizeCanvas(); // Initial resize and particle setup after image loads
       animate();
     };
@@ -54,10 +55,10 @@ const BackgroundCanvas = () => {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          size: Math.random() * 10 + 10, // Small size for clovers (10 to 20px)
+          size: Math.random() * 15 + 15, // Larger size for clovers (15 to 30px)
           speedX: (Math.random() - 0.5) * 0.1, // Slower horizontal movement
           speedY: Math.random() * 0.05 + 0.05, // Slower upwards movement
-          opacity: Math.random() * 0.6 + 0.4, // Higher opacity (0.4 to 1.0)
+          opacity: Math.random() * 0.5 + 0.5, // Higher opacity (0.5 to 1.0)
           image: cloverImageRef.current,
         });
       }
@@ -89,12 +90,12 @@ const BackgroundCanvas = () => {
         if (p.y < -p.size) {
           p.y = canvas.height + p.size;
           p.x = Math.random() * canvas.width;
-          p.opacity = Math.random() * 0.6 + 0.4;
+          p.opacity = Math.random() * 0.5 + 0.5;
         }
         if (p.x < -p.size || p.x > canvas.width + p.size) {
           p.x = p.x < -p.size ? canvas.width + p.size : -p.size;
           p.y = Math.random() * canvas.height;
-          p.opacity = Math.random() * 0.6 + 0.4;
+          p.opacity = Math.random() * 0.5 + 0.5;
         }
       });
     };
