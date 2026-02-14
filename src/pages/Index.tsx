@@ -35,66 +35,48 @@ const Index = () => {
     queryFn: async () => {
       const cached = cache.get<Draw[]>(CACHE_KEY);
 
-      // 1. Try to use fresh cache
-      if (cached.source === "cache" && cached.value && cached.value.length > 0) {
-        setHasDrawsError(false);
+      // 1. If any cached data exists (even stale), return it immediately.
+      //    React Query will then refetch in the background if stale.
+      if (cached.value && cached.value.length > 0) {
+        if (cached.source === "fallback") {
+          // Notify user if we're showing stale data
+          showError("Nieuwe trekkinggegevens konden niet worden geladen. Toon verouderde gegevens.");
+        }
+        setHasDrawsError(false); // Assume data is available, even if stale
         setUserFacingErrorMessage("");
         return cached.value;
       }
 
-      // 2. If no fresh cache, try to fetch from API
+      // 2. If no cached data, or cache is empty, then proceed to fetch from API.
       try {
         const fetchedResult = await fetchDraws();
         if (fetchedResult.draws.length === 0) {
-          console.warn("[Index] Fetched 0 draws from API.");
-          // If API returns empty, try to use stale cache
-          if (cached.source === "fallback" && cached.value && cached.value.length > 0) {
-            showError("Nieuwe trekkinggegevens konden niet worden geladen. Toon verouderde gegevens.");
-            setHasDrawsError(false); // We are showing *some* data
-            setUserFacingErrorMessage(""); // Clear specific error message if fallback is used
-            return cached.value;
-          } else {
-            // No fresh data, no stale fallback, API returned empty
-            setHasDrawsError(true);
-            const msg = "Geen EuroMillions trekkinggegevens gevonden. Probeer later opnieuw.";
-            setUserFacingErrorMessage(msg);
-            showError(msg);
-            return [];
-          }
-        } else {
-          // API returned data successfully
-          cache.set(CACHE_KEY, fetchedResult.draws, TTL_12H);
-          setHasDrawsError(false);
-          setUserFacingErrorMessage("");
-          return fetchedResult.draws;
+          throw new ProviderError("API returned no draws.", { source: fetchedResult.source, reason: "empty_response" });
         }
+        cache.set(CACHE_KEY, fetchedResult.draws, TTL_12H);
+        setHasDrawsError(false);
+        setUserFacingErrorMessage("");
+        return fetchedResult.draws;
       } catch (error) {
-        console.error("[Index] Error fetching draws:", error);
-        // If API fetch fails, try to use stale cache
-        if (cached.source === "fallback" && cached.value && cached.value.length > 0) {
-          showError("Fout bij het laden van nieuwe trekkinggegevens. Toon verouderde gegevens.");
-          setHasDrawsError(false); // We are showing *some* data
-          setUserFacingErrorMessage(""); // Clear specific error message if fallback is used
-          return cached.value;
-        } else {
-          // No fresh data, no stale fallback, API fetch failed
-          setHasDrawsError(true);
-          let msg = "Fout bij het laden van EuroMillions trekkinggegevens. Controleer uw internetverbinding of probeer later opnieuw.";
-          if (error instanceof ProviderError) {
-            if (error.details?.reason === "timeout") {
-              msg = `De verbinding met de EuroMillions API is verlopen. Probeer het later opnieuw. (Bron: ${error.details.source})`;
-            } else if (error.details?.reason === "validation_error") {
-              msg = `De EuroMillions API reageerde met een onverwacht formaat. We werken aan een oplossing.`;
-            } else if (error.details?.reason === "network_error") {
-              msg = `Er is een netwerkfout opgetreden bij het verbinden met de EuroMillions API. Controleer uw internetverbinding. (Bron: ${error.details.source})`;
-            } else if (error.details?.source === "both" && error.details?.reason === "api_unavailable") {
-              msg = `Kon geen verbinding maken met de EuroMillions API (zowel productie als staging). Probeer het later opnieuw.`;
-            }
+        // 3. If API fetch fails and no cached data was available, then set error state.
+        setHasDrawsError(true);
+        let msg = "Fout bij het laden van EuroMillions trekkinggegevens. Controleer uw internetverbinding of probeer later opnieuw.";
+        if (error instanceof ProviderError) {
+          if (error.details?.reason === "timeout") {
+            msg = `De verbinding met de EuroMillions API is verlopen. Probeer het later opnieuw. (Bron: ${error.details.source})`;
+          } else if (error.details?.reason === "validation_error") {
+            msg = `De EuroMillions API reageerde met een onverwacht formaat. We werken aan een oplossing.`;
+          } else if (error.details?.reason === "network_error") {
+            msg = `Er is een netwerkfout opgetreden bij het verbinden met de EuroMillions API. Controleer uw internetverbinding. (Bron: ${error.details.source})`;
+          } else if (error.details?.source === "both" && error.details?.reason === "api_unavailable") {
+            msg = `Kon geen verbinding maken met de EuroMillions API (zowel productie als staging). Probeer het later opnieuw.`;
+          } else if (error.details?.reason === "empty_response") {
+            msg = "Geen EuroMillions trekkinggegevens gevonden. Probeer later opnieuw.";
           }
-          setUserFacingErrorMessage(msg);
-          showError(msg);
-          return [];
         }
+        setUserFacingErrorMessage(msg);
+        showError(msg); // Show toast for the error
+        throw error; // Re-throw to let react-query mark it as an error
       }
     },
     staleTime: TTL_12H,
