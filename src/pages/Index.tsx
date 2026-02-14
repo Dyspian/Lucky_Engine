@@ -18,6 +18,7 @@ import TrustStatsStrip from '@/components/TrustStatsStrip';
 import LastDraw from '@/components/LastDraw';
 import FrequencyChart from '@/components/FrequencyChart';
 import BackgroundGrid from '@/components/BackgroundGrid';
+import AdMockup from '@/components/AdMockup'; // Import AdMockup
 import { trackEvent } from "@/utils/analytics";
 import { Database } from 'lucide-react';
 import { format } from "date-fns";
@@ -142,6 +143,11 @@ const Index = () => {
           
           <TrustStatsStrip />
 
+          {/* AD 1: Below Trust Stats */}
+          <div className="max-w-6xl mx-auto px-6">
+            <AdMockup size="leaderboard" />
+          </div>
+
           <div className="relative my-12 md:my-24 h-px bg-gradient-to-r from-transparent via-emerald/30 to-transparent">
             <div className="absolute inset-x-0 -top-2 h-4 bg-emerald/10 blur-md" />
             <div className="absolute inset-x-0 -bottom-2 h-4 bg-emerald/10 blur-md" />
@@ -217,11 +223,17 @@ const Index = () => {
               </>
             )}
 
+            {/* AD 2: Between Generator and Explanation */}
+            <AdMockup size="responsive" />
+
             <section id="explanation-section" className="pt-12 md:pt-16">
               <ExplanationSection />
             </section>
             
             <DisclaimerSection />
+            
+            {/* AD 3: Before Footer */}
+            <AdMockup size="leaderboard" />
           </div>
         </main>
 

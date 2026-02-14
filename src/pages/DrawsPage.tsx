@@ -25,6 +25,7 @@ import { showSuccess, showError } from "@/utils/toast";
 import DrawCard from "@/components/draws/DrawCard";
 import { AnimatePresence, motion } from "framer-motion";
 import BackgroundGrid from "@/components/BackgroundGrid";
+import AdMockup from '@/components/AdMockup'; // Import AdMockup
 
 const FilterFormSchema = EuromillionsQueryParamsBaseSchema.extend({
   year: z.string().optional(),
@@ -140,7 +141,7 @@ const DrawsPage = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="lg:col-span-1"
           >
-              <Card className="bg-card border border-border/20 shadow-xl rounded-lg sticky top-24 h-fit">
+              <Card className="bg-card border border-border/20 shadow-xl rounded-lg sticky top-24 h-fit z-30">
                 <CardHeader className="pb-4 border-b border-border/20">
                   <CardTitle className="text-xs font-bold uppercase tracking-extra-wide text-muted-foreground flex items-center gap-2 text-small-caps">
                     <Filter size={16} className="text-emerald" />
@@ -232,9 +233,17 @@ const DrawsPage = () => {
                   </form>
                 </CardContent>
               </Card>
+
+              {/* AD 4: Sidebar Ad (Rectangle) */}
+              <div className="mt-8 hidden lg:block">
+                 <AdMockup size="rectangle" />
+              </div>
           </motion.div>
 
           <div className="lg:col-span-2 space-y-4">
+            {/* AD 5: Main Content Top Ad (Leaderboard) */}
+            <AdMockup size="leaderboard" className="mb-6" />
+
             {isLoading ? (
               <div className="flex flex-col items-center justify-center py-24 text-muted-foreground bg-card/30 rounded-lg border border-border/10">
                 <Loader2 className="h-12 w-12 animate-spin text-emerald mb-4" />
