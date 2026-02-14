@@ -121,7 +121,7 @@ const BackgroundCanvas = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 w-full h-full -z-20 border-4 border-red-500" // Temporary red border
+      className="fixed inset-0 w-full h-full -z-20"
       aria-hidden="true"
     />
   );
