@@ -7,6 +7,7 @@ import { cache } from "@/lib/cache";
 import { buildStats, FrequencyData } from "@/lib/stats-engine";
 import { generateTickets, GenerateConfig, Ticket } from "@/lib/generator";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer"; // Import Footer
 import HeroLuck from "@/components/HeroLuck";
 import GeneratorPanel from "@/components/GeneratorPanel";
 import TicketCard from "@/components/TicketCard";
@@ -270,13 +271,7 @@ const Index = () => {
           </div>
         </main>
 
-        <footer className="py-8 border-t border-border/10 relative z-10 mt-16 md:mt-24">
-          <div className="max-w-6xl mx-auto px-6 text-left">
-            <p className="text-[9px] font-bold uppercase tracking-extra-wide text-muted-foreground/40 text-small-caps">
-              © 2024 Lucky Engine • Analytische Systemen Divisie
-            </p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </>
   );

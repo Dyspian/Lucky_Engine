@@ -10,6 +10,7 @@ import { z } from "zod";
 import { getEuromillionsDraws, EuromillionsQueryParamsBaseSchema, EuromillionsQueryParams, DataUnavailableError } from "@/services/euromillions";
 import { Draw } from "@/lib/euromillions/schemas";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer"; // Import Footer
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -23,7 +24,6 @@ import { format, subDays } from "date-fns";
 import { showSuccess, showError } from "@/utils/toast";
 import DrawCard from "@/components/draws/DrawCard";
 import { AnimatePresence, motion } from "framer-motion";
-import { MadeWithDyad } from "@/components/made-with-elmony";
 import BackgroundGrid from "@/components/BackgroundGrid";
 import BackgroundCanvas from "@/components/BackgroundCanvas";
 
@@ -291,14 +291,7 @@ const DrawsPage = () => {
           </div>
         </div>
       </main>
-      <footer className="py-8 border-t border-border/10 relative z-10 mt-16 md:mt-24">
-        <div className="max-w-6xl mx-auto px-6 text-left">
-          <MadeWithDyad />
-          <p className="text-[9px] font-bold uppercase tracking-extra-wide text-muted-foreground/40 text-small-caps mt-2">
-            © 2024 Lucky Engine • Analytische Systemen Divisie
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
