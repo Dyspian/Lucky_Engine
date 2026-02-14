@@ -19,7 +19,7 @@ import LastDraw from '@/components/LastDraw';
 import FrequencyChart from '@/components/FrequencyChart';
 import BackgroundGrid from '@/components/BackgroundGrid';
 import { trackEvent } from "@/utils/analytics";
-import { Database, WifiOff, AlertTriangle } from 'lucide-react';
+import { Database } from 'lucide-react'; // Removed WifiOff, AlertTriangle
 
 const Index = () => {
   const [results, setResults] = useState<{ tickets: Ticket[], explanation: string } | null>(null);
@@ -114,27 +114,7 @@ const Index = () => {
             onHowItWorksClick={() => scrollToSection('explanation-section')}
           />
           
-          <div className="container mx-auto px-6 -mt-12 relative z-20 mb-16 space-y-2">
-            <div className="flex flex-col items-center gap-2">
-               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald/10 border border-emerald/20 backdrop-blur-md">
-                 <WifiOff size={14} className="text-emerald" />
-                 <span className="text-[10px] font-bold uppercase tracking-widest text-emerald">Offline Engine Actief</span>
-               </div>
-               
-               {statsResult?.warning === "DATA_STALE" && (
-                 <motion.div 
-                   initial={{ opacity: 0, y: -10 }}
-                   animate={{ opacity: 1, y: 0 }}
-                   className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 border border-orange-500/20 backdrop-blur-md"
-                 >
-                   <AlertTriangle size={14} className="text-orange-500" />
-                   <span className="text-[10px] font-bold uppercase tracking-widest text-orange-500">
-                     Tijdsverschil Gedetecteerd: {statsResult.timeGapDays} Dagen (DB Verouderd)
-                   </span>
-                 </motion.div>
-               )}
-            </div>
-          </div>
+          {/* Removed Status Banners (WifiOff/Offline Engine) for cleaner UI */}
           
           <TrustStatsStrip />
 

@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, Filter, Search, Loader2, Bug } from "lucide-react";
+import { CalendarIcon, Filter, Search, Loader2 } from "lucide-react"; // Removed Bug icon
 import { cn } from "@/lib/utils";
 import { format, subDays } from "date-fns";
 import { showSuccess, showError } from "@/utils/toast";
@@ -36,7 +36,6 @@ type FilterFormData = z.infer<typeof FilterFormSchema>;
 
 const DrawsPage = () => {
   const [queryParams, setQueryParams] = useState<EuromillionsQueryParams>({});
-  const [isDevMode, setIsDevMode] = useState(import.meta.env.MODE !== 'production');
 
   const { data: draws, isLoading, isError, error, refetch } = useQuery<Draw[], DataUnavailableError, Draw[], (string | EuromillionsQueryParams)[]>({
     queryKey: ['euromillionsDraws', queryParams],
@@ -132,24 +131,6 @@ const DrawsPage = () => {
                 Bekijk de volledige geschiedenis van trekkingsresultaten. Filter op datum of jaar om specifieke patronen te analyseren.
             </p>
         </motion.div>
-
-        {isDevMode && (
-          <Card className="mb-8 bg-red-900/20 border border-red-700/50 shadow-lg">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-bold flex items-center gap-2 text-red-400 uppercase tracking-extra-wide text-small-caps">
-                <Bug size={16} /> Ontwikkelings Debug Paneel
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-xs text-red-200 space-y-2">
-              <p><strong>Huidige Query Parameters:</strong> {JSON.stringify(queryParams)}</p>
-              <p><strong>Laadstatus:</strong> {isLoading ? "Laden..." : "Voltooid"}</p>
-              {isError && <p><strong>Fout:</strong> {error?.message}</p>}
-              <Button variant="outline" size="sm" onClick={() => refetch()} className="mt-2 text-red-200 border-red-700/50 hover:bg-red-800/30">
-                Handmatig Herladen
-              </Button>
-            </CardContent>
-          </Card>
-        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <motion.div 
@@ -252,7 +233,6 @@ const DrawsPage = () => {
               </Card>
           </motion.div>
 
-          {/* Draw Stream List */}
           <div className="lg:col-span-2 space-y-4">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center py-24 text-muted-foreground bg-card/30 rounded-lg border border-border/10">
