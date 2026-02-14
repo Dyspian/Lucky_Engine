@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Settings2, Sparkles, ChevronDown, Loader2 } from "lucide-react";
+import { Settings2, Sparkles, ChevronDown, Loader2, Gauge } from "lucide-react";
 import { Period } from "@/lib/stats-engine";
 import confetti from 'canvas-confetti';
 
@@ -21,8 +21,17 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
   const [tickets, setTickets] = useState([3]);
   const [period, setPeriod] = useState<Period>("2y");
   const [recent, setRecent] = useState("50");
+  const [riskFactor, setRiskFactor] = useState([1.5]); // Default Balanced
   const [isOpen, setIsOpen] = useState(false);
   const [isPulsing, setIsPulsing] = useState(false);
+
+  const getRiskLabel = (val: number) => {
+    if (val > 2.5) return { label: "Conservatief", color: "text-blue-400" };
+    if (val < 0.8) return { label: "Avontuurlijk", color: "text-orange-400" };
+    return { label: "Gebalanceerd", color: "text-emerald" };
+  };
+
+  const riskInfo = getRiskLabel(riskFactor[0]);
 
   const handleGenerate = () => {
     setIsPulsing(true);
@@ -40,6 +49,7 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
       tickets: tickets[0],
       period,
       recent: parseInt(recent) || 50,
+      riskFactor: riskFactor[0],
       weights: { all: 0.7, recent: 0.3 }
     });
   };
@@ -64,8 +74,30 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
             max={10} 
             min={1} 
             step={1}
-            className="py-4 [&>span:first-child]:bg-emerald [&>span:first-child]:shadow-lg [&>span:first-child]:shadow-emerald/30 [&>span:first-child]:border-emerald-hover [&>span:first-child]:rounded-full [&>[data-radix-slider-track]]:bg-border/30 [&>[data-radix-slider-track]]:h-2 [&>[data-radix-slider-track]]:rounded-full" // Rounded thumb and track styling
+            className="py-4 [&>span:first-child]:bg-emerald [&>span:first-child]:shadow-lg [&>span:first-child]:shadow-emerald/30 [&>span:first-child]:border-emerald-hover [&>span:first-child]:rounded-full [&>[data-radix-slider-track]]:bg-border/30 [&>[data-radix-slider-track]]:h-2 [&>[data-radix-slider-track]]:rounded-full"
           />
+        </div>
+
+        {/* New Strategy Section */}
+        <div className="space-y-4 p-4 rounded-md bg-card/50 border border-border/20">
+           <div className="flex justify-between items-center mb-2">
+            <div className="flex items-center gap-2">
+               <Gauge size={16} className="text-muted-foreground" />
+               <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground text-small-caps">Strategie Profiel</Label>
+            </div>
+            <span className={`text-xs font-bold ${riskInfo.color} uppercase tracking-wider`}>{riskInfo.label}</span>
+          </div>
+          <Slider 
+            value={riskFactor} 
+            onValueChange={setRiskFactor} 
+            max={4.0} 
+            min={0.5} 
+            step={0.1}
+            className="[&>span:first-child]:bg-foreground [&>span:first-child]:border-foreground [&>[data-radix-slider-track]]:bg-border/30"
+          />
+          <p className="text-[10px] text-muted-foreground italic text-center">
+            {riskFactor[0] > 2.5 ? "Focus op hoogste waarschijnlijkheid." : riskFactor[0] < 0.8 ? "Verhoogt variantie voor zeldzame combinaties." : "Optimale balans tussen statistiek en kans."}
+          </p>
         </div>
 
         <Collapsible open={isOpen} onOpenChange={setIsOpen} className="space-y-4">
@@ -106,12 +138,17 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
                 />
               </div>
             </div>
-            <div className="p-3 rounded-md bg-card/50 border border-border/20">
-              <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-muted-foreground text-small-caps">
-                <span>Gewichtsverdeling</span>
-                <span className="text-emerald">70% Hist / 30% Rec</span>
-              </div>
-            </div>
+            
+             <div className="space-y-2 pt-2">
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground text-small-caps">Actieve Wiskundige Filters</Label>
+                <div className="flex flex-wrap gap-2">
+                  {['Somkromme', 'Pariteitsbalans', 'Bereikspreiding', 'Clusterpreventie'].map(filter => (
+                    <span key={filter} className="text-[10px] px-2 py-1 rounded bg-emerald/10 text-emerald border border-emerald/20">
+                      {filter}
+                    </span>
+                  ))}
+                </div>
+             </div>
           </CollapsibleContent>
         </Collapsible>
 
@@ -119,7 +156,7 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
           onClick={handleGenerate}
           disabled={isLoading}
           className="w-full bg-emerald hover:bg-emerald-hover text-primary-foreground font-bold py-4 px-6 sm:py-7 sm:px-8 rounded-md text-base sm:text-lg emerald-glow transition-all duration-120 active:scale-[0.98]"
-          style={{ boxShadow: '0 4px 15px rgba(0, 200, 83, 0.4), 0 1px 5px rgba(0, 200, 83, 0.2)' }} // More pronounced shadow
+          style={{ boxShadow: '0 4px 15px rgba(0, 200, 83, 0.4), 0 1px 5px rgba(0, 200, 83, 0.2)' }} 
         >
           {isLoading ? (
             <Loader2 className="animate-spin mr-2" />
