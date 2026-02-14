@@ -14,6 +14,12 @@ export default defineConfig(({ mode }) => ({
         rewrite: (path) => path.replace(/^\/api\/euromillions/, ''),
         secure: false,
       },
+      '/api/apiverve': {
+        target: 'https://api.apiverve.com/v1',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/apiverve/, ''),
+        secure: false,
+      },
     },
   },
   plugins: [dyadComponentTagger(), react()],

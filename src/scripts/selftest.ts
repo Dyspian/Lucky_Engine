@@ -6,7 +6,7 @@ async function runSelfTest() {
   console.log("Starting backend self-test...");
 
   let draws: Draw[] = [];
-  let providerSource: "prod" | "staging" | "embedded" = "prod"; 
+  let providerSource: "prod" | "staging" | "embedded" | "live-mixed" = "embedded"; 
   let drawsCount: number = 0;
 
   try {

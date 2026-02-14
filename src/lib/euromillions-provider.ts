@@ -2,6 +2,7 @@
 
 import { Draw } from "./euromillions/schemas"; 
 import { LOCAL_HISTORY } from "@/data/history";
+import { fetchLatestDrawFromApiVerve } from "@/lib/apiverve";
 
 // Re-export Draw type so consumers can use it
 export type { Draw };
@@ -14,25 +15,40 @@ export class ProviderError extends Error {
 }
 
 /**
- * Fetches draw data from the Embedded Archive.
- * This is instantaneous and works offline.
+ * Fetches draw data.
+ * Tries to get the LATEST draw from APIVerve (live accuracy).
+ * Merges it with the EMBEDDED history (statistical depth).
  */
-export async function fetchDraws(): Promise<{ draws: Draw[]; source: "embedded" }> {
-  // Simulate a very brief delay just to allow UI transitions to feel natural, 
-  // but logically this is instant.
-  await new Promise(resolve => setTimeout(resolve, 50));
+export async function fetchDraws(): Promise<{ draws: Draw[]; source: "embedded" | "live-mixed" }> {
+  // 1. Load Local History (Instant)
+  let combinedDraws = [...LOCAL_HISTORY];
+  let source: "embedded" | "live-mixed" = "embedded";
 
-  if (!LOCAL_HISTORY || LOCAL_HISTORY.length === 0) {
-    throw new ProviderError("Local history is empty.");
+  // 2. Try Fetching Live Data (Async)
+  // We do this optimistically. If it fails, we just return local.
+  try {
+    const liveDraw = await fetchLatestDrawFromApiVerve();
+    
+    if (liveDraw) {
+      // Check if we already have this date to avoid duplicates
+      const exists = combinedDraws.some(d => d.date === liveDraw.date);
+      if (!exists) {
+        combinedDraws.unshift(liveDraw as Draw);
+        source = "live-mixed";
+        console.log("[Provider] Successfully merged live APIVerve data.");
+      }
+    }
+  } catch (err) {
+    console.warn("[Provider] Live fetch failed, using local history only.", err);
   }
 
-  // Sort by date descending to ensure the latest draw is first
-  const sortedDraws = [...LOCAL_HISTORY].sort((a, b) => 
+  // 3. Sort by date descending
+  combinedDraws.sort((a, b) => 
     new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 
   return { 
-    draws: sortedDraws, 
-    source: "embedded" 
+    draws: combinedDraws, 
+    source: source 
   };
 }
