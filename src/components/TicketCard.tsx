@@ -4,7 +4,10 @@ import React from 'react';
 import { Ticket } from "@/lib/generator";
 import Ball from "./Ball";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Copy } from "lucide-react";
 import { motion } from "framer-motion";
+import { copyTicketToClipboard } from "@/utils/clipboard";
 
 interface TicketCardProps {
   ticket: Ticket;
@@ -18,7 +21,7 @@ const TicketCard = ({ ticket, index }: TicketCardProps) => {
       animate={{ x: 0, opacity: 1 }}
       transition={{ delay: index * 0.1 }}
     >
-      <Card className="overflow-hidden border-none bg-white/80 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-shadow duration-300">
+      <Card className="group overflow-hidden border-none bg-white/80 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-300">
         <CardContent className="p-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-2">
@@ -38,6 +41,14 @@ const TicketCard = ({ ticket, index }: TicketCardProps) => {
                   <Ball key={`s-${i}`} value={s} variant="star" delay={index * 0.1 + 0.3 + i * 0.05} />
                 ))}
               </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity rounded-full hover:bg-indigo-50 text-indigo-400 hover:text-indigo-600"
+                onClick={() => copyTicketToClipboard(ticket.numbers, ticket.stars)}
+              >
+                <Copy size={18} />
+              </Button>
             </div>
           </div>
         </CardContent>

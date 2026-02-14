@@ -8,6 +8,7 @@ import { generateTickets, Ticket } from "@/lib/generator";
 import cache from "@/lib/cache";
 import TicketCard from "@/components/TicketCard";
 import StatsInfo from "@/components/StatsInfo";
+import LastDraw from "@/components/LastDraw";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Sparkles, RefreshCw, Ticket as TicketIcon } from "lucide-react";
@@ -18,7 +19,7 @@ const Index = () => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [stats, setStats] = useState<RankedResult | null>(null);
 
-  const { data: draws, isLoading, error, refetch } = useQuery({
+  const { data: draws, isLoading, error } = useQuery({
     queryKey: ['euromillions-draws'],
     queryFn: async () => {
       const cachedData = cache.get<Draw[]>('draws');
@@ -32,11 +33,13 @@ const Index = () => {
   });
 
   useEffect(() => {
-    if (draws) {
+    if (draws && draws.length > 0) {
       const calculatedStats = calculateStats(draws);
       setStats(calculatedStats);
-      // Generate initial tickets
-      setTickets(generateTickets(calculatedStats, 3));
+      // Generate initial tickets if none exist
+      if (tickets.length === 0) {
+        setTickets(generateTickets(calculatedStats, 3));
+      }
     }
   }, [draws]);
 
@@ -59,7 +62,7 @@ const Index = () => {
       </div>
 
       <div className="relative max-w-4xl mx-auto px-4 py-12 sm:py-20">
-        <header className="text-center mb-16">
+        <header className="text-center mb-12">
           <motion.div
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -88,13 +91,26 @@ const Index = () => {
 
         <main className="space-y-12">
           {isLoading ? (
-            <div className="space-y-4">
-              {[1, 2, 3].map((i) => (
-                <Skeleton key={i} className="h-32 w-full rounded-2xl" />
-              ))}
+            <div className="space-y-8">
+              <Skeleton className="h-40 w-full rounded-3xl" />
+              <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <Skeleton key={i} className="h-32 w-full rounded-2xl" />
+                ))}
+              </div>
             </div>
           ) : (
             <>
+              {draws && draws.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <LastDraw draw={draws[0]} />
+                </motion.div>
+              )}
+
               <div className="flex flex-col gap-6">
                 <div className="flex items-center justify-between px-2">
                   <h2 className="text-2xl font-bold flex items-center gap-2">
