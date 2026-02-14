@@ -46,7 +46,7 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
         <motion.div variants={itemVariants}>
           <Logo
             imageUrl={logoUrl}
-            imgClassName="h-32 md:h-48 mx-auto mb-4" // Increased logo size
+            imgClassName="h-48 md:h-64 mx-auto mb-4" // Further increased logo size
             alt="Lucky Engine - Statistical EuroMillions Analysis and Ticket Generator"
             ariaLabel="Lucky Engine Logo - Home Page for EuroMillions Predictions"
           />
