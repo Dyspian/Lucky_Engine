@@ -19,7 +19,9 @@ import LastDraw from '@/components/LastDraw';
 import FrequencyChart from '@/components/FrequencyChart';
 import BackgroundGrid from '@/components/BackgroundGrid';
 import { trackEvent } from "@/utils/analytics";
-import { Database } from 'lucide-react'; // Removed WifiOff, AlertTriangle
+import { Database } from 'lucide-react';
+import { format } from "date-fns";
+import { nl } from "date-fns/locale";
 
 const Index = () => {
   const [results, setResults] = useState<{ tickets: Ticket[], explanation: string } | null>(null);
@@ -113,8 +115,30 @@ const Index = () => {
             onGenerateClick={() => scrollToSection('generator-section')}
             onHowItWorksClick={() => scrollToSection('explanation-section')}
           />
-          
-          {/* Removed Status Banners (WifiOff/Offline Engine) for cleaner UI */}
+
+          {/* Data Freshness Indicator */}
+          {lastDraw && (
+             <motion.div 
+               initial={{ opacity: 0, y: -10 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ delay: 0.5 }}
+               className="flex justify-center -mt-8 mb-12 relative z-20 px-4"
+             >
+                <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-background/60 backdrop-blur-md border border-border/40 shadow-sm hover:border-emerald/30 transition-colors duration-300">
+                   <div className="flex items-center gap-2">
+                     <span className="relative flex h-2 w-2">
+                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald opacity-75"></span>
+                       <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald"></span>
+                     </span>
+                     <span className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Database Status</span>
+                   </div>
+                   <div className="h-3 w-px bg-border/50"></div>
+                   <p className="text-[10px] sm:text-xs font-medium text-muted-foreground">
+                      Gegevens bijgewerkt t/m <span className="text-foreground font-semibold">{format(new Date(lastDraw.date), "d MMMM yyyy", { locale: nl })}</span>
+                   </p>
+                </div>
+             </motion.div>
+          )}
           
           <TrustStatsStrip />
 
