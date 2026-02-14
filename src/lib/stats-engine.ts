@@ -34,10 +34,12 @@ export interface StatsResult {
   recent: number;
   weights: { all: number; recent: number };
   drawCount: number;
-  rankedNumbers: number[];
-  rankedStars: number[];
-  topNumbers: StatItem[];
-  topStars: StatItem[];
+  rankedNumbers: number[]; // Must be length 50
+  rankedStars: number[];   // Must be length 12
+  topNumbers: StatItem[];  // Top 10
+  topStars: StatItem[];    // Top 10
+  allNumberStats: StatItem[]; // New: full list of StatItems for generator
+  allStarStats: StatItem[];   // New: full list of StatItems for generator
   explanation: string;
   warning?: "LOW_SAMPLE_SIZE";
 }
@@ -60,7 +62,7 @@ function filterByPeriod(draws: Draw[], period: Period): Draw[] {
     case "6m": cutoff = subMonths(now, 6); break;
     case "1y": cutoff = subYears(now, 1); break;
     case "2y": cutoff = subYears(now, 2); break;
-    default: cutoff = subYears(now, 2);
+    default: cutoff = subYears(now, 2); // Default to 2 years if somehow invalid period
   }
 
   return draws.filter((d) => isAfter(parseISO(d.date), cutoff));
@@ -74,7 +76,7 @@ function calculateRankedItems(
   range: number,
   isStar: boolean,
   config: StatsConfig
-): { ranked: number[]; top: StatItem[] } {
+): { ranked: number[]; top: StatItem[]; allStats: StatItem[] } {
   const { recentWindow, weightAll, weightRecent } = config;
   const totalDraws = draws.length;
   const recentDraws = draws.slice(0, Math.min(recentWindow, totalDraws));
@@ -82,6 +84,7 @@ function calculateRankedItems(
 
   const items: StatItem[] = [];
 
+  // Iterate through the full range (1 to 50 or 1 to 12) to ensure all possible values are considered
   for (let i = 1; i <= range; i++) {
     const countPeriod = draws.filter((d) => 
       (isStar ? d.stars : d.numbers).includes(i)
@@ -93,6 +96,8 @@ function calculateRankedItems(
 
     const freqPeriod = totalDraws > 0 ? countPeriod / totalDraws : 0;
     const freqRecent = recentCount > 0 ? countRecent / recentCount : 0;
+    
+    // Ensure score is never negative, even if weights are somehow misconfigured
     const score = (freqPeriod * weightAll) + (freqRecent * weightRecent);
 
     items.push({ value: i, freqPeriod, freqRecent, score });
@@ -103,12 +108,13 @@ function calculateRankedItems(
     if (b.score !== a.score) return b.score - a.score;
     if (b.freqRecent !== a.freqRecent) return b.freqRecent - a.freqRecent;
     if (b.freqPeriod !== a.freqPeriod) return b.freqPeriod - a.freqPeriod;
-    return a.value - b.value;
+    return a.value - b.value; // Tie-break by value ascending
   });
 
   return {
     ranked: sorted.map((item) => item.value),
     top: sorted.slice(0, 10),
+    allStats: sorted, // Return all stats for the generator
   };
 }
 
@@ -120,8 +126,8 @@ export function buildStats(draws: Draw[], rawConfig: Partial<StatsConfig>): Stat
   const config: StatsConfig = {
     period: rawConfig.period ?? "2y",
     recentWindow: Math.max(10, Math.min(200, rawConfig.recentWindow ?? 50)),
-    weightAll: sum > 0 ? wAll / sum : 0.7,
-    weightRecent: sum > 0 ? wRecent / sum : 0.3,
+    weightAll: sum > 0 ? wAll / sum : 0.7, // Default to 0.7 if sum is 0
+    weightRecent: sum > 0 ? wRecent / sum : 0.3, // Default to 0.3 if sum is 0
   };
 
   const filteredDraws = filterByPeriod(draws, config.period);
@@ -147,6 +153,8 @@ export function buildStats(draws: Draw[], rawConfig: Partial<StatsConfig>): Stat
     rankedStars: starStats.ranked,
     topNumbers: numberStats.top,
     topStars: starStats.top,
+    allNumberStats: numberStats.allStats, // Expose full stats for generator
+    allStarStats: starStats.allStats,     // Expose full stats for generator
     explanation,
     warning: drawCount < 20 ? "LOW_SAMPLE_SIZE" : undefined,
   };

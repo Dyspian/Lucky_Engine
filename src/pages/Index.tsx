@@ -27,9 +27,10 @@ const Index = () => {
     queryFn: async () => {
       const cached = cache.get<Draw[]>(CACHE_KEY);
       if (cached.source === "cache") return cached.value!;
-      const draws = await fetchDraws();
-      cache.set(CACHE_KEY, draws, TTL_12H);
-      return draws;
+      
+      const fetchedResult = await fetchDraws(); // This returns { draws: Draw[]; source: "prod" | "staging" }
+      cache.set(CACHE_KEY, fetchedResult.draws, TTL_12H); // Cache only the array of draws
+      return fetchedResult.draws; // Return only the array of draws
     },
     staleTime: TTL_12H,
   });

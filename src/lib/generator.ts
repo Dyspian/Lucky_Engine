@@ -51,26 +51,46 @@ function weightedPickUnique(
   items: StatItem[], 
   count: number, 
   rng: () => number,
-  alpha: number = 1.2
+  alpha: number = 1.2,
+  epsilon: number = 1e-6 // Small value to ensure non-zero weight for score=0
 ): number[] {
   const selected: number[] = [];
-  const pool = items.map(item => ({
+  let pool = items.map(item => ({
     value: item.value,
     // Apply temperature smoothing: (score + epsilon) ^ alpha
-    weight: Math.pow(item.score + 1e-6, alpha)
+    weight: Math.pow(item.score + epsilon, alpha)
   }));
 
+  // Check if all weights are effectively zero (or very close)
+  const totalInitialWeight = pool.reduce((sum, p) => sum + p.weight, 0);
+  const useUniformRandom = totalInitialWeight < epsilon * pool.length; // If sum of weights is tiny
+
   while (selected.length < count && pool.length > 0) {
-    const totalWeight = pool.reduce((sum, p) => sum + p.weight, 0);
-    let r = rng() * totalWeight;
-    
-    for (let i = 0; i < pool.length; i++) {
-      r -= pool[i].weight;
-      if (r <= 0) {
-        selected.push(pool[i].value);
-        pool.splice(i, 1);
-        break;
+    if (useUniformRandom) {
+      // Fallback to uniform random selection if all weights are zero
+      const randomIndex = Math.floor(rng() * pool.length);
+      selected.push(pool[randomIndex].value);
+      pool.splice(randomIndex, 1);
+    } else {
+      const totalWeight = pool.reduce((sum, p) => sum + p.weight, 0);
+      let r = rng() * totalWeight;
+      
+      let pickedIndex = -1;
+      for (let i = 0; i < pool.length; i++) {
+        r -= pool[i].weight;
+        if (r <= 0) {
+          pickedIndex = i;
+          break;
+        }
       }
+
+      // Fallback if floating point precision issues prevent picking, or if r is still positive due to tiny weights
+      if (pickedIndex === -1) {
+        pickedIndex = Math.floor(rng() * pool.length);
+      }
+
+      selected.push(pool[pickedIndex].value);
+      pool.splice(pickedIndex, 1);
     }
   }
 
@@ -90,6 +110,10 @@ export function generateTickets(
   const warnings: string[] = [];
   const seen = new Set<string>();
 
+  // Use all stats, not just top 10
+  const candidatesMain = stats.allNumberStats;
+  const candidatesStars = stats.allStarStats;
+
   for (let i = 0; i < config.tickets; i++) {
     let ticket: Ticket;
     let attempts = 0;
@@ -98,12 +122,12 @@ export function generateTickets(
     // Attempt to generate a unique ticket within the batch
     do {
       ticket = {
-        numbers: weightedPickUnique(stats.topNumbers, 5, rng),
-        stars: weightedPickUnique(stats.topStars, 2, rng)
+        numbers: weightedPickUnique(candidatesMain, 5, rng),
+        stars: weightedPickUnique(candidatesStars, 2, rng)
       };
       serialized = `${ticket.numbers.join(',')}|${ticket.stars.join(',')}`;
       attempts++;
-    } while (seen.has(serialized) && attempts < 5);
+    } while (seen.has(serialized) && attempts < 5); // Retry up to 5 times for uniqueness
 
     if (seen.has(serialized)) {
       warnings.push("DUPLICATES_POSSIBLE");
