@@ -4,8 +4,7 @@ import React from 'react';
 import Logo from './Logo';
 
 const Navbar = () => {
-  // IMPORTANT: Replace this with your actual Supabase Storage public URL for lucky_engine.png
-  const logoUrl = "https://your-supabase-url.supabase.co/storage/v1/object/public/your-bucket-name/lucky_engine.png"; 
+  const logoUrl = "https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/lucky_engine.png"; 
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/80 backdrop-blur-xl">

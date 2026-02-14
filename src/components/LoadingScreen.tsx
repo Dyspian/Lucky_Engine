@@ -21,8 +21,7 @@ const LoadingScreen = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // IMPORTANT: Replace this with your actual Supabase Storage public URL for lucky_engine.png
-  const logoUrl = "https://your-supabase-url.supabase.co/storage/v1/object/public/your-bucket-name/lucky_engine.png"; 
+  const logoUrl = "https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/lucky_engine.png"; 
 
   return (
     <motion.div 
