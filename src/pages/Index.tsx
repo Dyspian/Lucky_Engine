@@ -41,7 +41,7 @@ const Index = () => {
 
   const handleGenerate = async (config: GenerateConfig) => {
     if (!drawsData) {
-      showError("Data layer not ready. Please wait.");
+      showError("Gegevenslaag niet gereed. Even geduld a.u.b.");
       return;
     }
 
@@ -58,13 +58,13 @@ const Index = () => {
         explanation: stats.explanation
       });
       
-      showSuccess(`${tickets.length} tickets generated successfully.`);
+      showSuccess(`${tickets.length} tickets succesvol gegenereerd.`);
       
       setTimeout(() => {
         document.getElementById('generator-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 100);
     } catch (err) {
-      showError("Generation failed. Please check settings.");
+      showError("Generatie mislukt. Controleer de instellingen.");
     } finally {
       setIsGenerating(false);
     }
@@ -120,10 +120,10 @@ const Index = () => {
 
             {statsResult && (
               <section id="frequency-charts" className="space-y-8">
-                <h2 className="text-2xl font-bold tracking-tight text-white text-center">Frequency Analysis</h2>
+                <h2 className="text-2xl font-bold tracking-tight text-white text-center">Frequentie Analyse</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <FrequencyChart data={numberFrequencyData} title="Number Frequency" color="hsl(var(--primary))" />
-                  <FrequencyChart data={starFrequencyData} title="Star Frequency" color="hsl(var(--primary))" />
+                  <FrequencyChart data={numberFrequencyData} title="Getal Frequentie" color="hsl(var(--primary))" />
+                  <FrequencyChart data={starFrequencyData} title="Ster Frequentie" color="hsl(var(--primary))" />
                 </div>
               </section>
             )}
@@ -144,10 +144,10 @@ const Index = () => {
                     >
                       <div className="flex items-center justify-between px-2">
                         <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
-                          Generated Results
+                          Gegenereerde Resultaten
                         </h2>
                         <span className="text-[10px] font-medium text-primary/60 italic">
-                          Weighted by statistical score
+                          Gewogen op basis van statistische score
                         </span>
                       </div>
                       
@@ -166,7 +166,7 @@ const Index = () => {
                   ) : (
                     <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-20 py-20">
                       <div className="w-16 h-16 rounded-full border-2 border-dashed border-muted-foreground" />
-                      <p className="text-sm font-medium uppercase tracking-widest">Awaiting Configuration</p>
+                      <p className="text-sm font-medium uppercase tracking-widest">Wachten op Configuratie</p>
                     </div>
                   )}
                 </AnimatePresence>
@@ -183,7 +183,7 @@ const Index = () => {
 
         <footer className="py-12 border-t border-white/5 text-center relative z-10">
           <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground/40">
-            © 2024 Lucky Engine • Analytical Systems Division
+            © 2024 Lucky Engine • Analytische Systemen Divisie
           </p>
         </footer>
       </div>

@@ -6,10 +6,10 @@ import Logo from './Logo';
 
 const LoadingScreen = () => {
   const loadingTexts = [
-    "Analyzing historical draws...",
-    "Calculating number frequencies...",
-    "Weighting recent performance...",
-    "Calibrating the Lucky Engine...",
+    "Historische trekkingen analyseren...",
+    "Getalfrequenties berekenen...",
+    "Recente prestaties wegen...",
+    "De Lucky Engine kalibreren...",
   ];
 
   const [index, setIndex] = React.useState(0);
@@ -35,7 +35,7 @@ const LoadingScreen = () => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
       >
-        <Logo imgClassName="h-24" imageUrl={logoUrl} alt="Lucky Engine Loading Logo" ariaLabel="Lucky Engine Loading Screen Logo" />
+        <Logo imgClassName="h-24" imageUrl={logoUrl} alt="Lucky Engine Laadlogo" ariaLabel="Lucky Engine Laadscherm Logo" />
       </motion.div>
 
       <div className="w-64 h-1 bg-white/5 rounded-full mt-12 mb-6 overflow-hidden">

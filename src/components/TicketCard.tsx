@@ -52,7 +52,7 @@ const TicketCard = ({ ticket, index }: TicketCardProps) => {
               size="icon"
               className="rounded-full hover:bg-white/5 text-muted-foreground hover:text-primary transition-colors"
               onClick={handleCopy}
-              aria-label="Copy ticket"
+              aria-label="Kopieer ticket"
             >
               {copied ? <Check size={18} className="text-primary" /> : <Copy size={18} />}
             </Button>

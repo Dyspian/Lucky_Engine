@@ -46,13 +46,13 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
       <CardHeader className="pb-4">
         <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
           <Sparkles size={16} className="text-primary" />
-          Engine Configuration
+          Engine Configuratie
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-8">
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <Label className="text-sm font-medium text-white">Number of Tickets</Label>
+            <Label className="text-sm font-medium text-white">Aantal Tickets</Label>
             <span className="text-primary font-bold text-lg">{tickets[0]}</span>
           </div>
           <Slider 
@@ -70,7 +70,7 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
             <Button variant="ghost" className="w-full justify-between text-muted-foreground hover:text-white hover:bg-white/10 px-2 rounded-xl"> {/* Added rounded-xl */}
               <div className="flex items-center gap-2">
                 <Settings2 size={16} />
-                <span className="text-xs font-bold uppercase tracking-wider">Advanced Settings</span>
+                <span className="text-xs font-bold uppercase tracking-wider">Geavanceerde Instellingen</span>
               </div>
               <ChevronDown size={16} className={isOpen ? "rotate-180 transition-transform" : "transition-transform"} />
             </Button>
@@ -78,21 +78,21 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
           <CollapsibleContent className="space-y-6 pt-2">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground uppercase tracking-wider">Analysis Period</Label>
+                <Label className="text-xs text-muted-foreground uppercase tracking-wider">Analyse Periode</Label>
                 <Select value={period} onValueChange={(v: Period) => setPeriod(v)}>
                   <SelectTrigger className="bg-secondary/50 border-white/10 rounded-xl text-white hover:border-primary/50 transition-colors"> {/* Refined styling */}
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl bg-card border-white/10"> {/* Refined styling */}
-                    <SelectItem value="6m">Last 6 Months</SelectItem>
-                    <SelectItem value="1y">Last Year</SelectItem>
-                    <SelectItem value="2y">Last 2 Years</SelectItem>
-                    <SelectItem value="all">All History</SelectItem>
+                    <SelectItem value="6m">Laatste 6 Maanden</SelectItem>
+                    <SelectItem value="1y">Laatste Jaar</SelectItem>
+                    <SelectItem value="2y">Laatste 2 Jaar</SelectItem>
+                    <SelectItem value="all">Alle Historie</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground uppercase tracking-wider">Recency Window</Label>
+                <Label className="text-xs text-muted-foreground uppercase tracking-wider">Recentheidsvenster</Label>
                 <Input 
                   type="number" 
                   value={recent} 
@@ -105,7 +105,7 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/5"> {/* Changed to rounded-xl */}
               <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                <span>Weight Distribution</span>
+                <span>Gewichtsverdeling</span>
                 <span className="text-primary">70% Hist / 30% Rec</span>
               </div>
             </div>
@@ -120,7 +120,7 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
           {isLoading ? (
             <Loader2 className="animate-spin mr-2" />
           ) : (
-            "GENERATE LUCKY TICKETS"
+            "GENEREER GELUKSTICKETEN"
           )}
         </Button>
       </CardContent>

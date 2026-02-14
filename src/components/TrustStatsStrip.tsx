@@ -7,23 +7,23 @@ import { BarChart2, ShieldCheck, Lightbulb, TrendingUp } from 'lucide-react';
 const trustFacts = [
   {
     icon: <BarChart2 size={20} className="text-primary" />,
-    title: "Historical Draw Data",
-    description: "Leveraging comprehensive past results for analysis."
+    title: "Historische Trekking Gegevens",
+    description: "Gebruik van uitgebreide eerdere resultaten voor analyse."
   },
   {
     icon: <TrendingUp size={20} className="text-primary" />,
-    title: "Frequency + Recency",
-    description: "Weighted algorithms identify emerging patterns."
+    title: "Frequentie + Recentheid",
+    description: "Gewogen algoritmen identificeren opkomende patronen."
   },
   {
     icon: <Lightbulb size={20} className="text-primary" />,
-    title: "Transparent Methodology",
-    description: "Clear insights into how numbers are generated."
+    title: "Transparante Methodologie",
+    description: "Duidelijke inzichten in hoe getallen worden gegenereerd."
   },
   {
     icon: <ShieldCheck size={20} className="text-primary" />,
-    title: "No Guarantees",
-    description: "Purely statistical, independent draws. Play responsibly."
+    title: "Geen Garanties",
+    description: "Puur statistisch, onafhankelijke trekkingen. Speel verantwoord."
   },
 ];
 

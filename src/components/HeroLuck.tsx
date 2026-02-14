@@ -46,16 +46,16 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
         <motion.div variants={itemVariants}>
           <Logo
             imageUrl={logoUrl}
-            imgClassName="h-64 md:h-80 mx-auto mb-4" // Further increased logo size
-            alt="Lucky Engine - Statistical EuroMillions Analysis and Ticket Generator"
-            ariaLabel="Lucky Engine Logo - Home Page for EuroMillions Predictions"
+            imgClassName="h-64 md:h-80 mx-auto mb-4"
+            alt="Lucky Engine - Statistische EuroMillions Analyse en Ticket Generator"
+            ariaLabel="Lucky Engine Logo - Startpagina voor EuroMillions Voorspellingen"
           />
         </motion.div>
         <motion.h1 variants={itemVariants} className="text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
-          Find your luck — <br className="hidden md:inline"/>powered by transparent statistics.
+          Vind je geluk — <br className="hidden md:inline"/>aangedreven door transparante statistieken.
         </motion.h1>
         <motion.p variants={itemVariants} className="text-lg md:text-xl text-indigo-200/80 leading-relaxed max-w-md mx-auto">
-          Our engine analyzes historical EuroMillions data, applying weighted frequency and recency algorithms to identify mathematical trends.
+          Onze engine analyseert historische EuroMillions-gegevens en past gewogen frequentie- en recentheidsalgoritmen toe om wiskundige trends te identificeren.
         </motion.p>
         <motion.div variants={itemVariants} className="pt-6 flex flex-col sm:flex-row justify-center gap-4">
           <Button
@@ -63,7 +63,7 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
             className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-7 px-8 rounded-xl text-lg gold-glow transition-all active:scale-[0.98] relative overflow-hidden group"
           >
             <Sparkles className="absolute -top-2 -left-2 w-8 h-8 text-white/20 group-hover:rotate-180 transition-transform duration-700" />
-            GENERATE LUCKY TICKETS
+            GENEREER GELUKSTICKETEN
             <Sparkles className="absolute -bottom-2 -right-2 w-8 h-8 text-white/20 group-hover:rotate-180 transition-transform duration-700" />
           </Button>
           <Button
@@ -71,11 +71,11 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
             variant="outline"
             className="border-white/20 text-white hover:bg-white/10 hover:text-white font-semibold py-7 px-8 rounded-xl text-lg transition-colors"
           >
-            How it works
+            Hoe het werkt
           </Button>
         </motion.div>
         <motion.p variants={itemVariants} className="text-xs text-indigo-300/60 mt-4">
-          No guarantee. Independent draws. Free tool.
+          Geen garantie. Onafhankelijke trekkingen. Gratis tool.
         </motion.p>
       </div>
     </motion.section>
