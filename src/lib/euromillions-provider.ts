@@ -19,7 +19,7 @@ const ExternalApiResponseSchema = z.array(z.unknown());
 const PROD_BASE_URL = "https://euromillions.api.pedromealha.dev";
 const STAGING_BASE_URL = "https://euromillions.staging.api.pedromealha.dev";
 const API_PATH = "/v1/draws";
-const FETCH_TIMEOUT_MS = 10000; // 10 seconds per attempt
+const FETCH_TIMEOUT_MS = 20000; // Increased to 20 seconds per attempt
 
 /**
  * Custom error class for provider failures, with structured details.
@@ -50,6 +50,8 @@ async function fetchFromUrl(baseUrl: string): Promise<Draw[]> {
     clearTimeout(timeoutId);
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`[Provider] API responded with status ${response.status} from ${baseUrl}. Response body: ${errorText}`);
       throw new Error(`API responded with status: ${response.status}`);
     }
 
