@@ -3,10 +3,18 @@ import dyadComponentTagger from "@dyad-sh/react-vite-component-tagger";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
-export default defineConfig(() => ({
+export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    proxy: {
+      '/api/euromillions': {
+        target: 'https://euromillions.api.pedromealha.dev',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/euromillions/, ''),
+        secure: false,
+      },
+    },
   },
   plugins: [dyadComponentTagger(), react()],
   resolve: {
