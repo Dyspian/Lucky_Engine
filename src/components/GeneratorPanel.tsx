@@ -47,7 +47,7 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
   return (
     <Card className={`bg-card border border-border/20 shadow-xl rounded-lg transition-all duration-300 ${isPulsing ? 'animate-pulse-emerald' : ''}`}>
       <CardHeader className="pb-4 border-b border-border/20">
-        <CardTitle className="text-xs font-bold uppercase tracking-extra-wide text-muted-foreground flex items-center gap-2">
+        <CardTitle className="text-xs font-bold uppercase tracking-extra-wide text-muted-foreground flex items-center gap-2 text-small-caps">
           <Sparkles size={16} className="text-emerald" />
           Engine Configuratie
         </CardTitle>
@@ -64,7 +64,7 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
             max={10} 
             min={1} 
             step={1}
-            className="py-4 [&>span:first-child]:bg-emerald [&>span:first-child]:shadow-lg [&>span:first-child]:shadow-emerald/30 [&>span:first-child]:border-emerald-hover"
+            className="py-4 [&>span:first-child]:bg-emerald [&>span:first-child]:shadow-lg [&>span:first-child]:shadow-emerald/30 [&>span:first-child]:border-emerald-hover [&>span:first-child]:rounded-full [&>[data-radix-slider-track]]:bg-border/30 [&>[data-radix-slider-track]]:h-2 [&>[data-radix-slider-track]]:rounded-full" // Rounded thumb and track styling
           />
         </div>
 
@@ -73,7 +73,7 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
             <Button variant="ghost" className="w-full justify-between text-secondary-foreground hover:text-foreground hover:bg-card/50 px-3 rounded-md transition-colors duration-120">
               <div className="flex items-center gap-2">
                 <Settings2 size={16} />
-                <span className="text-xs font-bold uppercase tracking-wider">Geavanceerde Instellingen</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-small-caps">Geavanceerde Instellingen</span>
               </div>
               <ChevronDown size={16} className={isOpen ? "rotate-180 transition-transform duration-300" : "transition-transform duration-300"} />
             </Button>
@@ -81,9 +81,9 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
           <CollapsibleContent className="space-y-6 pt-4 border-t border-border/20 mt-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground uppercase tracking-wider">Analyse Periode</Label>
+                <Label className="text-xs text-muted-foreground uppercase tracking-wider text-small-caps">Analyse Periode</Label>
                 <Select value={period} onValueChange={(v: Period) => setPeriod(v)}>
-                  <SelectTrigger className="bg-input border-border/20 rounded-md text-foreground hover:border-emerald/50 transition-colors duration-120">
+                  <SelectTrigger className="bg-input border-border/20 rounded-md text-foreground hover:border-emerald/50 transition-colors duration-120 focus:ring-1 focus:ring-emerald focus:ring-offset-0">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="rounded-md bg-card border-border/20 text-foreground">
@@ -95,19 +95,19 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground uppercase tracking-wider">Recentheidsvenster</Label>
+                <Label className="text-xs text-muted-foreground uppercase tracking-wider text-small-caps">Recentheidsvenster</Label>
                 <Input 
                   type="number" 
                   value={recent} 
                   onChange={(e) => setRecent(e.target.value)}
-                  className="bg-input border-border/20 rounded-md text-foreground focus:border-emerald/50 transition-colors duration-120"
+                  className="bg-input border-border/20 rounded-md text-foreground focus:border-emerald/50 transition-colors duration-120 focus:ring-1 focus:ring-emerald focus:ring-offset-0"
                   min={10}
                   max={200}
                 />
               </div>
             </div>
             <div className="p-3 rounded-md bg-card/50 border border-border/20">
-              <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+              <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-muted-foreground text-small-caps">
                 <span>Gewichtsverdeling</span>
                 <span className="text-emerald">70% Hist / 30% Rec</span>
               </div>
@@ -119,6 +119,7 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
           onClick={handleGenerate}
           disabled={isLoading}
           className="w-full bg-emerald hover:bg-emerald-hover text-primary-foreground font-bold py-7 rounded-md text-lg emerald-glow transition-all duration-120 active:scale-[0.98]"
+          style={{ boxShadow: '0 4px 15px rgba(0, 200, 83, 0.4), 0 1px 5px rgba(0, 200, 83, 0.2)' }} // More pronounced shadow
         >
           {isLoading ? (
             <Loader2 className="animate-spin mr-2" />

@@ -30,12 +30,17 @@ const Ball = ({ value, variant = 'number', delay = 0 }: BallProps) => {
           ? "w-9 h-9 bg-gradient-to-br from-gold-depth to-gold text-primary-foreground rounded-md rotate-45 relative overflow-hidden border border-gold/50 shadow-inner shadow-gold/30" 
           : "w-11 h-11 bg-gradient-to-br from-card to-background text-foreground rounded-full relative overflow-hidden border border-border/50 shadow-inner shadow-background/30"
       )}
+      style={{
+        boxShadow: isStar 
+          ? 'inset 0 2px 8px rgba(0,0,0,0.4), 0 2px 4px rgba(0,0,0,0.2)' // Deeper inset for stars
+          : 'inset 0 2px 8px rgba(0,0,0,0.4), 0 2px 4px rgba(0,0,0,0.2)', // Deeper inset for numbers
+      }}
     >
-      {/* Subtle radial highlight */}
+      {/* Subtle radial highlight - more complex */}
       <div className={cn(
-        "absolute inset-0 rounded-full",
+        "absolute inset-0",
         isStar ? "rounded-md" : "rounded-full",
-        "bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50"
+        "bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-60" // Stronger highlight
       )} />
       <span className={cn(isStar && "-rotate-45 text-primary-foreground")}>
         {value}

@@ -16,9 +16,11 @@ const LastDraw = ({ draw }: LastDrawProps) => {
   const formattedDate = format(new Date(draw.date), "EEEE d MMMM yyyy", { locale: nl });
 
   return (
-    <Card className="border border-border/20 bg-card text-foreground shadow-xl overflow-hidden rounded-md transition-shadow duration-120"> {/* Added transition-shadow */}
+    <Card className="border border-border/20 bg-card text-foreground shadow-xl overflow-hidden rounded-lg transition-shadow duration-120"
+      style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.3), 0 1px 5px rgba(0,0,0,0.1)' }} // Deeper shadow for cards
+    >
       <CardHeader className="pb-2">
-        <CardTitle className="text-xs font-bold flex items-center gap-2 text-muted-foreground uppercase tracking-extra-wide">
+        <CardTitle className="text-xs font-bold flex items-center gap-2 text-muted-foreground uppercase tracking-extra-wide text-small-caps">
           <CalendarDays size={16} className="text-emerald" />
           Laatste Trekking
         </CardTitle>

@@ -123,7 +123,7 @@ const Index = () => {
 
             {statsResult && (
               <section id="frequency-charts" className="space-y-8">
-                <h2 className="text-xl font-bold tracking-extra-wide text-foreground text-center uppercase mb-12">Frequentie Analyse</h2>
+                <h2 className="text-xl font-bold tracking-extra-wide text-foreground text-center uppercase mb-12 text-small-caps">Frequentie Analyse</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <FrequencyChart data={numberFrequencyData} title="Getal Frequentie" color="hsl(var(--emerald))" />
                   <FrequencyChart data={starFrequencyData} title="Ster Frequentie" color="hsl(var(--gold))" /> {/* Stars use gold color */}
@@ -147,7 +147,7 @@ const Index = () => {
                       className="space-y-6"
                     >
                       <div className="flex items-center justify-between px-2">
-                        <h2 className="text-xs font-bold uppercase tracking-extra-wide text-muted-foreground">
+                        <h2 className="text-xs font-bold uppercase tracking-extra-wide text-muted-foreground text-small-caps">
                           Gegenereerde Resultaten
                         </h2>
                         <span className="text-[10px] font-medium text-emerald/60 italic">
@@ -161,7 +161,9 @@ const Index = () => {
                         ))}
                       </div>
 
-                      <div className="p-6 rounded-md bg-card border border-border/20 shadow-lg">
+                      <div className="p-6 rounded-md bg-card border border-border/20 shadow-lg"
+                        style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.3), 0 1px 5px rgba(0,0,0,0.1)' }} // Deeper shadow for cards
+                      >
                         <p className="text-xs text-secondary-foreground leading-relaxed font-medium italic">
                           {results.explanation}
                         </p>
@@ -170,7 +172,7 @@ const Index = () => {
                   ) : (
                     <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-20 py-20">
                       <div className="w-16 h-16 rounded-full border-2 border-dashed border-muted-foreground" />
-                      <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground">Wachten op Configuratie</p>
+                      <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground text-small-caps">Wachten op Configuratie</p>
                     </div>
                   )}
                 </AnimatePresence>
@@ -187,7 +189,7 @@ const Index = () => {
 
         <footer className="py-12 border-t border-border/10 relative z-10 mt-24">
           <div className="max-w-6xl mx-auto px-6 text-left"> {/* Left-aligned footer text */}
-            <p className="text-[10px] font-bold uppercase tracking-extra-wide text-muted-foreground/40">
+            <p className="text-[10px] font-bold uppercase tracking-extra-wide text-muted-foreground/40 text-small-caps">
               © 2024 Lucky Engine • Analytische Systemen Divisie
             </p>
           </div>

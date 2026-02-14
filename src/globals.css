@@ -56,11 +56,20 @@
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     background-attachment: fixed;
     letter-spacing: -0.01em; /* Slightly tighter tracking for body */
+    /* Subtle noise texture for engineered feel */
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB2aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGZpbHRlciBpZD0ibm9pc2VGaWx0ZXIiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIwLjciIG51bW9jdGF2ZXM9IjMiIHN0aXRjaFRpbGVzPSJzdGl0Y2hBIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbHRlcj0idXJsKCNub2lzZUZpbHRlcpkiIG9wYWNpdHk9IjAuMDMiLz48L3N2Zz4=');
+    background-size: 100px 100px; /* Smaller to make it more subtle */
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold;
     letter-spacing: 0.05em; /* Wider letter spacing for headings */
+  }
+
+  /* Small-caps for specific labels/headings */
+  .text-small-caps {
+    font-variant-caps: small-caps;
+    font-feature-settings: "smcp";
   }
 }
 
@@ -76,29 +85,29 @@
   box-shadow: 0 0 25px -5px hsl(var(--emerald) / 0.4), 0 0 10px -2px hsl(var(--emerald) / 0.2);
 }
 
-/* Custom radial spotlight */
+/* Custom radial spotlight - more impactful */
 .radial-spotlight {
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 80vw;
-  max-width: 1200px;
-  height: 600px;
-  background: radial-gradient(circle at center, hsl(var(--emerald) / 0.08) 0%, transparent 70%);
+  width: 90vw; /* Larger spread */
+  max-width: 1400px; /* Max width */
+  height: 700px; /* Taller */
+  background: radial-gradient(circle at center, hsl(var(--emerald) / 0.12) 0%, transparent 75%); /* Stronger, wider gradient */
   pointer-events: none;
   z-index: -10;
-  opacity: 0.6;
+  opacity: 0.7; /* Slightly more opaque */
 }
 
-/* Custom grid pattern */
+/* Custom grid pattern - more subtle */
 .background-grid {
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(to right, hsl(var(--border)/0.05) 1px, transparent 1px),
-                    linear-gradient(to bottom, hsl(var(--border)/0.05) 1px, transparent 1px);
-  background-size: 40px 40px; /* Adjust grid size as needed */
+  background-image: linear-gradient(to right, hsl(var(--border)/0.03) 1px, transparent 1px), /* Even fainter lines */
+                    linear-gradient(to bottom, hsl(var(--border)/0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
   pointer-events: none;
   z-index: -30;
-  opacity: 0.8;
+  opacity: 0.7; /* Slightly less opaque */
 }

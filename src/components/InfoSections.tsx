@@ -17,14 +17,16 @@ export const ExplanationSection = () => {
         <div className="w-10 h-10 rounded-md bg-emerald-depth flex items-center justify-center text-emerald shadow-md">
           <Info size={20} />
         </div>
-        <h2 className="text-xl font-bold tracking-extra-wide text-foreground uppercase">Hoe de Engine Werkt</h2>
+        <h2 className="text-xl font-bold tracking-extra-wide text-foreground uppercase text-small-caps">Hoe de Engine Werkt</h2>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {points.map((p, i) => (
-          <div key={i} className="p-6 rounded-lg bg-card border border-border/20 space-y-2 shadow-lg transition-all duration-120 hover:border-emerald/50 hover:-translate-y-1">
+          <div key={i} className="p-6 rounded-lg bg-card border border-border/20 space-y-2 shadow-lg transition-all duration-120 hover:border-emerald/50 hover:-translate-y-1"
+            style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.3), 0 1px 5px rgba(0,0,0,0.1)' }} // Deeper shadow for cards
+          >
             <div className="flex items-center gap-2 text-emerald">
               <CheckCircle2 size={16} />
-              <h3 className="font-bold text-sm uppercase tracking-wider text-foreground">{p.title}</h3>
+              <h3 className="font-bold text-sm uppercase tracking-wider text-foreground text-small-caps">{p.title}</h3>
             </div>
             <p className="text-sm text-secondary-foreground leading-relaxed">{p.desc}</p>
           </div>
@@ -36,10 +38,12 @@ export const ExplanationSection = () => {
 
 export const DisclaimerSection = () => {
   return (
-    <section className="p-8 rounded-lg bg-card border border-border/20 space-y-4 shadow-lg">
+    <section className="p-8 rounded-lg bg-card border border-border/20 space-y-4 shadow-lg"
+      style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.3), 0 1px 5px rgba(0,0,0,0.1)' }} // Deeper shadow for cards
+    >
       <div className="flex items-center gap-2 text-muted-foreground">
         <AlertTriangle size={16} className="text-emerald" />
-        <h2 className="text-xs font-bold uppercase tracking-extra-wide">Juridische Disclaimer</h2>
+        <h2 className="text-xs font-bold uppercase tracking-extra-wide text-small-caps">Juridische Disclaimer</h2>
       </div>
       <div className="space-y-3 text-xs text-secondary-foreground leading-relaxed font-medium">
         <p>
