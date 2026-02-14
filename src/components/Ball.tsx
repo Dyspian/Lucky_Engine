@@ -2,30 +2,20 @@
 
 import React from 'react';
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
 
 interface BallProps {
   value: number;
   variant?: 'number' | 'star';
-  delay?: number;
+  delay?: number; // Kept for compatibility but ignored
 }
 
-const Ball = ({ value, variant = 'number', delay = 0 }: BallProps) => {
+const Ball = ({ value, variant = 'number' }: BallProps) => {
   const isStar = variant === 'star';
   
   return (
-    <motion.div
-      initial={{ scale: 0.8, opacity: 0, y: 6 }}
-      animate={{ scale: 1, opacity: 1, y: 0 }}
-      transition={{ 
-        type: "spring", 
-        stiffness: 200, 
-        damping: 20,
-        delay: delay,
-        duration: 0.4
-      }}
+    <div
       className={cn(
-        "flex items-center justify-center font-bold select-none transition-transform duration-120",
+        "flex items-center justify-center font-bold select-none",
         isStar 
           ? "w-7 h-7 text-xs sm:w-8 sm:h-8 sm:text-sm bg-gradient-to-br from-gold-depth to-gold text-foreground rounded-md rotate-45 relative overflow-hidden border border-gold/50 shadow-inner shadow-gold/30" 
           : "w-9 h-9 text-sm sm:w-10 sm:h-10 sm:text-base bg-gradient-to-br from-card to-background text-foreground rounded-full relative overflow-hidden border border-border/50 shadow-inner shadow-background/30"
@@ -45,7 +35,7 @@ const Ball = ({ value, variant = 'number', delay = 0 }: BallProps) => {
       <span className={cn(isStar && "-rotate-45 text-foreground")}>
         {value}
       </span>
-    </motion.div>
+    </div>
   );
 };
 
