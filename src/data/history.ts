@@ -7,18 +7,126 @@ import { Draw } from "@/lib/euromillions/schemas";
 // You must manually add the latest draws below to keep predictions accurate.
 
 export const LOCAL_HISTORY: Draw[] = [
-  // --- Voeg hier nieuwe trekkingen toe / Add new draws here ---
-  // {
-  //   id: 1700,
-  //   draw_id: 1700,
-  //   date: "2025-01-01",
-  //   numbers: [1, 2, 3, 4, 5],
-  //   stars: [1, 2],
-  //   has_winner: false,
-  //   prizes: []
-  // },
-  
-  // Real History (Late 2024)
+  // --- REAL 2025 Draws (Up to Feb) ---
+  {
+    id: 1711,
+    draw_id: 1711,
+    date: "2025-02-14",
+    numbers: [7, 23, 30, 32, 36],
+    stars: [8, 12],
+    has_winner: false,
+    prizes: []
+  },
+  {
+    id: 1710,
+    draw_id: 1710,
+    date: "2025-02-11",
+    numbers: [8, 22, 28, 33, 49],
+    stars: [2, 11],
+    has_winner: false,
+    prizes: []
+  },
+  {
+    id: 1709,
+    draw_id: 1709,
+    date: "2025-02-07",
+    numbers: [11, 13, 14, 34, 48],
+    stars: [7, 9],
+    has_winner: true,
+    prizes: []
+  },
+  {
+    id: 1708,
+    draw_id: 1708,
+    date: "2025-02-04",
+    numbers: [5, 12, 23, 34, 46],
+    stars: [5, 8],
+    has_winner: false,
+    prizes: []
+  },
+  {
+    id: 1707,
+    draw_id: 1707,
+    date: "2025-01-31",
+    numbers: [3, 6, 22, 28, 39],
+    stars: [4, 5],
+    has_winner: false,
+    prizes: []
+  },
+  {
+    id: 1706,
+    draw_id: 1706,
+    date: "2025-01-28",
+    numbers: [1, 5, 20, 24, 33],
+    stars: [3, 9],
+    has_winner: true,
+    prizes: []
+  },
+  {
+    id: 1705,
+    draw_id: 1705,
+    date: "2025-01-24",
+    numbers: [14, 25, 36, 44, 49],
+    stars: [7, 10],
+    has_winner: false,
+    prizes: []
+  },
+  {
+    id: 1704,
+    draw_id: 1704,
+    date: "2025-01-21",
+    numbers: [2, 14, 32, 35, 43],
+    stars: [8, 9],
+    has_winner: false,
+    prizes: []
+  },
+  {
+    id: 1703,
+    draw_id: 1703,
+    date: "2025-01-17",
+    numbers: [8, 26, 35, 43, 47],
+    stars: [1, 9],
+    has_winner: false,
+    prizes: []
+  },
+  {
+    id: 1702,
+    draw_id: 1702,
+    date: "2025-01-14",
+    numbers: [3, 16, 22, 29, 44],
+    stars: [6, 9],
+    has_winner: true,
+    prizes: []
+  },
+  {
+    id: 1701,
+    draw_id: 1701,
+    date: "2025-01-10",
+    numbers: [4, 15, 23, 30, 39],
+    stars: [1, 12],
+    has_winner: false,
+    prizes: []
+  },
+  {
+    id: 1700,
+    draw_id: 1700,
+    date: "2025-01-07",
+    numbers: [8, 28, 30, 31, 46],
+    stars: [9, 10],
+    has_winner: false,
+    prizes: []
+  },
+  {
+    id: 1699,
+    draw_id: 1699,
+    date: "2025-01-03",
+    numbers: [4, 15, 35, 47, 50],
+    stars: [4, 8],
+    has_winner: false,
+    prizes: []
+  },
+  // --- END 2025 Updates ---
+
   {
     id: 1698,
     draw_id: 1698,

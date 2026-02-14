@@ -10,7 +10,7 @@ import { z } from "zod";
 import { getEuromillionsDraws, EuromillionsQueryParamsBaseSchema, EuromillionsQueryParams, DataUnavailableError } from "@/services/euromillions";
 import { Draw } from "@/lib/euromillions/schemas";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer"; // Import Footer
+import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -26,9 +26,8 @@ import DrawCard from "@/components/draws/DrawCard";
 import { AnimatePresence, motion } from "framer-motion";
 import BackgroundGrid from "@/components/BackgroundGrid";
 
-// Extend the base query schema for form validation
 const FilterFormSchema = EuromillionsQueryParamsBaseSchema.extend({
-  year: z.string().optional(), // Year as string for select input
+  year: z.string().optional(),
   startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Start date must be in YYYY-MM-DD format.").optional(),
   endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "End date must be in YYYY-MM-DD format.").optional(),
 });
@@ -45,7 +44,6 @@ const DrawsPage = () => {
     staleTime: 1000 * 60 * 60 * 12, // 12 hours
   });
 
-  // Handle errors via useEffect since onError is removed in v5
   useEffect(() => {
     if (isError && error) {
       console.error("Error fetching draws in DrawsPage:", error);
@@ -105,12 +103,13 @@ const DrawsPage = () => {
     setValue('startDate', newStartDate ? format(newStartDate, 'yyyy-MM-dd') : undefined);
     setValue('endDate', newEndDate ? format(newEndDate, 'yyyy-MM-dd') : undefined);
     
-    handleSubmit(onSubmit)(); // Trigger form submission with new values
+    handleSubmit(onSubmit)();
   };
 
-  // Generate years for the select dropdown (e.g., from 2004 to current year)
+  // Generate years from 2004 up to at least 2026 (or current year if later)
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: currentYear - 2004 + 1 }, (_, i) => (currentYear - i).toString());
+  const maxYear = Math.max(currentYear, 2026);
+  const years = Array.from({ length: maxYear - 2004 + 1 }, (_, i) => (maxYear - i).toString());
 
   return (
     <div className="relative min-h-screen text-foreground selection:bg-emerald/30 font-sans">
@@ -153,7 +152,6 @@ const DrawsPage = () => {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Filter Panel */}
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
