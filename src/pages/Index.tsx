@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useQuery } from "@tanstack/react-query";
-import { fetchDraws, Draw, ProviderError } from "@/lib/euromillions-provider"; // Import ProviderError
+import { fetchDraws, Draw, ProviderError } from "@/lib/euromillions-provider";
 import { cache } from "@/lib/cache";
 import { buildStats, FrequencyData } from "@/lib/stats-engine";
 import { generateTickets, GenerateConfig, Ticket } from "@/lib/generator";
@@ -28,53 +28,73 @@ const Index = () => {
   const [results, setResults] = useState<{ tickets: Ticket[], explanation: string } | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [hasDrawsError, setHasDrawsError] = useState(false);
-  const [userFacingErrorMessage, setUserFacingErrorMessage] = useState<string>(""); // State to hold the specific error message
+  const [userFacingErrorMessage, setUserFacingErrorMessage] = useState<string>("");
 
   const { data: drawsData, isLoading: isDataLoading } = useQuery<Draw[], Error, Draw[], string[]>({
     queryKey: [CACHE_KEY],
     queryFn: async () => {
       const cached = cache.get<Draw[]>(CACHE_KEY);
-      if (cached.source === "cache") {
-        if (cached.value && cached.value.length > 0) {
-          setHasDrawsError(false);
-          setUserFacingErrorMessage(""); // Clear error message
-          return cached.value;
-        }
+
+      // 1. Try to use fresh cache
+      if (cached.source === "cache" && cached.value && cached.value.length > 0) {
+        setHasDrawsError(false);
+        setUserFacingErrorMessage("");
+        return cached.value;
       }
-      
+
+      // 2. If no fresh cache, try to fetch from API
       try {
         const fetchedResult = await fetchDraws();
         if (fetchedResult.draws.length === 0) {
           console.warn("[Index] Fetched 0 draws from API.");
-          setHasDrawsError(true);
-          const msg = "Geen EuroMillions trekkinggegevens gevonden. Probeer later opnieuw.";
-          setUserFacingErrorMessage(msg);
-          showError(msg);
+          // If API returns empty, try to use stale cache
+          if (cached.source === "fallback" && cached.value && cached.value.length > 0) {
+            showError("Nieuwe trekkinggegevens konden niet worden geladen. Toon verouderde gegevens.");
+            setHasDrawsError(false); // We are showing *some* data
+            setUserFacingErrorMessage(""); // Clear specific error message if fallback is used
+            return cached.value;
+          } else {
+            // No fresh data, no stale fallback, API returned empty
+            setHasDrawsError(true);
+            const msg = "Geen EuroMillions trekkinggegevens gevonden. Probeer later opnieuw.";
+            setUserFacingErrorMessage(msg);
+            showError(msg);
+            return [];
+          }
         } else {
+          // API returned data successfully
           cache.set(CACHE_KEY, fetchedResult.draws, TTL_12H);
           setHasDrawsError(false);
-          setUserFacingErrorMessage(""); // Clear error message
+          setUserFacingErrorMessage("");
+          return fetchedResult.draws;
         }
-        return fetchedResult.draws;
       } catch (error) {
         console.error("[Index] Error fetching draws:", error);
-        setHasDrawsError(true);
-        let msg = "Fout bij het laden van EuroMillions trekkinggegevens. Controleer uw internetverbinding of probeer later opnieuw.";
-
-        if (error instanceof ProviderError) {
-          if (error.details?.reason === "timeout") {
-            msg = `De verbinding met de EuroMillions API is verlopen. Probeer het later opnieuw. (Bron: ${error.details.source})`;
-          } else if (error.details?.reason === "validation_error") {
-            msg = `De EuroMillions API reageerde met een onverwacht formaat. We werken aan een oplossing.`;
-          } else if (error.details?.reason === "network_error") {
-            msg = `Er is een netwerkfout opgetreden bij het verbinden met de EuroMillions API. Controleer uw internetverbinding. (Bron: ${error.details.source})`;
-          } else if (error.details?.source === "both" && error.details?.reason === "api_unavailable") {
-            msg = `Kon geen verbinding maken met de EuroMillions API (zowel productie als staging). Probeer het later opnieuw.`;
+        // If API fetch fails, try to use stale cache
+        if (cached.source === "fallback" && cached.value && cached.value.length > 0) {
+          showError("Fout bij het laden van nieuwe trekkinggegevens. Toon verouderde gegevens.");
+          setHasDrawsError(false); // We are showing *some* data
+          setUserFacingErrorMessage(""); // Clear specific error message if fallback is used
+          return cached.value;
+        } else {
+          // No fresh data, no stale fallback, API fetch failed
+          setHasDrawsError(true);
+          let msg = "Fout bij het laden van EuroMillions trekkinggegevens. Controleer uw internetverbinding of probeer later opnieuw.";
+          if (error instanceof ProviderError) {
+            if (error.details?.reason === "timeout") {
+              msg = `De verbinding met de EuroMillions API is verlopen. Probeer het later opnieuw. (Bron: ${error.details.source})`;
+            } else if (error.details?.reason === "validation_error") {
+              msg = `De EuroMillions API reageerde met een onverwacht formaat. We werken aan een oplossing.`;
+            } else if (error.details?.reason === "network_error") {
+              msg = `Er is een netwerkfout opgetreden bij het verbinden met de EuroMillions API. Controleer uw internetverbinding. (Bron: ${error.details.source})`;
+            } else if (error.details?.source === "both" && error.details?.reason === "api_unavailable") {
+              msg = `Kon geen verbinding maken met de EuroMillions API (zowel productie als staging). Probeer het later opnieuw.`;
+            }
           }
+          setUserFacingErrorMessage(msg);
+          showError(msg);
+          return [];
         }
-        setUserFacingErrorMessage(msg);
-        showError(msg);
-        return [];
       }
     },
     staleTime: TTL_12H,
