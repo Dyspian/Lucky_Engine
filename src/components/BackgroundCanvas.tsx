@@ -9,12 +9,13 @@ interface Particle {
   speedX: number;
   speedY: number;
   opacity: number;
-  color: string;
+  image: HTMLImageElement | null; // Now holds the image element
 }
 
 const BackgroundCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameId = useRef<number | null>(null);
+  const cloverImageRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -24,14 +25,27 @@ const BackgroundCanvas = () => {
     if (!ctx) return;
 
     let particles: Particle[] = [];
-    const particleCount = 150; // Increased particle count
-    const colors = ['hsl(var(--particle-green))', 'hsl(var(--primary))', 'rgba(255,255,255,0.8)']; // Green, Gold, White
+    const particleCount = 100; // Adjusted particle count for image performance
+
+    // Preload the clover image
+    const preloadImage = new Image();
+    preloadImage.src = '/clovereffect.svg'; // Assuming clovereffect.svg is in the public folder
+    preloadImage.onload = () => {
+      cloverImageRef.current = preloadImage;
+      resizeCanvas(); // Initial resize and particle setup after image loads
+      animate();
+    };
+    preloadImage.onerror = (err) => {
+      console.error("Failed to load clover image:", err);
+      // Fallback or handle error if image fails to load
+      resizeCanvas(); // Still initialize canvas even if image fails
+      animate();
+    };
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      // Re-initialize particles on resize to distribute them correctly
-      particles = [];
+      particles = []; // Clear existing particles
       initParticles();
     };
 
@@ -40,11 +54,11 @@ const BackgroundCanvas = () => {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          size: Math.random() * 2 + 1, // Larger particles (1 to 3)
-          speedX: (Math.random() - 0.5) * 0.2, // Slightly faster horizontal movement
-          speedY: Math.random() * 0.1 + 0.1, // Faster upwards movement (0.1 to 0.2)
+          size: Math.random() * 10 + 10, // Small size for clovers (10 to 20px)
+          speedX: (Math.random() - 0.5) * 0.1, // Slower horizontal movement
+          speedY: Math.random() * 0.05 + 0.05, // Slower upwards movement
           opacity: Math.random() * 0.6 + 0.4, // Higher opacity (0.4 to 1.0)
-          color: colors[Math.floor(Math.random() * colors.length)],
+          image: cloverImageRef.current,
         });
       }
     };
@@ -55,13 +69,12 @@ const BackgroundCanvas = () => {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach(p => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = p.opacity;
-        ctx.shadowBlur = 8; // Add a subtle glow
-        ctx.shadowColor = p.color; // Glow color matches particle color
-        ctx.fill();
+        if (p.image) {
+          ctx.globalAlpha = p.opacity;
+          ctx.shadowBlur = 10; // Add a subtle glow
+          ctx.shadowColor = 'hsl(var(--particle-green))'; // Green glow for clovers
+          ctx.drawImage(p.image, p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+        }
       });
       ctx.shadowBlur = 0; // Reset shadow blur after drawing particles
       ctx.shadowColor = 'transparent';
@@ -93,8 +106,8 @@ const BackgroundCanvas = () => {
     };
 
     window.addEventListener('resize', resizeCanvas);
-    resizeCanvas(); // Initial resize and particle setup
-    animate();
+    // Initial setup is now handled by preloadImage.onload
+    // No need to call resizeCanvas() or animate() directly here
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
