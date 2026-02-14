@@ -235,22 +235,20 @@ const DrawsPage = () => {
                   </form>
                 </CardContent>
               </Card>
-
-              {/* AD 4: Sidebar Ad (Rectangle) */}
-              <div className="mt-8 hidden lg:block">
-                 <AdMockup size="rectangle" />
-              </div>
+              {/* Sidebar placeholder removed as requested */}
           </motion.div>
 
           <div className="lg:col-span-2 space-y-4">
-            {/* AD 5: Main Content Top Ad (Leaderboard) */}
-            <AdMockup 
-              size="leaderboard" 
-              className="mb-6"
-              imageUrl="https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/ads1.png"
-              linkUrl="https://partner.bybit.com/b/luckyengine"
-              label="Partner van Lucky Engine"
-            />
+            {/* Main Content Top Ad (Leaderboard) - Using Ads 1 as requested */}
+            <div className="relative z-10">
+              <AdMockup 
+                size="leaderboard" 
+                className="mb-6 w-full"
+                imageUrl="https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/ads1.png"
+                linkUrl="https://partner.bybit.com/b/luckyengine"
+                label="Partner van Lucky Engine"
+              />
+            </div>
 
             {isLoading ? (
               <div className="flex flex-col items-center justify-center py-24 text-muted-foreground bg-card/30 rounded-lg border border-border/10">
