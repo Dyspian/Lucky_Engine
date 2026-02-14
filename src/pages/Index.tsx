@@ -13,6 +13,7 @@ import TicketCard from "@/components/TicketCard";
 import { ExplanationSection, DisclaimerSection } from "@/components/InfoSections";
 import { showSuccess, showError } from "@/utils/toast";
 import { motion, AnimatePresence } from "framer-motion";
+import LoadingScreen from '@/components/LoadingScreen';
 
 const CACHE_KEY = "draws:v1";
 const TTL_12H = 12 * 60 * 60 * 1000;
@@ -67,70 +68,76 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground selection:bg-primary/30">
-      <Navbar />
-      
-      <main className="container mx-auto px-4 pb-24">
-        <Hero />
+    <>
+      <AnimatePresence>
+        {isDataLoading && !drawsData && <LoadingScreen />}
+      </AnimatePresence>
+
+      <div className="min-h-screen bg-background text-foreground selection:bg-primary/30">
+        <Navbar />
         
-        <div className="max-w-4xl mx-auto space-y-24">
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-            <div className="lg:col-span-5 sticky top-24">
-              <GeneratorPanel onGenerate={handleGenerate} isLoading={isGenerating || isDataLoading} />
-            </div>
-            
-            <div className="lg:col-span-7 space-y-8 min-h-[400px]" id="results">
-              <AnimatePresence mode="wait">
-                {results ? (
-                  <motion.div 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="space-y-6"
-                  >
-                    <div className="flex items-center justify-between px-2">
-                      <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
-                        Generated Results
-                      </h2>
-                      <span className="text-[10px] font-medium text-primary/60 italic">
-                        Weighted by statistical score
-                      </span>
-                    </div>
-                    
-                    <div className="space-y-4">
-                      {results.tickets.map((ticket, i) => (
-                        <TicketCard key={i} ticket={ticket} index={i} />
-                      ))}
-                    </div>
-
-                    <div className="p-6 rounded-2xl bg-primary/[0.03] border border-primary/10">
-                      <p className="text-xs text-primary/80 leading-relaxed font-medium italic">
-                        {results.explanation}
-                      </p>
-                    </div>
-                  </motion.div>
-                ) : (
-                  <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-20 py-20">
-                    <div className="w-16 h-16 rounded-full border-2 border-dashed border-muted-foreground" />
-                    <p className="text-sm font-medium uppercase tracking-widest">Awaiting Configuration</p>
-                  </div>
-                )}
-              </AnimatePresence>
-            </div>
-          </section>
-
-          <ExplanationSection />
+        <main className="container mx-auto px-4 pb-24">
+          <Hero />
           
-          <DisclaimerSection />
-        </div>
-      </main>
+          <div className="max-w-4xl mx-auto space-y-24">
+            <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+              <div className="lg:col-span-5 sticky top-24">
+                <GeneratorPanel onGenerate={handleGenerate} isLoading={isGenerating || isDataLoading} />
+              </div>
+              
+              <div className="lg:col-span-7 space-y-8 min-h-[400px]" id="results">
+                <AnimatePresence mode="wait">
+                  {results ? (
+                    <motion.div 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="space-y-6"
+                    >
+                      <div className="flex items-center justify-between px-2">
+                        <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
+                          Generated Results
+                        </h2>
+                        <span className="text-[10px] font-medium text-primary/60 italic">
+                          Weighted by statistical score
+                        </span>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        {results.tickets.map((ticket, i) => (
+                          <TicketCard key={i} ticket={ticket} index={i} />
+                        ))}
+                      </div>
 
-      <footer className="py-12 border-t border-white/5 text-center">
-        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground/40">
-          © 2024 Lucky Engine • Analytical Systems Division
-        </p>
-      </footer>
-    </div>
+                      <div className="p-6 rounded-2xl bg-primary/[0.03] border border-primary/10">
+                        <p className="text-xs text-primary/80 leading-relaxed font-medium italic">
+                          {results.explanation}
+                        </p>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-20 py-20">
+                      <div className="w-16 h-16 rounded-full border-2 border-dashed border-muted-foreground" />
+                      <p className="text-sm font-medium uppercase tracking-widest">Awaiting Configuration</p>
+                    </div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </section>
+
+            <ExplanationSection />
+            
+            <DisclaimerSection />
+          </div>
+        </main>
+
+        <footer className="py-12 border-t border-white/5 text-center">
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground/40">
+            © 2024 Lucky Engine • Analytical Systems Division
+          </p>
+        </footer>
+      </div>
+    </>
   );
 };
 
