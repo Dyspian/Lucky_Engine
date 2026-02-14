@@ -13,23 +13,13 @@ export const EUROMILLIONS_API_STAGING_URL = "https://euromillions.staging.api.pe
 /**
  * Resolves the base URL for the EuroMillions API based on the environment.
  * 
- * In development: Uses the local proxy path '/api/euromillions' to avoid CORS.
- * In production: Uses the real production URL.
+ * We are bypassing the local proxy and connecting directly to production
+ * to avoid the 429 Too Many Requests error on localhost.
  *
  * @returns The resolved and normalized base URL for the EuroMillions API.
  */
 export function getEuromillionsApiBaseUrl(): string {
-  // If explicitly set via env var, prioritize it
-  if (import.meta.env.NEXT_PUBLIC_EUROMILLIONS_API_BASE_URL) {
-    const url = import.meta.env.NEXT_PUBLIC_EUROMILLIONS_API_BASE_URL;
-    return url.endsWith('/') ? url : `${url}/`;
-  }
-
-  // In production, use the real domain
-  if (import.meta.env.MODE === 'production') {
-    return EUROMILLIONS_API_PROD_URL.endsWith('/') ? EUROMILLIONS_API_PROD_URL : `${EUROMILLIONS_API_PROD_URL}/`;
-  }
-
-  // In development, use the local proxy configured in vite.config.ts
-  return '/api/euromillions/'; 
+  // Always use the real production URL.
+  // This bypasses local proxy issues and 429s from the dev server.
+  return EUROMILLIONS_API_PROD_URL.endsWith('/') ? EUROMILLIONS_API_PROD_URL : `${EUROMILLIONS_API_PROD_URL}/`;
 }

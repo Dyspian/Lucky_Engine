@@ -25,26 +25,26 @@ const BackgroundCanvas = () => {
     if (!ctx) return;
 
     let particles: Particle[] = [];
-    const particleCount = window.innerWidth < 768 ? 80 : 150; // Reduced particle count for mobile
+    const particleCount = window.innerWidth < 768 ? 80 : 150; 
 
-    // Preload the clover image
+    // Use placeholder.svg since clovereffect.svg is missing to prevent 404
     const preloadImage = new Image();
-    preloadImage.src = '/clovereffect.svg'; // Assumes clovereffect.svg is in the public folder
+    preloadImage.src = '/placeholder.svg'; 
     preloadImage.onload = () => {
       cloverImageRef.current = preloadImage;
-      resizeCanvas(); // Initial resize and particle setup after image loads
+      resizeCanvas(); 
       animate();
     };
     preloadImage.onerror = (err) => {
-      console.error("Failed to load clover image:", err);
-      resizeCanvas(); // Still initialize canvas even if image fails
+      console.warn("Failed to load particle image, falling back to shapes.");
+      resizeCanvas(); 
       animate();
     };
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      particles = []; // Clear existing particles
+      particles = []; 
       initParticles();
     };
 
@@ -53,10 +53,10 @@ const BackgroundCanvas = () => {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          size: Math.random() * 10 + 10, // Slightly smaller size for clovers (10 to 20px)
-          speedX: (Math.random() - 0.5) * 0.05, // Even slower horizontal movement
-          speedY: Math.random() * 0.03 + 0.03, // Even slower upwards movement
-          opacity: Math.random() * 0.2 + 0.1, // Much lower opacity (0.1 to 0.3)
+          size: Math.random() * 10 + 10, 
+          speedX: (Math.random() - 0.5) * 0.05, 
+          speedY: Math.random() * 0.03 + 0.03, 
+          opacity: Math.random() * 0.2 + 0.1, 
           image: cloverImageRef.current,
         });
       }
@@ -64,26 +64,31 @@ const BackgroundCanvas = () => {
 
     const drawParticles = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      // No need to draw background here, it's handled by CSS
       
       particles.forEach(p => {
         if (p.image) {
           ctx.globalAlpha = p.opacity;
-          ctx.shadowBlur = 5; // Subtle glow
-          ctx.shadowColor = 'hsl(var(--emerald) / 0.3)'; // Emerald glow for clovers
+          ctx.shadowBlur = 5; 
+          ctx.shadowColor = 'hsl(var(--emerald) / 0.3)'; 
           ctx.drawImage(p.image, p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+        } else {
+          // Fallback if image fails or isn't loaded yet: simple circles
+          ctx.globalAlpha = p.opacity;
+          ctx.fillStyle = 'hsl(148, 100%, 39%)'; // Manual emerald color
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size / 4, 0, Math.PI * 2);
+          ctx.fill();
         }
       });
-      ctx.shadowBlur = 0; // Reset shadow blur after drawing particles
+      ctx.shadowBlur = 0; 
       ctx.shadowColor = 'transparent';
     };
 
     const updateParticles = () => {
       particles.forEach(p => {
         p.x += p.speedX;
-        p.y -= p.speedY; // Move upwards
+        p.y -= p.speedY; 
 
-        // Reset particle if it goes off screen
         if (p.y < -p.size) {
           p.y = canvas.height + p.size;
           p.x = Math.random() * canvas.width;
