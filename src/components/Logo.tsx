@@ -3,11 +3,17 @@
 import React from 'react';
 import { cn } from "@/lib/utils";
 
-const Logo = ({ className, imgClassName }: { className?: string; imgClassName?: string }) => {
+interface LogoProps {
+  className?: string;
+  imgClassName?: string;
+  imageUrl?: string; // New prop for image URL
+}
+
+const Logo = ({ className, imgClassName, imageUrl = "/lucky_engine.png" }: LogoProps) => {
   return (
     <div className={cn("relative group", className)}>
       <img 
-        src="/lucky_engine.png" 
+        src={imageUrl} 
         alt="Lucky Engine Logo" 
         className={cn("w-auto transition-transform duration-500 ease-in-out group-hover:scale-105", imgClassName)}
       />
