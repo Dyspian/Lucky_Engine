@@ -11,9 +11,8 @@ const Navbar = () => {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Logo imgClassName="h-10" imageUrl={logoUrl} />
         <div className="hidden sm:block">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-            Premium Statistical Engine v2.4
-          </span>
+          {/* Replaced text with another instance of the Logo */}
+          <Logo imgClassName="h-8 opacity-70" imageUrl={logoUrl} />
         </div>
       </div>
     </nav>
