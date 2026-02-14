@@ -42,11 +42,11 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
       initial="hidden"
       animate="visible"
     >
-      <div className="max-w-3xl mx-auto text-center space-y-6 relative z-10"> {/* Adjusted for single column, centered content */}
+      <div className="max-w-3xl mx-auto text-center space-y-6 relative z-10">
         <motion.div variants={itemVariants}>
           <Logo
             imageUrl={logoUrl}
-            imgClassName="h-20 md:h-24 mx-auto mb-4" // Ensure logo is centered
+            imgClassName="h-32 md:h-48 mx-auto mb-4" // Increased logo size
             alt="Lucky Engine - Statistical EuroMillions Analysis and Ticket Generator"
             ariaLabel="Lucky Engine Logo - Home Page for EuroMillions Predictions"
           />
@@ -54,10 +54,10 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
         <motion.h1 variants={itemVariants} className="text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
           Find your luck — <br className="hidden md:inline"/>powered by transparent statistics.
         </motion.h1>
-        <motion.p variants={itemVariants} className="text-lg md:text-xl text-indigo-200/80 leading-relaxed max-w-md mx-auto"> {/* Ensure paragraph is centered */}
+        <motion.p variants={itemVariants} className="text-lg md:text-xl text-indigo-200/80 leading-relaxed max-w-md mx-auto">
           Our engine analyzes historical EuroMillions data, applying weighted frequency and recency algorithms to identify mathematical trends.
         </motion.p>
-        <motion.div variants={itemVariants} className="pt-6 flex flex-col sm:flex-row justify-center gap-4"> {/* Ensure buttons are centered */}
+        <motion.div variants={itemVariants} className="pt-6 flex flex-col sm:flex-row justify-center gap-4">
           <Button
             onClick={handleGenerateClick}
             className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-7 px-8 rounded-xl text-lg gold-glow transition-all active:scale-[0.98] relative overflow-hidden group"
