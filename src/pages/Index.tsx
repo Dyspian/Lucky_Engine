@@ -92,7 +92,7 @@ const Index = () => {
         {isDataLoading && !drawsData && <LoadingScreen />}
       </AnimatePresence>
 
-      <div className="relative min-h-screen bg-background text-foreground selection:bg-primary/30">
+      <div className="relative min-h-screen text-foreground selection:bg-primary/30"> {/* Removed bg-background */}
         <BackgroundCanvas /> {/* New animated background */}
         {/* Removed the old bg-background/80 div */}
 
