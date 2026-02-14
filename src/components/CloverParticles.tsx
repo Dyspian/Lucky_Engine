@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import Particles from "@tsparticles/react";
-import { loadSlim } from "@tsparticles/slim"; // loads tsparticles-slim
+import { loadSlim } from "@tsparticles/slim";
 import type { Engine } from "@tsparticles/engine";
 
 const CloverParticles = () => {
@@ -58,7 +58,9 @@ const CloverParticles = () => {
               enable: false,
               mode: "repulse",
             },
-            resize: true,
+            resize: {
+              enable: true,
+            },
           },
           modes: {
             push: {
@@ -86,12 +88,11 @@ const CloverParticles = () => {
             random: true,
             speed: 0.3, // Slow drift
             straight: false,
-            vibration: true, // Subtle horizontal movement
           },
           number: {
             density: {
               enable: true,
-              area: 800,
+              value_area: 800, // Corrected back to 'value_area' based on type error
             },
             value: 40, // Low density
           },
@@ -107,10 +108,12 @@ const CloverParticles = () => {
           },
           shape: {
             type: "image",
-            image: {
-              src: "/clover.svg", // Custom clover SVG
-              width: 24,
-              height: 24,
+            options: {
+              image: {
+                src: "/clover.svg", // Custom clover SVG
+                width: 24,
+                height: 24,
+              },
             },
           },
           size: {
@@ -118,7 +121,6 @@ const CloverParticles = () => {
             animation: {
               enable: true,
               speed: 1,
-              minimumValue: 10,
               sync: false,
               startValue: "random",
               destroy: "min",
