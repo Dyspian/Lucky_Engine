@@ -1,8 +1,15 @@
 import { Draw } from "./euromillions-provider";
 
+export type FrequencyData = {
+  value: number;
+  count: number;
+};
+
 export type RankedResult = {
   rankedNumbers: number[];
   rankedStars: number[];
+  numberFrequencies: FrequencyData[];
+  starFrequencies: FrequencyData[];
   explanation: string;
 };
 
@@ -15,7 +22,7 @@ export function calculateStats(draws: Draw[]): RankedResult {
   const recentWindow = 50;
   const recentDraws = draws.slice(0, recentWindow);
 
-  // Initialize maps for all possible numbers (1-50) and stars (1-12)
+  // Initialize maps
   for (let i = 1; i <= 50; i++) {
     allTimeNumbers.set(i, 0);
     recentNumbers.set(i, 0);
@@ -25,13 +32,12 @@ export function calculateStats(draws: Draw[]): RankedResult {
     recentStars.set(i, 0);
   }
 
-  // Calculate all-time frequencies
+  // Calculate frequencies
   draws.forEach((draw) => {
     draw.numbers.forEach((n) => allTimeNumbers.set(n, (allTimeNumbers.get(n) || 0) + 1));
     draw.stars.forEach((s) => allTimeStars.set(s, (allTimeStars.get(s) || 0) + 1));
   });
 
-  // Calculate recent frequencies
   recentDraws.forEach((draw) => {
     draw.numbers.forEach((n) => recentNumbers.set(n, (recentNumbers.get(n) || 0) + 1));
     draw.stars.forEach((s) => recentStars.set(s, (recentStars.get(s) || 0) + 1));
@@ -43,24 +49,20 @@ export function calculateStats(draws: Draw[]): RankedResult {
     totalDraws: number,
     recentCount: number
   ) => {
-    const scores: { item: number; score: number }[] = [];
+    const scores: { item: number; score: number; count: number }[] = [];
     
     allTimeMap.forEach((count, item) => {
       const freqAllTime = count / totalDraws;
       const freqRecent = (recentMap.get(item) || 0) / recentCount;
-      
-      // Formula: score = (freq_all_time * 0.7) + (freq_recent * 0.3)
       const score = (freqAllTime * 0.7) + (freqRecent * 0.3);
-      scores.push({ item, score });
+      scores.push({ item, score, count });
     });
 
-    return scores
-      .sort((a, b) => b.score - a.score)
-      .map((s) => s.item);
+    return scores.sort((a, b) => b.score - a.score);
   };
 
-  const rankedNumbers = calculateScores(allTimeNumbers, recentNumbers, draws.length, recentDraws.length);
-  const rankedStars = calculateScores(allTimeStars, recentStars, draws.length, recentDraws.length);
+  const scoredNumbers = calculateScores(allTimeNumbers, recentNumbers, draws.length, recentDraws.length);
+  const scoredStars = calculateScores(allTimeStars, recentStars, draws.length, recentDraws.length);
 
   const explanation = `
     De Lucky Engine analyseert historische EuroMillions-trekkingen met behulp van een gewogen frequentiemodel. 
@@ -69,12 +71,18 @@ export function calculateStats(draws: Draw[]): RankedResult {
     
     Dit model identificeert getallen die historisch gezien vaker voorkomen, terwijl het ook rekening houdt 
     met recente trends. Belangrijk: EuroMillions-trekkingen zijn onafhankelijke gebeurtenissen. 
-    Historische data biedt geen garantie voor toekomstige resultaten en verhoogt de feitelijke winkans niet.
+    Historische data biedt geen garantie voor toekomstige resultaten.
   `.trim();
 
   return {
-    rankedNumbers,
-    rankedStars,
+    rankedNumbers: scoredNumbers.map(s => s.item),
+    rankedStars: scoredStars.map(s => s.item),
+    numberFrequencies: scoredNumbers
+      .sort((a, b) => a.item - b.item)
+      .map(s => ({ value: s.item, count: s.count })),
+    starFrequencies: scoredStars
+      .sort((a, b) => a.item - b.item)
+      .map(s => ({ value: s.item, count: s.count })),
     explanation,
   };
 }

@@ -9,15 +9,17 @@ import cache from "@/lib/cache";
 import TicketCard from "@/components/TicketCard";
 import StatsInfo from "@/components/StatsInfo";
 import LastDraw from "@/components/LastDraw";
+import FrequencyChart from "@/components/FrequencyChart";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Sparkles, RefreshCw, Ticket as TicketIcon } from "lucide-react";
+import { Sparkles, RefreshCw, Ticket as TicketIcon, BarChart3 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { showError } from "@/utils/toast";
+import { showError, showSuccess } from "@/utils/toast";
 
 const Index = () => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [stats, setStats] = useState<RankedResult | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const { data: draws, isLoading, error } = useQuery({
     queryKey: ['euromillions-draws'],
@@ -29,14 +31,13 @@ const Index = () => {
       cache.set('draws', freshData);
       return freshData;
     },
-    staleTime: 1000 * 60 * 60 * 12, // 12 hours
+    staleTime: 1000 * 60 * 60 * 12,
   });
 
   useEffect(() => {
     if (draws && draws.length > 0) {
       const calculatedStats = calculateStats(draws);
       setStats(calculatedStats);
-      // Generate initial tickets if none exist
       if (tickets.length === 0) {
         setTickets(generateTickets(calculatedStats, 3));
       }
@@ -45,7 +46,13 @@ const Index = () => {
 
   const handleGenerate = () => {
     if (stats) {
-      setTickets(generateTickets(stats, 3));
+      setIsGenerating(true);
+      // Artificial delay for "AI processing" feel
+      setTimeout(() => {
+        setTickets(generateTickets(stats, 3));
+        setIsGenerating(false);
+        showSuccess("Nieuwe geluksgetallen gegenereerd!");
+      }, 800);
     }
   };
 
@@ -55,7 +62,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans selection:bg-indigo-100">
-      {/* Decorative background elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-[10%] -right-[10%] w-[40%] h-[40%] rounded-full bg-indigo-100/50 blur-3xl" />
         <div className="absolute -bottom-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-amber-50/50 blur-3xl" />
@@ -119,11 +125,12 @@ const Index = () => {
                   </h2>
                   <Button 
                     onClick={handleGenerate}
+                    disabled={isGenerating}
                     variant="outline"
-                    className="rounded-full border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all duration-300 font-bold gap-2"
+                    className="rounded-full border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all duration-300 font-bold gap-2 min-w-[160px]"
                   >
-                    <RefreshCw size={18} />
-                    Nieuwe Getallen
+                    <RefreshCw size={18} className={isGenerating ? "animate-spin" : ""} />
+                    {isGenerating ? "Analyseren..." : "Nieuwe Getallen"}
                   </Button>
                 </div>
 
@@ -137,11 +144,30 @@ const Index = () => {
               </div>
 
               {stats && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                  className="space-y-8"
                 >
+                  <div className="flex items-center gap-2 px-2">
+                    <BarChart3 className="text-indigo-600" />
+                    <h2 className="text-2xl font-bold">Data Inzichten</h2>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <FrequencyChart 
+                      data={stats.numberFrequencies} 
+                      title="Getal Frequentie (1-50)" 
+                      color="#4f46e5" 
+                    />
+                    <FrequencyChart 
+                      data={stats.starFrequencies} 
+                      title="Ster Frequentie (1-12)" 
+                      color="#f59e0b" 
+                    />
+                  </div>
+
                   <StatsInfo explanation={stats.explanation} />
                 </motion.div>
               )}
