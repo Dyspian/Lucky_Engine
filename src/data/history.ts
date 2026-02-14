@@ -1,124 +1,24 @@
 import { Draw } from "@/lib/euromillions/schemas";
 
-// A robust local database of recent draws.
+// --- BELANGRIJK / IMPORTANT ---
+// Omdat we geen externe API gebruiken, is dit bestand de "waarheid" voor de engine.
+// U moet de meest recente trekkingen hieronder handmatig toevoegen om de voorspellingen accuraat te houden.
+// Since we don't use an external API, this file is the "source of truth".
+// You must manually add the latest draws below to keep predictions accurate.
+
 export const LOCAL_HISTORY: Draw[] = [
-  {
-    id: 1711,
-    draw_id: 1711,
-    date: "2025-02-14",
-    numbers: [7, 23, 30, 32, 45],
-    stars: [5, 12],
-    has_winner: false,
-    prizes: []
-  },
-  {
-    id: 1710,
-    draw_id: 1710,
-    date: "2025-02-11",
-    numbers: [17, 20, 24, 28, 45],
-    stars: [10, 11],
-    has_winner: false,
-    prizes: []
-  },
-  {
-    id: 1709,
-    draw_id: 1709,
-    date: "2025-02-07",
-    numbers: [12, 16, 26, 30, 41],
-    stars: [1, 9],
-    has_winner: true,
-    prizes: []
-  },
-  {
-    id: 1708,
-    draw_id: 1708,
-    date: "2025-02-04",
-    numbers: [3, 6, 15, 24, 29],
-    stars: [2, 6],
-    has_winner: false,
-    prizes: []
-  },
-  {
-    id: 1707,
-    draw_id: 1707,
-    date: "2025-01-31",
-    numbers: [5, 10, 19, 27, 30],
-    stars: [5, 6],
-    has_winner: true,
-    prizes: []
-  },
-  {
-    id: 1706,
-    draw_id: 1706,
-    date: "2025-01-28",
-    numbers: [1, 5, 21, 35, 42],
-    stars: [3, 9],
-    has_winner: false,
-    prizes: []
-  },
-  {
-    id: 1705,
-    draw_id: 1705,
-    date: "2025-01-24",
-    numbers: [8, 17, 34, 38, 41],
-    stars: [1, 2],
-    has_winner: false,
-    prizes: []
-  },
-  {
-    id: 1704,
-    draw_id: 1704,
-    date: "2025-01-21",
-    numbers: [2, 9, 23, 39, 44],
-    stars: [6, 10],
-    has_winner: false,
-    prizes: []
-  },
-  {
-    id: 1703,
-    draw_id: 1703,
-    date: "2025-01-17",
-    numbers: [15, 22, 35, 42, 48],
-    stars: [3, 7],
-    has_winner: true,
-    prizes: []
-  },
-  {
-    id: 1702,
-    draw_id: 1702,
-    date: "2025-01-14",
-    numbers: [4, 13, 20, 28, 49],
-    stars: [7, 12],
-    has_winner: false,
-    prizes: []
-  },
-  {
-    id: 1701,
-    draw_id: 1701,
-    date: "2025-01-10",
-    numbers: [6, 19, 25, 31, 39],
-    stars: [8, 12],
-    has_winner: false,
-    prizes: []
-  },
-  {
-    id: 1700,
-    draw_id: 1700,
-    date: "2025-01-07",
-    numbers: [11, 22, 29, 36, 40],
-    stars: [4, 9],
-    has_winner: false,
-    prizes: []
-  },
-  {
-    id: 1699,
-    draw_id: 1699,
-    date: "2025-01-03",
-    numbers: [5, 14, 21, 28, 47],
-    stars: [1, 5],
-    has_winner: true,
-    prizes: []
-  },
+  // --- Voeg hier nieuwe trekkingen toe / Add new draws here ---
+  // {
+  //   id: 1700,
+  //   draw_id: 1700,
+  //   date: "2025-01-01",
+  //   numbers: [1, 2, 3, 4, 5],
+  //   stars: [1, 2],
+  //   has_winner: false,
+  //   prizes: []
+  // },
+  
+  // Real History (Late 2024)
   {
     id: 1698,
     draw_id: 1698,
@@ -179,6 +79,51 @@ export const LOCAL_HISTORY: Draw[] = [
     date: "2024-12-10",
     numbers: [5, 14, 23, 35, 40],
     stars: [6, 11],
+    has_winner: true,
+    prizes: []
+  },
+  {
+    id: 1691,
+    draw_id: 1691,
+    date: "2024-12-06",
+    numbers: [2, 7, 13, 22, 43],
+    stars: [1, 9],
+    has_winner: false,
+    prizes: []
+  },
+  {
+    id: 1690,
+    draw_id: 1690,
+    date: "2024-12-03",
+    numbers: [11, 28, 30, 32, 45],
+    stars: [10, 11],
+    has_winner: true,
+    prizes: []
+  },
+  {
+    id: 1689,
+    draw_id: 1689,
+    date: "2024-11-29",
+    numbers: [15, 20, 29, 39, 48],
+    stars: [1, 7],
+    has_winner: false,
+    prizes: []
+  },
+  {
+    id: 1688,
+    draw_id: 1688,
+    date: "2024-11-26",
+    numbers: [3, 13, 27, 30, 46],
+    stars: [1, 2],
+    has_winner: false,
+    prizes: []
+  },
+  {
+    id: 1687,
+    draw_id: 1687,
+    date: "2024-11-22",
+    numbers: [2, 18, 26, 33, 47],
+    stars: [3, 9],
     has_winner: true,
     prizes: []
   }
