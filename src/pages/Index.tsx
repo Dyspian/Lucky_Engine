@@ -129,58 +129,60 @@ const Index = () => {
           
           <TrustStatsStrip />
 
-          <div className="relative my-16 md:my-24 h-px bg-gradient-to-r from-transparent via-emerald/30 to-transparent">
+          <div className="relative my-12 md:my-24 h-px bg-gradient-to-r from-transparent via-emerald/30 to-transparent"> {/* Kleinere my op mobiel */}
             <div className="absolute inset-x-0 -top-2 h-4 bg-emerald/10 blur-md" />
             <div className="absolute inset-x-0 -bottom-2 h-4 bg-emerald/10 blur-md" />
           </div>
           
-          <div className="max-w-6xl mx-auto px-6 space-y-16 md:space-y-24">
+          <div className="max-w-6xl mx-auto px-6 space-y-12 md:space-y-24"> {/* Kleinere space-y op mobiel */}
             {lastDraw && (
-              <section id="last-draw-section" className="mb-16">
+              <section id="last-draw-section" className="mb-12 md:mb-16"> {/* Kleinere mb op mobiel */}
                 <LastDraw draw={lastDraw} />
               </section>
             )}
 
             {statsResult && (
               <section id="frequency-charts" className="space-y-8">
-                <h2 className="text-xl font-bold tracking-extra-wide text-foreground text-center uppercase mb-12 text-small-caps">Frequentie Analyse</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <h2 className="text-xl font-bold tracking-extra-wide text-foreground text-center uppercase mb-8 md:mb-12 text-small-caps">Frequentie Analyse</h2> {/* Kleinere mb op mobiel */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"> {/* Kleinere gap op mobiel */}
                   <FrequencyChart data={numberFrequencyData} title="Getal Frequentie" color="hsl(var(--emerald))" />
                   <FrequencyChart data={starFrequencyData} title="Ster Frequentie" color="hsl(var(--gold))" />
                 </div>
               </section>
             )}
 
-            <section id="generator-section" className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-12 items-start pt-16"> {/* Reduced gap for mobile */}
+            <section id="generator-section" className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-12 items-start pt-12 md:pt-16"> {/* Kleinere gap en pt op mobiel */}
               <div className="lg:col-span-5 sticky top-24">
                 <GeneratorPanel onGenerate={handleGenerate} isLoading={isGenerating || isDataLoading} />
               </div>
               
-              <div className="lg:col-span-7 space-y-8 min-h-[400px] pt-8" id="results"> {/* Added pt-8 for spacing */}
+              <div className="lg:col-span-7 space-y-6 min-h-[400px] pt-6 md:pt-8" id="results"> {/* Kleinere space-y en pt op mobiel */}
                 <AnimatePresence mode="wait">
                   {results ? (
                     <motion.div 
                       initial={{ opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -6 }}
-                      className="space-y-6"
+                      /* Kleinere space-y */
+                      className="space-y-4" 
                     >
                       <div className="flex items-center justify-between px-2">
                         <h2 className="text-xs font-bold uppercase tracking-extra-wide text-muted-foreground text-small-caps">
                           Gegenereerde Resultaten
                         </h2>
-                        <span className="text-[10px] font-medium text-emerald/60 italic">
+                        <span className="text-[9px] font-medium text-emerald/60 italic"> {/* Kleinere tekst */}
                           Gewogen op basis van statistische score
                         </span>
                       </div>
                       
-                      <div className="space-y-4">
+                      <div className="space-y-3"> {/* Kleinere space-y */}
                         {results.tickets.map((ticket, i) => (
                           <TicketCard key={i} ticket={ticket} index={i} />
                         ))}
                       </div>
 
-                      <div className="p-6 rounded-md bg-card border border-border/20 shadow-lg"
+                      {/* Kleinere padding */}
+                      <div className="p-4 rounded-md bg-card border border-border/20 shadow-lg" 
                         style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.3), 0 1px 5px rgba(0,0,0,0.1)' }}
                       >
                         <p className="text-xs text-secondary-foreground leading-relaxed font-medium italic">
@@ -189,8 +191,8 @@ const Index = () => {
                       </div>
                     </motion.div>
                   ) : (
-                    <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-20 py-20">
-                      <div className="w-16 h-16 rounded-full border-2 border-dashed border-muted-foreground" />
+                    <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-20 py-16 md:py-20"> {/* Kleinere py op mobiel */}
+                      <div className="w-14 h-14 rounded-full border-2 border-dashed border-muted-foreground" /> {/* Kleinere placeholder */}
                       <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground text-small-caps">Wachten op Configuratie</p>
                     </div>
                   )}
@@ -198,7 +200,7 @@ const Index = () => {
               </div>
             </section>
 
-            <section id="explanation-section" className="pt-16">
+            <section id="explanation-section" className="pt-12 md:pt-16"> {/* Kleinere pt op mobiel */}
               <ExplanationSection />
             </section>
             
@@ -206,9 +208,9 @@ const Index = () => {
           </div>
         </main>
 
-        <footer className="py-12 border-t border-border/10 relative z-10 mt-24">
+        <footer className="py-8 border-t border-border/10 relative z-10 mt-16 md:mt-24"> {/* Kleinere py en mt op mobiel */}
           <div className="max-w-6xl mx-auto px-6 text-left">
-            <p className="text-[10px] font-bold uppercase tracking-extra-wide text-muted-foreground/40 text-small-caps">
+            <p className="text-[9px] font-bold uppercase tracking-extra-wide text-muted-foreground/40 text-small-caps"> {/* Kleinere tekst */}
               © 2024 Lucky Engine • Analytische Systemen Divisie
             </p>
           </div>

@@ -26,19 +26,19 @@ const LastDraw = ({ draw }: LastDrawProps) => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6"> {/* Aangepaste gap */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4"> {/* Nog compactere gap */}
           <div>
-            <p className="text-xl sm:text-2xl font-bold capitalize mb-1 text-foreground">{formattedDate}</p> {/* Aangepaste tekstgrootte */}
-            <p className="text-muted-foreground text-sm">Officiële resultaten van de laatste trekking</p>
+            <p className="text-lg sm:text-2xl font-bold capitalize mb-0.5 text-foreground">{formattedDate}</p> {/* Aangepaste tekstgrootte en mb */}
+            <p className="text-muted-foreground text-xs sm:text-sm">Officiële resultaten van de laatste trekking</p> {/* Kleinere tekst op mobiel */}
           </div>
-          <div className="flex flex-wrap gap-2 items-center">
-            <div className="flex gap-2">
+          <div className="flex flex-wrap gap-1 items-center"> {/* Nog compactere gap voor ballen */}
+            <div className="flex gap-1"> {/* Nog compactere gap */}
               {draw.numbers.map((n, i) => (
                 <Ball key={`last-n-${i}`} value={n} delay={i * 0.05} />
               ))}
             </div>
-            <div className="w-px h-8 bg-border/50 mx-2 hidden sm:block" />
-            <div className="flex gap-2">
+            <div className="w-px h-6 bg-border/50 mx-1 hidden sm:block" /> {/* Kleinere separator */}
+            <div className="flex gap-1"> {/* Nog compactere gap */}
               {draw.stars.map((s, i) => (
                 <Ball key={`last-s-${i}`} value={s} variant="star" delay={0.3 + i * 0.05} />
               ))}
