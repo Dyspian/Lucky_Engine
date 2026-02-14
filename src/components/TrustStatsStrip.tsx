@@ -50,7 +50,7 @@ const TrustStatsStrip = () => {
         {trustFacts.map((fact, i) => (
           <motion.div
             key={i}
-            className="bg-card border border-border/20 p-6 rounded-md flex flex-col items-center text-center space-y-3 shadow-lg transition-all duration-120 hover:border-emerald/50 hover:shadow-emerald-glow hover:-translate-y-1"
+            className="bg-card border border-border/20 p-6 rounded-lg flex flex-col items-center text-center space-y-3 shadow-lg transition-all duration-120 hover:border-emerald/50 hover:shadow-emerald-glow hover:-translate-y-1"
             variants={itemVariants}
             transition={{ delay: i * 0.1 }}
           >

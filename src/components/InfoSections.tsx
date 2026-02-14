@@ -21,7 +21,7 @@ export const ExplanationSection = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {points.map((p, i) => (
-          <div key={i} className="p-6 rounded-md bg-card border border-border/20 space-y-2 shadow-lg transition-all duration-120 hover:border-emerald/50 hover:-translate-y-1">
+          <div key={i} className="p-6 rounded-lg bg-card border border-border/20 space-y-2 shadow-lg transition-all duration-120 hover:border-emerald/50 hover:-translate-y-1">
             <div className="flex items-center gap-2 text-emerald">
               <CheckCircle2 size={16} />
               <h3 className="font-bold text-sm uppercase tracking-wider text-foreground">{p.title}</h3>
@@ -36,7 +36,7 @@ export const ExplanationSection = () => {
 
 export const DisclaimerSection = () => {
   return (
-    <section className="p-8 rounded-md bg-card border border-border/20 space-y-4 shadow-lg">
+    <section className="p-8 rounded-lg bg-card border border-border/20 space-y-4 shadow-lg">
       <div className="flex items-center gap-2 text-muted-foreground">
         <AlertTriangle size={16} className="text-emerald" />
         <h2 className="text-xs font-bold uppercase tracking-extra-wide">Juridische Disclaimer</h2>

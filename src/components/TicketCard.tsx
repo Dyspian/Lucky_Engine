@@ -30,7 +30,7 @@ const TicketCard = ({ ticket, index }: TicketCardProps) => {
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: index * 0.05, duration: 0.3 }}
     >
-      <Card className="bg-card border border-border/20 overflow-hidden rounded-md shadow-lg transition-all duration-120 hover:border-emerald/50 hover:-translate-y-1">
+      <Card className="bg-card border border-border/20 overflow-hidden rounded-lg shadow-lg transition-all duration-120 hover:border-emerald/50 hover:-translate-y-1">
         <CardContent className="p-5 sm:p-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">

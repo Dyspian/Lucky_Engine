@@ -185,10 +185,12 @@ const Index = () => {
           </div>
         </main>
 
-        <footer className="py-12 border-t border-border/10 text-center relative z-10 mt-24">
-          <p className="text-[10px] font-bold uppercase tracking-extra-wide text-muted-foreground/40">
-            © 2024 Lucky Engine • Analytische Systemen Divisie
-          </p>
+        <footer className="py-12 border-t border-border/10 relative z-10 mt-24">
+          <div className="max-w-6xl mx-auto px-6 text-left"> {/* Left-aligned footer text */}
+            <p className="text-[10px] font-bold uppercase tracking-extra-wide text-muted-foreground/40">
+              © 2024 Lucky Engine • Analytische Systemen Divisie
+            </p>
+          </div>
         </footer>
       </div>
     </>
