@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import Logo from './Logo';
 import { Sparkles } from 'lucide-react';
-import AnimatedOrb from './AnimatedOrb'; // Import the new AnimatedOrb component
+// Removed: import AnimatedOrb from './AnimatedOrb';
 
 interface HeroLuckProps {
   onGenerateClick: () => void;
@@ -84,8 +84,10 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
 
         {/* Right: Luck Core Visual */}
         <div className="relative flex items-center justify-center h-80 lg:h-auto min-h-[300px] z-0">
-          {/* Replaced the old motion.div with the new AnimatedOrb component */}
-          <AnimatedOrb className="w-64 h-64 md:w-80 md:h-80" /> 
+          {/* Replaced AnimatedOrb with a static blurred background div */}
+          <div
+            className="absolute w-64 h-64 md:w-80 md:h-80 rounded-full blur-2xl opacity-70 bg-gradient-to-br from-primary/30 to-secondary/30"
+          />
           
           <motion.div
             className="absolute w-56 h-56 md:w-72 md:h-72 rounded-full border border-primary/50 flex items-center justify-center"
