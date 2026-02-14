@@ -4,7 +4,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import Logo from './Logo';
-import confetti from 'canvas-confetti';
 import { Sparkles } from 'lucide-react';
 
 interface HeroLuckProps {
@@ -16,14 +15,7 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
   const logoUrl = "https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/lucky_engine.png";
 
   const handleGenerateClick = () => {
-    confetti({
-      particleCount: 50,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors: ['#34D399', '#10B981', '#059669', '#FFD700'], // Green and gold
-      shapes: ['circle', 'square'], // Simple shapes for confetti
-      scalar: 0.8,
-    });
+    // Confetti effect moved to GeneratorPanel
     onGenerateClick();
   };
 

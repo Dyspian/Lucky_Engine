@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Settings2, Sparkles, ChevronDown, Loader2 } from "lucide-react";
 import { Period } from "@/lib/stats-engine";
+import confetti from 'canvas-confetti'; // Import confetti
 
 interface GeneratorPanelProps {
   onGenerate: (config: any) => void;
@@ -23,6 +24,15 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleGenerate = () => {
+    // Trigger confetti effect here
+    confetti({
+      particleCount: 50,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#34D399', '#10B981', '#059669', '#FFD700'], // Green and gold
+      shapes: ['circle', 'square'], // Simple shapes for confetti
+      scalar: 0.8,
+    });
     onGenerate({
       tickets: tickets[0],
       period,
