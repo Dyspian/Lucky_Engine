@@ -15,22 +15,29 @@ const Ball = ({ value, variant = 'number', delay = 0 }: BallProps) => {
   
   return (
     <motion.div
-      initial={{ scale: 0.8, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
+      initial={{ scale: 0.8, opacity: 0, y: 6 }}
+      animate={{ scale: 1, opacity: 1, y: 0 }}
       transition={{ 
         type: "spring", 
-        stiffness: 300, 
-        damping: 25,
-        delay: delay 
+        stiffness: 200, 
+        damping: 20,
+        delay: delay,
+        duration: 0.4
       }}
       className={cn(
-        "flex items-center justify-center font-bold select-none transition-transform hover:scale-110",
+        "flex items-center justify-center font-bold select-none transition-transform duration-120",
         isStar 
-          ? "w-9 h-9 bg-primary text-primary-foreground rounded-lg rotate-45 gold-glow" 
-          : "w-11 h-11 bg-secondary border border-white/10 text-white rounded-full"
+          ? "w-9 h-9 bg-gradient-to-br from-gold-depth to-gold text-primary-foreground rounded-md rotate-45 relative overflow-hidden border border-gold/50 shadow-inner shadow-gold/30" 
+          : "w-11 h-11 bg-gradient-to-br from-card to-background text-foreground rounded-full relative overflow-hidden border border-border/50 shadow-inner shadow-background/30"
       )}
     >
-      <span className={cn(isStar && "-rotate-45")}>
+      {/* Subtle radial highlight */}
+      <div className={cn(
+        "absolute inset-0 rounded-full",
+        isStar ? "rounded-md" : "rounded-full",
+        "bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50"
+      )} />
+      <span className={cn(isStar && "-rotate-45 text-primary-foreground")}>
         {value}
       </span>
     </motion.div>

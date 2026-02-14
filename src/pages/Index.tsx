@@ -17,7 +17,8 @@ import LoadingScreen from '@/components/LoadingScreen';
 import TrustStatsStrip from '@/components/TrustStatsStrip';
 import LastDraw from '@/components/LastDraw';
 import FrequencyChart from '@/components/FrequencyChart';
-import BackgroundCanvas from '@/components/BackgroundCanvas'; // Import the new component
+import BackgroundCanvas from '@/components/BackgroundCanvas';
+import BackgroundGrid from '@/components/BackgroundGrid'; // Import the new grid component
 
 const CACHE_KEY = "draws:v1";
 const TTL_12H = 12 * 60 * 60 * 1000;
@@ -92,13 +93,14 @@ const Index = () => {
         {isDataLoading && !drawsData && <LoadingScreen />}
       </AnimatePresence>
 
-      <div className="relative min-h-screen text-foreground selection:bg-primary/30"> {/* Removed bg-background */}
-        <BackgroundCanvas /> {/* New animated background */}
-        {/* Removed the old bg-background/80 div */}
+      <div className="relative min-h-screen text-foreground selection:bg-emerald/30 font-sans">
+        <BackgroundGrid /> {/* Layer 4: Grid pattern */}
+        <BackgroundCanvas /> {/* Layer 3: Clover particles */}
+        <div className="radial-spotlight" /> {/* Layer 2: Radial spotlight */}
 
         <Navbar />
         
-        <main className="container mx-auto px-4 pb-24 relative z-10">
+        <main className="relative z-10">
           <HeroLuck
             onGenerateClick={() => scrollToSection('generator-section')}
             onHowItWorksClick={() => scrollToSection('explanation-section')}
@@ -106,12 +108,13 @@ const Index = () => {
           
           <TrustStatsStrip />
 
-          <div className="relative my-16 md:my-24 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent">
-            <div className="absolute inset-x-0 -top-2 h-4 bg-primary/10 blur-md" />
-            <div className="absolute inset-x-0 -bottom-2 h-4 bg-primary/10 blur-md" />
+          {/* Subtle divider with glow */}
+          <div className="relative my-16 md:my-24 h-px bg-gradient-to-r from-transparent via-emerald/30 to-transparent">
+            <div className="absolute inset-x-0 -top-2 h-4 bg-emerald/10 blur-md" />
+            <div className="absolute inset-x-0 -bottom-2 h-4 bg-emerald/10 blur-md" />
           </div>
           
-          <div className="max-w-4xl mx-auto space-y-24">
+          <div className="max-w-6xl mx-auto px-6 space-y-24"> {/* Increased max-width and adjusted padding */}
             {lastDraw && (
               <section id="last-draw-section" className="mb-16">
                 <LastDraw draw={lastDraw} />
@@ -120,15 +123,16 @@ const Index = () => {
 
             {statsResult && (
               <section id="frequency-charts" className="space-y-8">
-                <h2 className="text-2xl font-bold tracking-tight text-white text-center">Frequentie Analyse</h2>
+                <h2 className="text-xl font-bold tracking-extra-wide text-foreground text-center uppercase mb-12">Frequentie Analyse</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <FrequencyChart data={numberFrequencyData} title="Getal Frequentie" color="hsl(var(--primary))" />
-                  <FrequencyChart data={starFrequencyData} title="Ster Frequentie" color="hsl(var(--primary))" />
+                  <FrequencyChart data={numberFrequencyData} title="Getal Frequentie" color="hsl(var(--emerald))" />
+                  <FrequencyChart data={starFrequencyData} title="Ster Frequentie" color="hsl(var(--gold))" /> {/* Stars use gold color */}
                 </div>
               </section>
             )}
 
-            <section id="generator-section" className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            {/* Generator Section - Asymmetric Layout */}
+            <section id="generator-section" className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start pt-16">
               <div className="lg:col-span-5 sticky top-24">
                 <GeneratorPanel onGenerate={handleGenerate} isLoading={isGenerating || isDataLoading} />
               </div>
@@ -137,16 +141,16 @@ const Index = () => {
                 <AnimatePresence mode="wait">
                   {results ? (
                     <motion.div 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
                       className="space-y-6"
                     >
                       <div className="flex items-center justify-between px-2">
-                        <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
+                        <h2 className="text-xs font-bold uppercase tracking-extra-wide text-muted-foreground">
                           Gegenereerde Resultaten
                         </h2>
-                        <span className="text-[10px] font-medium text-primary/60 italic">
+                        <span className="text-[10px] font-medium text-emerald/60 italic">
                           Gewogen op basis van statistische score
                         </span>
                       </div>
@@ -157,8 +161,8 @@ const Index = () => {
                         ))}
                       </div>
 
-                      <div className="p-6 rounded-2xl bg-primary/[0.03] border border-primary/10 shadow-lg">
-                        <p className="text-xs text-primary/80 leading-relaxed font-medium italic">
+                      <div className="p-6 rounded-md bg-card border border-border/20 shadow-lg">
+                        <p className="text-xs text-secondary-foreground leading-relaxed font-medium italic">
                           {results.explanation}
                         </p>
                       </div>
@@ -166,14 +170,14 @@ const Index = () => {
                   ) : (
                     <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-20 py-20">
                       <div className="w-16 h-16 rounded-full border-2 border-dashed border-muted-foreground" />
-                      <p className="text-sm font-medium uppercase tracking-widest">Wachten op Configuratie</p>
+                      <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground">Wachten op Configuratie</p>
                     </div>
                   )}
                 </AnimatePresence>
               </div>
             </section>
 
-            <section id="explanation-section">
+            <section id="explanation-section" className="pt-16">
               <ExplanationSection />
             </section>
             
@@ -181,8 +185,8 @@ const Index = () => {
           </div>
         </main>
 
-        <footer className="py-12 border-t border-white/5 text-center relative z-10">
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground/40">
+        <footer className="py-12 border-t border-border/10 text-center relative z-10 mt-24">
+          <p className="text-[10px] font-bold uppercase tracking-extra-wide text-muted-foreground/40">
             © 2024 Lucky Engine • Analytische Systemen Divisie
           </p>
         </footer>

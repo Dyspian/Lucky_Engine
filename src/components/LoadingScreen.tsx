@@ -38,12 +38,12 @@ const LoadingScreen = () => {
         <Logo imgClassName="h-24" imageUrl={logoUrl} alt="Lucky Engine Laadlogo" ariaLabel="Lucky Engine Laadscherm Logo" />
       </motion.div>
 
-      <div className="w-64 h-1 bg-white/5 rounded-full mt-12 mb-6 overflow-hidden">
+      <div className="w-64 h-1 bg-border/50 rounded-full mt-12 mb-6 overflow-hidden relative">
         <motion.div
-          className="h-full bg-primary gold-glow"
+          className="absolute top-0 left-0 h-full w-1/3 bg-emerald emerald-glow rounded-full"
           initial={{ x: '-100%' }}
           animate={{ x: '100%' }}
-          transition={{ duration: 2, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror' }}
+          transition={{ duration: 1.5, ease: 'linear', repeat: Infinity }}
         />
       </div>
 

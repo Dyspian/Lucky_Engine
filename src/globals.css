@@ -4,37 +4,46 @@
 
 @layer base {
   :root {
-    --background: 220 50% 15%; /* A more distinct dark blue */
-    --foreground: 210 40% 98%;
+    /* Base Background */
+    --background: 216 20% 6%; /* #0B0F14 */
+    --card: 216 20% 8%;     /* #0E141B - Section variation */
+    --popover: 216 20% 8%;  /* #0E141B */
 
-    --card: 222 47% 8%; /* Slightly lighter card background */
-    --card-foreground: 210 40% 98%;
+    /* Emerald Accent */
+    --emerald: 148 100% 39%; /* #00C853 */
+    --emerald-hover: 148 100% 45%; /* #00E676 */
+    --emerald-depth: 160 100% 11%; /* #003B2A */
 
-    --popover: 222 47% 6%;
-    --popover-foreground: 210 40% 98%;
+    /* Gold Accent */
+    --gold: 40 50% 57%; /* #C6A95F */
 
-    --primary: 40 95% 55%; /* More vibrant gold/orange accent */
-    --primary-foreground: 222 47% 4%;
+    /* Text Colors */
+    --foreground: 210 30% 93%; /* #E6EDF3 */
+    --muted-foreground: 210 15% 47%; /* #6B7785 */
+    --secondary-foreground: 210 15% 66%; /* #9BA7B4 */
 
-    --secondary: 222 47% 15%; /* Slightly darker secondary */
-    --secondary-foreground: 210 40% 98%;
+    /* Mapped to new system */
+    --primary: var(--emerald);
+    --primary-foreground: 216 20% 6%; /* Dark text on emerald */
+    --secondary: var(--card); /* Using section variation for secondary elements */
+    --accent: var(--emerald);
+    --accent-foreground: var(--primary-foreground);
+    --destructive: 0 62.8% 30.6%; /* Keep red for destructive */
+    --destructive-foreground: var(--foreground);
 
-    --muted: 222 47% 18%;
-    --muted-foreground: 215 20% 70%; /* Brighter muted foreground */
+    /* Borders & Inputs */
+    --border: 216 20% 15%; /* Darker, subtle border */
+    --input: 216 20% 10%;
+    --ring: var(--emerald);
 
-    --accent: 40 95% 55%;
-    --accent-foreground: 222 47% 4%;
+    /* Border Radii */
+    --radius-sm: 0.25rem; /* 4px */
+    --radius-md: 0.5rem;  /* 8px */
+    --radius-lg: 0.875rem; /* 14px */
+    --radius-full: 9999px;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 222 47% 15%; /* Slightly darker border */
-    --input: 222 47% 15%;
-    --ring: 40 95% 55%;
-
-    --radius: 1rem; /* Increased border-radius for rounded shapes */
-
-    --particle-green: 142 76% 36%; /* A vibrant green for particles */
+    /* Particle color (clover) */
+    --particle-green: 142 76% 36%; /* Keep a distinct green for clovers */
   }
 }
 
@@ -43,16 +52,53 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-primary/30;
+    @apply bg-background text-foreground antialiased selection:bg-emerald/30 font-sans;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     background-attachment: fixed;
+    letter-spacing: -0.01em; /* Slightly tighter tracking for body */
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold;
+    letter-spacing: 0.05em; /* Wider letter spacing for headings */
   }
 }
 
 .glass-panel {
-  @apply bg-card/50 backdrop-blur-md border border-white/5;
+  @apply bg-card/50 backdrop-blur-sm border border-border/5; /* Adjusted blur and border */
 }
 
 .gold-glow {
-  box-shadow: 0 0 25px -5px hsl(var(--primary) / 0.4), 0 0 10px -2px hsl(var(--primary) / 0.2);
+  box-shadow: 0 0 25px -5px hsl(var(--gold) / 0.4), 0 0 10px -2px hsl(var(--gold) / 0.2);
+}
+
+.emerald-glow {
+  box-shadow: 0 0 25px -5px hsl(var(--emerald) / 0.4), 0 0 10px -2px hsl(var(--emerald) / 0.2);
+}
+
+/* Custom radial spotlight */
+.radial-spotlight {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80vw;
+  max-width: 1200px;
+  height: 600px;
+  background: radial-gradient(circle at center, hsl(var(--emerald) / 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -10;
+  opacity: 0.6;
+}
+
+/* Custom grid pattern */
+.background-grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(to right, hsl(var(--border)/0.05) 1px, transparent 1px),
+                    linear-gradient(to bottom, hsl(var(--border)/0.05) 1px, transparent 1px);
+  background-size: 40px 40px; /* Adjust grid size as needed */
+  pointer-events: none;
+  z-index: -30;
+  opacity: 0.8;
 }
