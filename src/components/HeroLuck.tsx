@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import Logo from './Logo';
 import { Sparkles } from 'lucide-react';
+import { trackEvent } from "@/utils/analytics"; // Import trackEvent
 
 interface HeroLuckProps {
   onGenerateClick: () => void;
@@ -12,13 +13,16 @@ interface HeroLuckProps {
 }
 
 const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
-  // De logoUrl is nu standaard ingesteld in de Logo component, dus hier niet meer nodig.
-  // const logoUrl = "/lucky_engine.png"; 
-
   const handleGenerateClick = () => {
+    trackEvent("Hero Generate Button Clicked"); // Track event
     onGenerateClick();
   };
 
+  const handleHowItWorksClick = () => {
+    trackEvent("Hero How It Works Button Clicked"); // Track event
+    onHowItWorksClick();
+  };
+  
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -44,7 +48,6 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
       animate="visible"
     >
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
-        {/* Left-aligned content */}
         <div className="text-center md:text-left space-y-6">
           <motion.h1 variants={itemVariants} className="text-4xl md:text-5xl font-extrabold tracking-extra-wide text-foreground leading-tight">
             Vind je geluk — <br className="hidden md:inline"/>aangedreven door <span className="text-emerald">transparante statistieken</span>.
@@ -56,14 +59,14 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
             <Button
               onClick={handleGenerateClick}
               className="bg-emerald hover:bg-emerald-hover text-primary-foreground font-bold py-7 px-8 rounded-md text-lg emerald-glow transition-all duration-120 active:scale-[0.98] relative overflow-hidden group"
-              style={{ boxShadow: '0 4px 15px rgba(0, 200, 83, 0.4), 0 1px 5px rgba(0, 200, 83, 0.2)' }} // More pronounced shadow
+              style={{ boxShadow: '0 4px 15px rgba(0, 200, 83, 0.4), 0 1px 5px rgba(0, 200, 83, 0.2)' }}
             >
               <Sparkles className="absolute -top-2 -left-2 w-8 h-8 text-white/20 group-hover:rotate-180 transition-transform duration-700" />
               GENEREER GELUKSTICKETEN
               <Sparkles className="absolute -bottom-2 -right-2 w-8 h-8 text-white/20 group-hover:rotate-180 transition-transform duration-700" />
             </Button>
             <Button
-              onClick={onHowItWorksClick}
+              onClick={handleHowItWorksClick}
               variant="outline"
               className="border-border/20 text-secondary-foreground hover:bg-card/50 hover:text-foreground font-semibold py-7 px-8 rounded-md text-lg transition-colors duration-120"
             >
@@ -75,13 +78,11 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
           </motion.p>
         </div>
 
-        {/* Right-offset visual */}
         <motion.div 
           variants={itemVariants}
           className="flex justify-center md:justify-end relative"
         >
           <Logo
-            // imageUrl={logoUrl} // Niet meer nodig, Logo component gebruikt nu de standaard URL
             imgClassName="h-64 md:h-80 w-auto"
             alt="Lucky Engine - Statistische EuroMillions Analyse en Ticket Generator"
             ariaLabel="Lucky Engine Logo - Startpagina voor EuroMillions Voorspellingen"
