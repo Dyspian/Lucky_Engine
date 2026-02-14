@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 interface AdMockupProps {
   className?: string;
-  size?: "leaderboard" | "rectangle" | "banner" | "responsive";
+  size?: "leaderboard" | "rectangle" | "banner" | "responsive" | "auto";
   label?: string;
   imageUrl?: string;
   linkUrl?: string;
@@ -25,6 +25,7 @@ const AdMockup = ({
     size === "rectangle" && "w-full max-w-[336px] h-[280px]",
     size === "banner" && "w-full max-w-[468px] h-[60px]",
     size === "responsive" && "w-full h-[120px] md:h-[200px]",
+    size === "auto" && "w-full h-auto",
     className
   );
 
@@ -32,7 +33,7 @@ const AdMockup = ({
     <img 
       src={imageUrl} 
       alt={label} 
-      className="w-full h-full object-cover"
+      className={cn("w-full", size === "auto" ? "h-auto" : "h-full object-cover")}
     />
   ) : (
     <>

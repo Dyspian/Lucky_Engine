@@ -229,7 +229,12 @@ const Index = () => {
             )}
 
             {/* AD 2: Between Generator and Explanation */}
-            <AdMockup size="responsive" />
+            <AdMockup 
+              size="auto"
+              imageUrl="https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/ads2.png"
+              linkUrl="https://partner.bybit.com/b/VOKXWXAC47826"
+              label="Exclusieve Partner Aanbieding"
+            />
 
             <section id="explanation-section" className="pt-12 md:pt-16">
               <ExplanationSection />
