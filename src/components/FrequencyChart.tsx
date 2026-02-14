@@ -14,7 +14,7 @@ interface FrequencyChartProps {
 
 const FrequencyChart = ({ data, title, color }: FrequencyChartProps) => {
   return (
-    <Card className="border border-border/20 bg-card shadow-xl rounded-md">
+    <Card className="border border-border/20 bg-card shadow-xl rounded-md transition-shadow duration-120"> {/* Added transition-shadow */}
       <CardHeader className="pb-2">
         <CardTitle className="text-xs font-bold flex items-center gap-2 text-muted-foreground uppercase tracking-extra-wide">
           <BarChart3 size={16} className={color === "hsl(var(--gold))" ? "text-gold" : "text-emerald"} />

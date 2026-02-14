@@ -16,7 +16,7 @@ const LastDraw = ({ draw }: LastDrawProps) => {
   const formattedDate = format(new Date(draw.date), "EEEE d MMMM yyyy", { locale: nl });
 
   return (
-    <Card className="border border-border/20 bg-card text-foreground shadow-xl overflow-hidden rounded-md">
+    <Card className="border border-border/20 bg-card text-foreground shadow-xl overflow-hidden rounded-md transition-shadow duration-120"> {/* Added transition-shadow */}
       <CardHeader className="pb-2">
         <CardTitle className="text-xs font-bold flex items-center gap-2 text-muted-foreground uppercase tracking-extra-wide">
           <CalendarDays size={16} className="text-emerald" />
@@ -42,7 +42,7 @@ const LastDraw = ({ draw }: LastDrawProps) => {
               ))}
             </div>
           </div>
-        </div> {/* De ontbrekende sluit-tag is hier toegevoegd */}
+        </div>
       </CardContent>
     </Card>
   );
