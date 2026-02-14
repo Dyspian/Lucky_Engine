@@ -1,62 +1,49 @@
 // src/services/euromillions.ts
 
-import { fetchDraws as fetchDrawsClient, DataUnavailableError } from "@/lib/euromillions/client";
+import { LOCAL_HISTORY } from "@/data/history";
 import { Draw } from "@/lib/euromillions/schemas";
 import { z } from "zod";
+import { parseISO, isAfter, isBefore, startOfDay, endOfDay } from "date-fns";
 
-// Re-export DataUnavailableError so consumers can use it
-export { DataUnavailableError };
-
-/**
- * Base Zod object for query parameters.
- * Exported separately to allow extension using .extend().
- */
-export const EuromillionsQueryParamsBaseSchema = z.object({
-  year: z.number().int().min(2004, "Year must be 2004 or later.").optional(),
-  startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Start date must be in YYYY-MM-DD format.").optional(),
-  endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "End date must be in YYYY-MM-DD format.").optional(),
-});
-
-/**
- * Refined schema for validation usage.
- */
-export const EuromillionsQueryParamsSchema = EuromillionsQueryParamsBaseSchema.superRefine((data, ctx) => {
-  if (data.startDate && data.endDate && data.startDate > data.endDate) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Start date cannot be after end date.",
-      path: ["startDate"],
-    });
+export class DataUnavailableError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "DataUnavailableError";
   }
+}
+
+export const EuromillionsQueryParamsBaseSchema = z.object({
+  year: z.number().int().min(2004).optional(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
 });
 
-export type EuromillionsQueryParams = z.infer<typeof EuromillionsQueryParamsSchema>;
+export type EuromillionsQueryParams = z.infer<typeof EuromillionsQueryParamsBaseSchema>;
 
 /**
- * Fetches EuroMillions draws using the hardened client.
- * This acts as the client-side "internal proxy" for components.
- *
- * @param params - Query parameters for filtering draws.
- * @returns A promise that resolves to an array of Draw objects.
- * @throws DataUnavailableError if data cannot be retrieved.
+ * Retrieves draws from the local archive with filtering.
  */
 export async function getEuromillionsDraws(params?: EuromillionsQueryParams): Promise<Draw[]> {
-  const clientParams = {
-    year: params?.year,
-    dates: {
-      start: params?.startDate,
-      end: params?.endDate,
-    },
-  };
+  // Start with full history
+  let results = [...LOCAL_HISTORY];
 
-  try {
-    const { draws } = await fetchDrawsClient(clientParams);
-    return draws;
-  } catch (error) {
-    console.error("[Euromillions Service] Failed to fetch draws:", error);
-    if (error instanceof DataUnavailableError) {
-      throw error;
+  // Apply filters in memory
+  if (params) {
+    if (params.year) {
+      results = results.filter(d => new Date(d.date).getFullYear() === params.year);
     }
-    throw new DataUnavailableError("Failed to retrieve EuroMillions draws.", { originalError: error });
+
+    if (params.startDate) {
+      const start = startOfDay(parseISO(params.startDate));
+      results = results.filter(d => isAfter(parseISO(d.date), start) || d.date === params.startDate);
+    }
+
+    if (params.endDate) {
+      const end = endOfDay(parseISO(params.endDate));
+      results = results.filter(d => isBefore(parseISO(d.date), end) || d.date === params.endDate);
+    }
   }
+
+  // Always return sorted descending
+  return results.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }

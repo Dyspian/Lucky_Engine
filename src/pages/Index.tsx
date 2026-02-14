@@ -2,12 +2,11 @@
 
 import React, { useState } from 'react';
 import { useQuery } from "@tanstack/react-query";
-import { fetchDraws, Draw, ProviderError } from "@/lib/euromillions-provider";
-import { cache } from "@/lib/cache";
+import { fetchDraws, Draw } from "@/lib/euromillions-provider";
 import { buildStats, FrequencyData } from "@/lib/stats-engine";
 import { generateTickets, GenerateConfig, Ticket } from "@/lib/generator";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer"; // Import Footer
+import Footer from "@/components/Footer";
 import HeroLuck from "@/components/HeroLuck";
 import GeneratorPanel from "@/components/GeneratorPanel";
 import TicketCard from "@/components/TicketCard";
@@ -21,66 +20,20 @@ import FrequencyChart from '@/components/FrequencyChart';
 import BackgroundCanvas from '@/components/BackgroundCanvas';
 import BackgroundGrid from '@/components/BackgroundGrid';
 import { trackEvent } from "@/utils/analytics";
-
-const CACHE_KEY = "draws:v1";
-const TTL_12H = 12 * 60 * 60 * 1000;
+import { Database, WifiOff } from 'lucide-react';
 
 const Index = () => {
   const [results, setResults] = useState<{ tickets: Ticket[], explanation: string } | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [hasDrawsError, setHasDrawsError] = useState(false);
-  const [userFacingErrorMessage, setUserFacingErrorMessage] = useState<string>("");
 
-  const { data: drawsData, isLoading: isDataLoading } = useQuery<Draw[], Error, Draw[], string[]>({
-    queryKey: [CACHE_KEY],
+  // Since data is local, this is virtually instant
+  const { data: drawsData, isLoading: isDataLoading } = useQuery<Draw[]>({
+    queryKey: ["embedded-draws"],
     queryFn: async () => {
-      const cached = cache.get<Draw[]>(CACHE_KEY);
-
-      // 1. If any cached data exists (even stale), return it immediately.
-      //    React Query will then refetch in the background if stale.
-      if (cached.value && cached.value.length > 0) {
-        if (cached.source === "fallback") {
-          // Notify user if we're showing stale data
-          showError("Nieuwe trekkinggegevens konden niet worden geladen. Toon verouderde gegevens.");
-        }
-        setHasDrawsError(false); // Assume data is available, even if stale
-        setUserFacingErrorMessage("");
-        return cached.value;
-      }
-
-      // 2. If no cached data, or cache is empty, then proceed to fetch from API.
-      try {
-        const fetchedResult = await fetchDraws();
-        if (fetchedResult.draws.length === 0) {
-          throw new ProviderError("API returned no draws.", { source: fetchedResult.source, reason: "empty_response" });
-        }
-        cache.set(CACHE_KEY, fetchedResult.draws, TTL_12H);
-        setHasDrawsError(false);
-        setUserFacingErrorMessage("");
-        return fetchedResult.draws;
-      } catch (error) {
-        // 3. If API fetch fails and no cached data was available, then set error state.
-        setHasDrawsError(true);
-        let msg = "Fout bij het laden van EuroMillions trekkinggegevens. Controleer uw internetverbinding of probeer later opnieuw.";
-        if (error instanceof ProviderError) {
-          if (error.details?.reason === "timeout") {
-            msg = `De verbinding met de EuroMillions API is verlopen. Probeer het later opnieuw. (Bron: ${error.details.source})`;
-          } else if (error.details?.reason === "validation_error") {
-            msg = `De EuroMillions API reageerde met een onverwacht formaat. We werken aan een oplossing.`;
-          } else if (error.details?.reason === "network_error") {
-            msg = `Er is een netwerkfout opgetreden bij het verbinden met de EuroMillions API. Controleer uw internetverbinding. (Bron: ${error.details.source})`;
-          } else if (error.details?.source === "both" && error.details?.reason === "api_unavailable") {
-            msg = `Kon geen verbinding maken met de EuroMillions API (zowel productie als staging). Probeer het later opnieuw.`;
-          } else if (error.details?.reason === "empty_response") {
-            msg = "Geen EuroMillions trekkinggegevens gevonden. Probeer later opnieuw.";
-          }
-        }
-        setUserFacingErrorMessage(msg);
-        showError(msg); // Show toast for the error
-        throw error; // Re-throw to let react-query mark it as an error
-      }
+      const result = await fetchDraws();
+      return result.draws;
     },
-    staleTime: TTL_12H,
+    staleTime: Infinity, // Local data never goes "stale" in the browser session
   });
 
   const statsResult = drawsData && drawsData.length > 0 ? buildStats(drawsData, { period: "all", recentWindow: 50, weightAll: 0.7, weightRecent: 0.3 }) : null;
@@ -97,21 +50,17 @@ const Index = () => {
 
   const handleGenerate = async (config: GenerateConfig) => {
     if (!drawsData || drawsData.length === 0) {
-      showError("Gegevenslaag niet gereed of geen trekkinggegevens beschikbaar.");
+      showError("Systeem initialisatie fout: Interne database leeg.");
       return;
     }
 
     setIsGenerating(true);
     
+    // Simulate complex calculation time for UX
     await new Promise(resolve => setTimeout(resolve, 800));
 
     try {
       const stats = buildStats(drawsData, config);
-      if (stats.drawCount === 0) {
-        showError("Geen geldige trekkinggegevens om tickets te genereren. Pas de analyseperiode aan.");
-        setIsGenerating(false);
-        return;
-      }
       const { tickets } = generateTickets(stats, config);
       
       setResults({
@@ -123,10 +72,6 @@ const Index = () => {
 
       trackEvent("Ticket Generated", {
         numTickets: config.tickets,
-        period: config.period,
-        recentWindow: config.recent,
-        weightAll: config.weights.all,
-        weightRecent: config.weights.recent,
         generatedTicketCount: tickets.length,
       });
       
@@ -152,12 +97,10 @@ const Index = () => {
     ? statsResult.allStarStats.map(item => ({ value: item.value, count: Math.round(item.score * 1000) })) 
     : [];
 
-  const showGeneratorAndCharts = !isDataLoading && !hasDrawsError && drawsData && drawsData.length > 0;
-
   return (
     <>
       <AnimatePresence>
-        {isDataLoading && !drawsData && <LoadingScreen />}
+        {isDataLoading && <LoadingScreen />}
       </AnimatePresence>
 
       <div className="relative min-h-screen text-foreground selection:bg-emerald/30 font-sans">
@@ -173,6 +116,15 @@ const Index = () => {
             onHowItWorksClick={() => scrollToSection('explanation-section')}
           />
           
+          <div className="container mx-auto px-6 -mt-12 relative z-20 mb-16">
+            <div className="flex justify-center">
+               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald/10 border border-emerald/20 backdrop-blur-md">
+                 <WifiOff size={14} className="text-emerald" />
+                 <span className="text-[10px] font-bold uppercase tracking-widest text-emerald">Offline Engine Actief • Geen API Afhankelijkheid</span>
+               </div>
+            </div>
+          </div>
+          
           <TrustStatsStrip />
 
           <div className="relative my-12 md:my-24 h-px bg-gradient-to-r from-transparent via-emerald/30 to-transparent">
@@ -181,22 +133,8 @@ const Index = () => {
           </div>
           
           <div className="max-w-6xl mx-auto px-6 space-y-12 md:space-y-24">
-            {hasDrawsError && (
-              <section className="text-center py-16 bg-red-900/20 border border-red-700/50 rounded-lg shadow-lg">
-                <h2 className="text-xl font-bold text-red-400 mb-4">Fout bij het laden van gegevens</h2>
-                <p className="text-red-200">
-                  {userFacingErrorMessage}
-                </p>
-              </section>
-            )}
-
-            {!hasDrawsError && isDataLoading && (
-              <section className="text-center py-16">
-                <p className="text-muted-foreground">Laden van trekkinggegevens...</p>
-              </section>
-            )}
-
-            {showGeneratorAndCharts && (
+            
+            {drawsData && drawsData.length > 0 && (
               <>
                 {lastDraw && (
                   <section id="last-draw-section" className="mb-12 md:mb-16">
@@ -206,7 +144,7 @@ const Index = () => {
 
                 {statsResult && (
                   <section id="frequency-charts" className="space-y-8">
-                    <h2 className="text-xl font-bold tracking-extra-wide text-foreground text-center uppercase mb-8 md:mb-12 text-small-caps">Frequentie Analyse</h2>
+                    <h2 className="text-xl font-bold tracking-extra-wide text-foreground text-center uppercase mb-8 md:mb-12 text-small-caps">Historische Analyse</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                       <FrequencyChart data={numberFrequencyData} title="Getal Frequentie" color="hsl(var(--emerald))" />
                       <FrequencyChart data={starFrequencyData} title="Ster Frequentie" color="hsl(var(--gold))" />
@@ -216,7 +154,7 @@ const Index = () => {
 
                 <section id="generator-section" className="grid grid-cols-1 lg:col-span-12 gap-6 md:gap-12 items-start pt-12 md:pt-16">
                   <div className="lg:col-span-5 sticky top-24">
-                    <GeneratorPanel onGenerate={handleGenerate} isLoading={isGenerating || isDataLoading} />
+                    <GeneratorPanel onGenerate={handleGenerate} isLoading={isGenerating} />
                   </div>
                   
                   <div className="lg:col-span-7 space-y-6 min-h-[400px] pt-6 md:pt-8" id="results">
@@ -233,7 +171,7 @@ const Index = () => {
                               Gegenereerde Resultaten
                             </h2>
                             <span className="text-[9px] font-medium text-emerald/60 italic">
-                              Gewogen op basis van statistische score
+                              Lokale Wiskundige Verwerking
                             </span>
                           </div>
                           
@@ -253,8 +191,8 @@ const Index = () => {
                         </motion.div>
                       ) : (
                         <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-20 py-16 md:py-20">
-                          <div className="w-14 h-14 rounded-full border-2 border-dashed border-muted-foreground" />
-                          <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground text-small-caps">Wachten op Configuratie</p>
+                          <Database size={48} className="text-muted-foreground/50" />
+                          <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground text-small-caps">Interne Database Gereed</p>
                         </div>
                       )}
                     </AnimatePresence>

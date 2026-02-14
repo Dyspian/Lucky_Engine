@@ -6,7 +6,7 @@ async function runSelfTest() {
   console.log("Starting backend self-test...");
 
   let draws: Draw[] = [];
-  let providerSource: "prod" | "staging" = "prod"; // Default, will be updated
+  let providerSource: "prod" | "staging" | "embedded" = "prod"; 
   let drawsCount: number = 0;
 
   try {
@@ -29,6 +29,7 @@ async function runSelfTest() {
     period: "all",
     recent: 50,
     weights: { all: 0.7, recent: 0.3 },
+    riskFactor: 1.5 // Added riskFactor to match schema
   };
   const numSamples = 200;
 
