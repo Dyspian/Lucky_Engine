@@ -74,7 +74,7 @@ const CloverParticles = () => {
         },
         particles: {
           color: {
-            value: ["#34D399", "#10B981", "#059669", "#6EE7B7"], // Multiple shades of green
+            value: ["#6EE7B7", "#34D399", "#FCD34D", "#FBBF24"], // Brighter greens and golds
           },
           links: {
             enable: false,
@@ -86,21 +86,21 @@ const CloverParticles = () => {
               default: "out",
             },
             random: true,
-            speed: 0.3, // Slow drift
+            speed: 0.5, // Increased speed
             straight: false,
           },
           number: {
             density: {
               enable: true,
-              value_area: 800, // Corrected back to 'value_area' based on the latest type error
+              area: 800, // Corrected to 'area' as per the latest type error
             },
-            value: 40, // Low density
+            value: 60, // Increased density
           },
           opacity: {
-            value: { min: 0.1, max: 0.4 }, // Low opacity
+            value: { min: 0.2, max: 0.6 }, // Increased opacity range
             animation: {
               enable: true,
-              speed: 0.5,
+              speed: 0.8,
               sync: false,
               startValue: "random",
               destroy: "min",
@@ -111,16 +111,16 @@ const CloverParticles = () => {
             options: {
               image: {
                 src: "/clover.svg", // Custom clover SVG
-                width: 24,
-                height: 24,
+                width: 32, // Increased width
+                height: 32, // Increased height
               },
             },
           },
           size: {
-            value: { min: 10, max: 30 }, // Different sizes for parallax effect
+            value: { min: 15, max: 40 }, // Increased size range
             animation: {
               enable: true,
-              speed: 1,
+              speed: 1.5,
               sync: false,
               startValue: "random",
               destroy: "min",
@@ -129,7 +129,7 @@ const CloverParticles = () => {
           rotate: {
             animation: {
               enable: true,
-              speed: 0.5, // Gentle rotation
+              speed: 2, // Increased rotation speed
               sync: false,
             },
             value: { min: 0, max: 360 },

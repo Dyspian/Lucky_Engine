@@ -32,7 +32,7 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
   };
 
   return (
-    <Card className="glass-panel border-white/10 shadow-2xl">
+    <Card className="glass-panel border-white/10 shadow-2xl gold-glow"> {/* Added gold-glow */}
       <CardHeader className="pb-4">
         <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
           <Sparkles size={16} className="text-primary" />
@@ -51,13 +51,13 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
             max={10} 
             min={1} 
             step={1}
-            className="py-4"
+            className="py-4 [&>span:first-child]:bg-primary [&>span:first-child]:shadow-lg [&>span:first-child]:shadow-primary/30" /* Custom slider styling */
           />
         </div>
 
         <Collapsible open={isOpen} onOpenChange={setIsOpen} className="space-y-4">
           <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="w-full justify-between text-muted-foreground hover:text-white hover:bg-white/5 px-2">
+            <Button variant="ghost" className="w-full justify-between text-muted-foreground hover:text-white hover:bg-white/10 px-2 rounded-xl"> {/* Added rounded-xl */}
               <div className="flex items-center gap-2">
                 <Settings2 size={16} />
                 <span className="text-xs font-bold uppercase tracking-wider">Advanced Settings</span>
@@ -70,10 +70,10 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
               <div className="space-y-2">
                 <Label className="text-xs text-muted-foreground uppercase tracking-wider">Analysis Period</Label>
                 <Select value={period} onValueChange={(v: Period) => setPeriod(v)}>
-                  <SelectTrigger className="bg-secondary/50 border-white/5">
+                  <SelectTrigger className="bg-secondary/50 border-white/10 rounded-xl text-white hover:border-primary/50 transition-colors"> {/* Refined styling */}
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="rounded-xl bg-card border-white/10"> {/* Refined styling */}
                     <SelectItem value="6m">Last 6 Months</SelectItem>
                     <SelectItem value="1y">Last Year</SelectItem>
                     <SelectItem value="2y">Last 2 Years</SelectItem>
@@ -87,13 +87,13 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
                   type="number" 
                   value={recent} 
                   onChange={(e) => setRecent(e.target.value)}
-                  className="bg-secondary/50 border-white/5"
+                  className="bg-secondary/50 border-white/10 rounded-xl text-white focus:border-primary/50 transition-colors" /* Refined styling */
                   min={10}
                   max={200}
                 />
               </div>
             </div>
-            <div className="p-3 rounded-lg bg-white/5 border border-white/5">
+            <div className="p-3 rounded-xl bg-white/5 border border-white/5"> {/* Changed to rounded-xl */}
               <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                 <span>Weight Distribution</span>
                 <span className="text-primary">70% Hist / 30% Rec</span>

@@ -4,18 +4,20 @@ import React, { useState } from 'react';
 import { useQuery } from "@tanstack/react-query";
 import { fetchDraws, Draw } from "@/lib/euromillions-provider";
 import { cache } from "@/lib/cache";
-import { buildStats } from "@/lib/stats-engine";
+import { buildStats, FrequencyData } from "@/lib/stats-engine"; // Import FrequencyData
 import { generateTickets, GenerateConfig, Ticket } from "@/lib/generator";
 import Navbar from "@/components/Navbar";
-import HeroLuck from "@/components/HeroLuck"; // Changed from Hero to HeroLuck
+import HeroLuck from "@/components/HeroLuck";
 import GeneratorPanel from "@/components/GeneratorPanel";
 import TicketCard from "@/components/TicketCard";
 import { ExplanationSection, DisclaimerSection } from "@/components/InfoSections";
 import { showSuccess, showError } from "@/utils/toast";
 import { motion, AnimatePresence } from "framer-motion";
 import LoadingScreen from '@/components/LoadingScreen';
-import CloverParticles from '@/components/CloverParticles'; // New import
-import TrustStatsStrip from '@/components/TrustStatsStrip'; // New import
+import CloverParticles from '@/components/CloverParticles';
+import TrustStatsStrip from '@/components/TrustStatsStrip';
+import LastDraw from '@/components/LastDraw';
+import FrequencyChart from '@/components/FrequencyChart';
 
 const CACHE_KEY = "draws:v1";
 const TTL_12H = 12 * 60 * 60 * 1000;
@@ -30,9 +32,9 @@ const Index = () => {
       const cached = cache.get<Draw[]>(CACHE_KEY);
       if (cached.source === "cache") return cached.value!;
       
-      const fetchedResult = await fetchDraws(); // This returns { draws: Draw[]; source: "prod" | "staging" }
-      cache.set(CACHE_KEY, fetchedResult.draws, TTL_12H); // Cache only the array of draws
-      return fetchedResult.draws; // Return only the array of draws
+      const fetchedResult = await fetchDraws();
+      cache.set(CACHE_KEY, fetchedResult.draws, TTL_12H);
+      return fetchedResult.draws;
     },
     staleTime: TTL_12H,
   });
@@ -45,7 +47,6 @@ const Index = () => {
 
     setIsGenerating(true);
     
-    // Simulate network delay for premium feel
     await new Promise(resolve => setTimeout(resolve, 800));
 
     try {
@@ -59,7 +60,6 @@ const Index = () => {
       
       showSuccess(`${tickets.length} tickets generated successfully.`);
       
-      // Scroll to results
       setTimeout(() => {
         document.getElementById('generator-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 100);
@@ -74,6 +74,18 @@ const Index = () => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  // Derive stats for charts if data is available
+  const statsResult = drawsData ? buildStats(drawsData, { period: "all", recentWindow: 50, weightAll: 0.7, weightRecent: 0.3 }) : null;
+  const lastDraw = drawsData && drawsData.length > 0 ? drawsData[0] : null;
+
+  // Map StatItem[] to FrequencyData[] for the charts
+  const numberFrequencyData: FrequencyData[] = statsResult 
+    ? statsResult.allNumberStats.map(item => ({ value: item.value, count: Math.round(item.score * 1000) })) 
+    : [];
+  const starFrequencyData: FrequencyData[] = statsResult 
+    ? statsResult.allStarStats.map(item => ({ value: item.value, count: Math.round(item.score * 1000) })) 
+    : [];
+
   return (
     <>
       <AnimatePresence>
@@ -81,12 +93,12 @@ const Index = () => {
       </AnimatePresence>
 
       <div className="relative min-h-screen bg-background text-foreground selection:bg-primary/30">
-        <CloverParticles /> {/* Particle background */}
-        <div className="absolute inset-0 bg-background/80 z-[-1]" /> {/* Dark overlay for readability */}
+        <CloverParticles />
+        <div className="absolute inset-0 bg-background/80 z-[-1]" />
 
         <Navbar />
         
-        <main className="container mx-auto px-4 pb-24 relative z-10"> {/* Ensure content is above particles */}
+        <main className="container mx-auto px-4 pb-24 relative z-10">
           <HeroLuck
             onGenerateClick={() => scrollToSection('generator-section')}
             onHowItWorksClick={() => scrollToSection('explanation-section')}
@@ -94,13 +106,28 @@ const Index = () => {
           
           <TrustStatsStrip />
 
-          {/* Soft glow section divider */}
           <div className="relative my-16 md:my-24 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent">
             <div className="absolute inset-x-0 -top-2 h-4 bg-primary/10 blur-md" />
             <div className="absolute inset-x-0 -bottom-2 h-4 bg-primary/10 blur-md" />
           </div>
           
           <div className="max-w-4xl mx-auto space-y-24">
+            {lastDraw && (
+              <section id="last-draw-section" className="mb-16">
+                <LastDraw draw={lastDraw} />
+              </section>
+            )}
+
+            {statsResult && (
+              <section id="frequency-charts" className="space-y-8">
+                <h2 className="text-2xl font-bold tracking-tight text-white text-center">Frequency Analysis</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <FrequencyChart data={numberFrequencyData} title="Number Frequency" color="hsl(var(--primary))" />
+                  <FrequencyChart data={starFrequencyData} title="Star Frequency" color="hsl(var(--primary))" />
+                </div>
+              </section>
+            )}
+
             <section id="generator-section" className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
               <div className="lg:col-span-5 sticky top-24">
                 <GeneratorPanel onGenerate={handleGenerate} isLoading={isGenerating || isDataLoading} />
@@ -130,7 +157,7 @@ const Index = () => {
                         ))}
                       </div>
 
-                      <div className="p-6 rounded-2xl bg-primary/[0.03] border border-primary/10">
+                      <div className="p-6 rounded-2xl bg-primary/[0.03] border border-primary/10 shadow-lg"> {/* Added shadow-lg */}
                         <p className="text-xs text-primary/80 leading-relaxed font-medium italic">
                           {results.explanation}
                         </p>
@@ -146,7 +173,7 @@ const Index = () => {
               </div>
             </section>
 
-            <section id="explanation-section"> {/* Added ID for scrolling */}
+            <section id="explanation-section">
               <ExplanationSection />
             </section>
             

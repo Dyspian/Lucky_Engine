@@ -4,35 +4,35 @@
 
 @layer base {
   :root {
-    --background: 222 47% 4%; /* Deep dark blue/black */
+    --background: 222 47% 6%; /* Richer deep blue */
     --foreground: 210 40% 98%;
 
-    --card: 222 47% 6%;
+    --card: 222 47% 8%; /* Slightly lighter card background */
     --card-foreground: 210 40% 98%;
 
-    --popover: 222 47% 4%;
+    --popover: 222 47% 6%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 45 93% 47%; /* Gold accent */
+    --primary: 40 95% 55%; /* More vibrant gold/orange accent */
     --primary-foreground: 222 47% 4%;
 
-    --secondary: 222 47% 12%;
+    --secondary: 222 47% 15%; /* Slightly darker secondary */
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 222 47% 15%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 222 47% 18%;
+    --muted-foreground: 215 20% 70%; /* Brighter muted foreground */
 
-    --accent: 45 93% 47%;
+    --accent: 40 95% 55%;
     --accent-foreground: 222 47% 4%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 222 47% 12%;
-    --input: 222 47% 12%;
-    --ring: 45 93% 47%;
+    --border: 222 47% 15%; /* Slightly darker border */
+    --input: 222 47% 15%;
+    --ring: 40 95% 55%;
 
-    --radius: 0.75rem;
+    --radius: 1rem; /* Increased border-radius for rounded shapes */
   }
 }
 
@@ -43,6 +43,10 @@
   body {
     @apply bg-background text-foreground antialiased selection:bg-primary/30;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    /* Subtle radial gradient for depth */
+    background-image: radial-gradient(at 50% 0%, hsl(var(--primary) / 0.05) 0%, transparent 70%),
+                      radial-gradient(at 0% 100%, hsl(var(--secondary) / 0.05) 0%, transparent 70%);
+    background-attachment: fixed;
   }
 }
 
@@ -51,5 +55,5 @@
 }
 
 .gold-glow {
-  box-shadow: 0 0 20px -5px hsl(var(--primary) / 0.3);
+  box-shadow: 0 0 25px -5px hsl(var(--primary) / 0.4), 0 0 10px -2px hsl(var(--primary) / 0.2);
 }
