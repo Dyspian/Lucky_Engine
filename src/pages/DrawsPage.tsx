@@ -25,7 +25,8 @@ import { showSuccess, showError } from "@/utils/toast";
 import DrawCard from "@/components/draws/DrawCard";
 import { AnimatePresence, motion } from "framer-motion";
 import BackgroundGrid from "@/components/BackgroundGrid";
-import AdMockup from '@/components/AdMockup'; // Import AdMockup
+import AdMockup from '@/components/AdMockup';
+import { useIsEmbedded } from "@/hooks/use-embed";
 
 const FilterFormSchema = EuromillionsQueryParamsBaseSchema.extend({
   year: z.string().optional(),
@@ -37,6 +38,7 @@ type FilterFormData = z.infer<typeof FilterFormSchema>;
 
 const DrawsPage = () => {
   const [queryParams, setQueryParams] = useState<EuromillionsQueryParams>({});
+  const isEmbedded = useIsEmbedded();
 
   const { data: draws, isLoading, isError, error, refetch } = useQuery<Draw[], DataUnavailableError, Draw[], (string | EuromillionsQueryParams)[]>({
     queryKey: ['euromillionsDraws', queryParams],
@@ -117,7 +119,7 @@ const DrawsPage = () => {
       <BackgroundGrid />
       <div className="radial-spotlight" />
 
-      <Navbar />
+      {!isEmbedded && <Navbar />}
       
       <main className="container mx-auto px-6 py-8 md:py-12 relative z-10">
         <motion.div
@@ -277,7 +279,7 @@ const DrawsPage = () => {
           </div>
         </div>
       </main>
-      <Footer />
+      {!isEmbedded && <Footer />}
     </div>
   );
 };

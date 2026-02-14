@@ -23,10 +23,12 @@ import { trackEvent } from "@/utils/analytics";
 import { Database } from 'lucide-react';
 import { format } from "date-fns";
 import { nl } from "date-fns/locale";
+import { useIsEmbedded } from "@/hooks/use-embed";
 
 const Index = () => {
   const [results, setResults] = useState<{ tickets: Ticket[], explanation: string } | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const isEmbedded = useIsEmbedded();
 
   // Since data is local, this is virtually instant
   const { data: drawsData, isLoading: isDataLoading } = useQuery<Draw[]>({
@@ -109,12 +111,13 @@ const Index = () => {
         <BackgroundGrid />
         <div className="radial-spotlight" />
 
-        <Navbar />
+        {!isEmbedded && <Navbar />}
         
         <main className="relative z-10">
           <HeroLuck
             onGenerateClick={() => scrollToSection('generator-section')}
             onHowItWorksClick={() => scrollToSection('explanation-section')}
+            compact={isEmbedded}
           />
 
           {/* Data Freshness Indicator */}
@@ -247,7 +250,7 @@ const Index = () => {
           </div>
         </main>
 
-        <Footer />
+        {!isEmbedded && <Footer />}
       </div>
     </>
   );
