@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, Filter, Search, Loader2 } from "lucide-react"; // Removed Bug icon
+import { CalendarIcon, Filter, Search, Loader2 } from "lucide-react"; 
 import { cn } from "@/lib/utils";
 import { format, subDays } from "date-fns";
 import { showSuccess, showError } from "@/utils/toast";
@@ -66,7 +66,8 @@ const DrawsPage = () => {
 
   const onSubmit = (data: FilterFormData) => {
     const newParams: EuromillionsQueryParams = {
-      year: data.year ? parseInt(data.year) : undefined,
+      // Treat "all" as undefined (no year filter)
+      year: (data.year && data.year !== "all") ? parseInt(data.year) : undefined,
       startDate: data.startDate,
       endDate: data.endDate,
     };
@@ -155,7 +156,7 @@ const DrawsPage = () => {
                           <SelectValue placeholder="Selecteer jaar" />
                         </SelectTrigger>
                         <SelectContent className="rounded-md bg-card border-border/20 text-foreground h-60">
-                          <SelectItem value="">Alle Jaren</SelectItem>
+                          <SelectItem value="all">Alle Jaren</SelectItem>
                           {years.map(y => (
                             <SelectItem key={y} value={y}>{y}</SelectItem>
                           ))}
