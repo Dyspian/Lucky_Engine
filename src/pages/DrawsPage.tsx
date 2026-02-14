@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { getEuromillionsDraws, EuromillionsQueryParamsSchema, EuromillionsQueryParams, DataUnavailableError } from "@/services/euromillions";
+import { getEuromillionsDraws, EuromillionsQueryParamsBaseSchema, EuromillionsQueryParams, DataUnavailableError } from "@/services/euromillions";
 import { Draw } from "@/lib/euromillions/schemas";
 import Navbar from "@/components/Navbar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,14 +19,14 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon, Filter, Search, Loader2, Bug } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { format, subDays, subMonths, subYears } from "date-fns";
+import { format, subDays } from "date-fns";
 import { showSuccess, showError } from "@/utils/toast";
 import DrawCard from "@/components/draws/DrawCard";
 import { AnimatePresence, motion } from "framer-motion";
-import { MadeWithDyad } from "@/components/made-with-elmony"; // Assuming this is the correct path
+import { MadeWithDyad } from "@/components/made-with-elmony";
 
 // Extend the base query schema for form validation
-const FilterFormSchema = EuromillionsQueryParamsSchema.extend({
+const FilterFormSchema = EuromillionsQueryParamsBaseSchema.extend({
   year: z.string().optional(), // Year as string for select input
   startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Start date must be in YYYY-MM-DD format.").optional(),
   endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "End date must be in YYYY-MM-DD format.").optional(),
@@ -42,11 +42,15 @@ const DrawsPage = () => {
     queryKey: ['euromillionsDraws', queryParams],
     queryFn: () => getEuromillionsDraws(queryParams),
     staleTime: 1000 * 60 * 60 * 12, // 12 hours
-    onError: (err) => {
-      console.error("Error fetching draws in DrawsPage:", err);
-      showError(`Fout bij het laden van trekkingen: ${err.message}`);
-    },
   });
+
+  // Handle errors via useEffect since onError is removed in v5
+  useEffect(() => {
+    if (isError && error) {
+      console.error("Error fetching draws in DrawsPage:", error);
+      showError(`Fout bij het laden van trekkingen: ${error.message}`);
+    }
+  }, [isError, error]);
 
   const form = useForm<FilterFormData>({
     resolver: zodResolver(FilterFormSchema),

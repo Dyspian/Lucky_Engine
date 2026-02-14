@@ -8,7 +8,7 @@ const EUROMILLIONS_API_PROD_URL = "https://euromillions.api.pedromealha.dev";
 /**
  * Staging EuroMillions API base URL (used as fallback or in development).
  */
-const EUROMILLIONS_API_STAGING_URL = "https://euromillions.staging.api.pedromealha.dev";
+export const EUROMILLIONS_API_STAGING_URL = "https://euromillions.staging.api.pedromealha.dev";
 
 /**
  * Resolves the base URL for the EuroMillions API based on the environment.

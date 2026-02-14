@@ -4,14 +4,23 @@ import { fetchDraws as fetchDrawsClient, DataUnavailableError } from "@/lib/euro
 import { Draw } from "@/lib/euromillions/schemas";
 import { z } from "zod";
 
+// Re-export DataUnavailableError so consumers can use it
+export { DataUnavailableError };
+
 /**
- * Schema for validating query parameters for the client-side service.
+ * Base Zod object for query parameters.
+ * Exported separately to allow extension using .extend().
  */
-export const EuromillionsQueryParamsSchema = z.object({
+export const EuromillionsQueryParamsBaseSchema = z.object({
   year: z.number().int().min(2004, "Year must be 2004 or later.").optional(),
   startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Start date must be in YYYY-MM-DD format.").optional(),
   endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "End date must be in YYYY-MM-DD format.").optional(),
-}).superRefine((data, ctx) => {
+});
+
+/**
+ * Refined schema for validation usage.
+ */
+export const EuromillionsQueryParamsSchema = EuromillionsQueryParamsBaseSchema.superRefine((data, ctx) => {
   if (data.startDate && data.endDate && data.startDate > data.endDate) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,

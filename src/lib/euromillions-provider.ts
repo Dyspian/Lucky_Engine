@@ -3,6 +3,9 @@
 import { Draw } from "./euromillions/schemas"; // Import Draw from new schemas
 import { fetchDraws as fetchDrawsClient, DataUnavailableError } from "./euromillions/client"; // Import new client fetchDraws
 
+// Re-export Draw type so consumers can use it
+export type { Draw };
+
 /**
  * Custom error class for provider failures, now extending DataUnavailableError.
  */
@@ -34,6 +37,3 @@ export async function fetchDraws(): Promise<{ draws: Draw[]; source: "prod" | "s
     throw new ProviderError("An unexpected error occurred in the EuroMillions provider.", { originalError: error });
   }
 }
-
-// Re-export MAIN_RANGE and STAR_RANGE if they were originally here and needed elsewhere
-// Assuming they are defined in stats-engine.ts, so no need to re-export from here.

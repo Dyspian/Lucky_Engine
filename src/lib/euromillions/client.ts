@@ -1,7 +1,7 @@
 // src/lib/euromillions/client.ts
 
 import { z } from "zod";
-import { getEuromillionsApiBaseUrl } from "./config";
+import { getEuromillionsApiBaseUrl, EUROMILLIONS_API_STAGING_URL } from "./config";
 import { Draw, DrawArraySchema } from "./schemas";
 import { cache } from "@/lib/cache"; // Reusing existing cache layer
 
