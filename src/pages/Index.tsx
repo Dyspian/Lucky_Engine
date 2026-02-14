@@ -17,6 +17,7 @@ import LoadingScreen from '@/components/LoadingScreen';
 import TrustStatsStrip from '@/components/TrustStatsStrip';
 import LastDraw from '@/components/LastDraw';
 import FrequencyChart from '@/components/FrequencyChart';
+import BackgroundCanvas from '@/components/BackgroundCanvas'; // Import the new component
 
 const CACHE_KEY = "draws:v1";
 const TTL_12H = 12 * 60 * 60 * 1000;
@@ -92,8 +93,8 @@ const Index = () => {
       </AnimatePresence>
 
       <div className="relative min-h-screen bg-background text-foreground selection:bg-primary/30">
-        {/* Removed CloverParticles component */}
-        <div className="absolute inset-0 bg-background/80 z-[-1]" />
+        <BackgroundCanvas /> {/* New animated background */}
+        {/* Removed the old bg-background/80 div */}
 
         <Navbar />
         
