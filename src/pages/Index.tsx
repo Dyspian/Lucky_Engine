@@ -151,12 +151,12 @@ const Index = () => {
               </section>
             )}
 
-            <section id="generator-section" className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start pt-16">
+            <section id="generator-section" className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-12 items-start pt-16"> {/* Reduced gap for mobile */}
               <div className="lg:col-span-5 sticky top-24">
                 <GeneratorPanel onGenerate={handleGenerate} isLoading={isGenerating || isDataLoading} />
               </div>
               
-              <div className="lg:col-span-7 space-y-8 min-h-[400px]" id="results">
+              <div className="lg:col-span-7 space-y-8 min-h-[400px] pt-8" id="results"> {/* Added pt-8 for spacing */}
                 <AnimatePresence mode="wait">
                   {results ? (
                     <motion.div 

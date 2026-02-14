@@ -118,7 +118,7 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
         <Button 
           onClick={handleGenerate}
           disabled={isLoading}
-          className="w-full bg-emerald hover:bg-emerald-hover text-primary-foreground font-bold py-5 px-6 sm:py-7 sm:px-8 rounded-md text-base sm:text-lg emerald-glow transition-all duration-120 active:scale-[0.98]"
+          className="w-full bg-emerald hover:bg-emerald-hover text-primary-foreground font-bold py-4 px-6 sm:py-7 sm:px-8 rounded-md text-base sm:text-lg emerald-glow transition-all duration-120 active:scale-[0.98]"
           style={{ boxShadow: '0 4px 15px rgba(0, 200, 83, 0.4), 0 1px 5px rgba(0, 200, 83, 0.2)' }} // More pronounced shadow
         >
           {isLoading ? (
