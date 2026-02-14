@@ -245,12 +245,12 @@ const Index = () => {
             
             <DisclaimerSection />
             
-            {/* AD 3: Before Footer */}
+            {/* AD 3: Before Footer - Updated to match AD 1 */}
             <AdMockup 
-              size="auto"
-              imageUrl="https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/ads3.png"
-              linkUrl="https://bitvavo.com/invite?a=6CB1584CF6"
-              label="Partner Aanbieding"
+              size="leaderboard" 
+              imageUrl="https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/ads1.png"
+              linkUrl="https://partner.bybit.com/b/luckyengine"
+              label="Partner van Lucky Engine"
             />
           </div>
         </main>
