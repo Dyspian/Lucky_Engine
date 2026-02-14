@@ -145,7 +145,12 @@ const Index = () => {
 
           {/* AD 1: Below Trust Stats */}
           <div className="max-w-6xl mx-auto px-6">
-            <AdMockup size="leaderboard" />
+            <AdMockup 
+              size="leaderboard" 
+              imageUrl="https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/ads1.png"
+              linkUrl="https://partner.bybit.com/b/luckyengine"
+              label="Partner van Lucky Engine"
+            />
           </div>
 
           <div className="relative my-12 md:my-24 h-px bg-gradient-to-r from-transparent via-emerald/30 to-transparent">
@@ -180,38 +185,44 @@ const Index = () => {
                   </div>
                   
                   <div className="lg:col-span-7 space-y-6 min-h-[400px] pt-6 md:pt-8" id="results">
-                    {/* Replaced AnimatePresence/motion.div with static divs */}
-                    {results ? (
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between px-2">
-                          <h2 className="text-xs font-bold uppercase tracking-extra-wide text-muted-foreground text-small-caps">
-                            Gegenereerde Resultaten
-                          </h2>
-                          <span className="text-[9px] font-medium text-emerald/60 italic">
-                            Lokale Wiskundige Verwerking
-                          </span>
-                        </div>
-                        
-                        <div className="space-y-3">
-                          {results.tickets.map((ticket, i) => (
-                            <TicketCard key={i} ticket={ticket} index={i} />
-                          ))}
-                        </div>
-
-                        <div className="p-4 rounded-md bg-card border border-border/20 shadow-lg"
-                          style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.3), 0 1px 5px rgba(0,0,0,0.1)' }}
+                    <AnimatePresence mode="wait">
+                      {results ? (
+                        <motion.div 
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -6 }}
+                          className="space-y-4"
                         >
-                          <p className="text-xs text-secondary-foreground leading-relaxed font-medium italic">
-                            {results.explanation}
-                          </p>
+                          <div className="flex items-center justify-between px-2">
+                            <h2 className="text-xs font-bold uppercase tracking-extra-wide text-muted-foreground text-small-caps">
+                              Gegenereerde Resultaten
+                            </h2>
+                            <span className="text-[9px] font-medium text-emerald/60 italic">
+                              Lokale Wiskundige Verwerking
+                            </span>
+                          </div>
+                          
+                          <div className="space-y-3">
+                            {results.tickets.map((ticket, i) => (
+                              <TicketCard key={i} ticket={ticket} index={i} />
+                            ))}
+                          </div>
+
+                          <div className="p-4 rounded-md bg-card border border-border/20 shadow-lg"
+                            style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.3), 0 1px 5px rgba(0,0,0,0.1)' }}
+                          >
+                            <p className="text-xs text-secondary-foreground leading-relaxed font-medium italic">
+                              {results.explanation}
+                            </p>
+                          </div>
+                        </motion.div>
+                      ) : (
+                        <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-20 py-16 md:py-20">
+                          <Database size={48} className="text-muted-foreground/50" />
+                          <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground text-small-caps">Interne Database Gereed</p>
                         </div>
-                      </div>
-                    ) : (
-                      <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-20 py-16 md:py-20">
-                        <Database size={48} className="text-muted-foreground/50" />
-                        <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground text-small-caps">Interne Database Gereed</p>
-                      </div>
-                    )}
+                      )}
+                    </AnimatePresence>
                   </div>
                 </section>
               </>
