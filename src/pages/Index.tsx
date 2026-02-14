@@ -166,7 +166,7 @@ const Index = () => {
                 )}
 
                 <section id="generator-section" className="grid grid-cols-1 lg:col-span-12 gap-6 md:gap-12 items-start pt-12 md:pt-16">
-                  <div className="lg:col-span-5 sticky top-24">
+                  <div className="lg:col-span-5 sticky top-24 z-30">
                     <GeneratorPanel onGenerate={handleGenerate} isLoading={isGenerating} />
                   </div>
                   
