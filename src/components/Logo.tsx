@@ -6,15 +6,24 @@ import { cn } from "@/lib/utils";
 interface LogoProps {
   className?: string;
   imgClassName?: string;
-  imageUrl?: string; // New prop for image URL
+  imageUrl?: string;
+  alt?: string; // New prop for alt text
+  ariaLabel?: string; // New prop for aria-label
 }
 
-const Logo = ({ className, imgClassName, imageUrl = "/lucky_engine.png" }: LogoProps) => {
+const Logo = ({ 
+  className, 
+  imgClassName, 
+  imageUrl = "/lucky_engine.png", 
+  alt = "Lucky Engine Logo", // Default alt text
+  ariaLabel = "Lucky Engine Logo" // Default aria-label
+}: LogoProps) => {
   return (
     <div className={cn("relative group", className)}>
       <img 
         src={imageUrl} 
-        alt="Lucky Engine Logo" 
+        alt={alt} 
+        aria-label={ariaLabel}
         className={cn("w-auto transition-transform duration-500 ease-in-out group-hover:scale-105", imgClassName)}
       />
       <div 
