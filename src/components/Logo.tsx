@@ -26,10 +26,6 @@ const Logo = ({
         aria-label={ariaLabel}
         className={cn("w-auto transition-transform duration-500 ease-in-out group-hover:scale-105", imgClassName)}
       />
-      <div 
-        className="absolute inset-0 bg-primary blur-xl opacity-10 rounded-full -z-10 animate-subtle-pulse" // New subtle pulsating glow
-        style={{ backgroundImage: 'radial-gradient(circle, hsl(var(--primary)) 0%, transparent 70%)' }}
-      />
     </div>
   );
 };
