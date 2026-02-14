@@ -1,0 +1,121 @@
+"use client";
+
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Settings2, Sparkles, ChevronDown, Loader2 } from "lucide-react";
+import { Period } from "@/lib/stats-engine";
+
+interface GeneratorPanelProps {
+  onGenerate: (config: any) => void;
+  isLoading: boolean;
+}
+
+const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
+  const [tickets, setTickets] = useState([3]);
+  const [period, setPeriod] = useState<Period>("2y");
+  const [recent, setRecent] = useState("50");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleGenerate = () => {
+    onGenerate({
+      tickets: tickets[0],
+      period,
+      recent: parseInt(recent) || 50,
+      weights: { all: 0.7, recent: 0.3 }
+    });
+  };
+
+  return (
+    <Card className="glass-panel border-white/10 shadow-2xl">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+          <Sparkles size={16} className="text-primary" />
+          Engine Configuration
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-8">
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <Label className="text-sm font-medium text-white">Number of Tickets</Label>
+            <span className="text-primary font-bold text-lg">{tickets[0]}</span>
+          </div>
+          <Slider 
+            value={tickets} 
+            onValueChange={setTickets} 
+            max={10} 
+            min={1} 
+            step={1}
+            className="py-4"
+          />
+        </div>
+
+        <Collapsible open={isOpen} onOpenChange={setIsOpen} className="space-y-4">
+          <CollapsibleTrigger asChild>
+            <Button variant="ghost" className="w-full justify-between text-muted-foreground hover:text-white hover:bg-white/5 px-2">
+              <div className="flex items-center gap-2">
+                <Settings2 size={16} />
+                <span className="text-xs font-bold uppercase tracking-wider">Advanced Settings</span>
+              </div>
+              <ChevronDown size={16} className={isOpen ? "rotate-180 transition-transform" : "transition-transform"} />
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-6 pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground uppercase tracking-wider">Analysis Period</Label>
+                <Select value={period} onValueChange={(v: Period) => setPeriod(v)}>
+                  <SelectTrigger className="bg-secondary/50 border-white/5">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="6m">Last 6 Months</SelectItem>
+                    <SelectItem value="1y">Last Year</SelectItem>
+                    <SelectItem value="2y">Last 2 Years</SelectItem>
+                    <SelectItem value="all">All History</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground uppercase tracking-wider">Recency Window</Label>
+                <Input 
+                  type="number" 
+                  value={recent} 
+                  onChange={(e) => setRecent(e.target.value)}
+                  className="bg-secondary/50 border-white/5"
+                  min={10}
+                  max={200}
+                />
+              </div>
+            </div>
+            <div className="p-3 rounded-lg bg-white/5 border border-white/5">
+              <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                <span>Weight Distribution</span>
+                <span className="text-primary">70% Hist / 30% Rec</span>
+              </div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
+        <Button 
+          onClick={handleGenerate}
+          disabled={isLoading}
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-7 rounded-xl text-lg gold-glow transition-all active:scale-[0.98]"
+        >
+          {isLoading ? (
+            <Loader2 className="animate-spin mr-2" />
+          ) : (
+            "GENERATE LUCKY TICKETS"
+          )}
+        </Button>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default GeneratorPanel;

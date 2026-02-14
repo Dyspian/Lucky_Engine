@@ -1,92 +1,135 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from "@tanstack/react-query";
 import { fetchDraws, Draw } from "@/lib/euromillions-provider";
 import { cache } from "@/lib/cache";
 import { buildStats } from "@/lib/stats-engine";
-import { generateTickets, GenerateConfigSchema } from "@/lib/generator";
+import { generateTickets, GenerateConfig, Ticket } from "@/lib/generator";
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
+import GeneratorPanel from "@/components/GeneratorPanel";
+import TicketCard from "@/components/TicketCard";
+import { ExplanationSection, DisclaimerSection } from "@/components/InfoSections";
+import { showSuccess, showError } from "@/utils/toast";
+import { motion, AnimatePresence } from "framer-motion";
 
 const CACHE_KEY = "draws:v1";
 const TTL_12H = 12 * 60 * 60 * 1000;
 
 const Index = () => {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["api:generate:demo"],
+  const [results, setResults] = useState<{ tickets: Ticket[], explanation: string } | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const { data: drawsData, isLoading: isDataLoading } = useQuery({
+    queryKey: [CACHE_KEY],
     queryFn: async () => {
-      // 1. Load Data (Phase 1)
       const cached = cache.get<Draw[]>(CACHE_KEY);
-      let draws: Draw[];
-      if (cached.source === "cache") {
-        draws = cached.value!;
-      } else {
-        draws = await fetchDraws();
-        cache.set(CACHE_KEY, draws, TTL_12H);
-      }
-
-      // 2. Validate Config (Phase 3)
-      const rawConfig = { tickets: 3, period: "2y", recent: 50 };
-      const config = GenerateConfigSchema.parse(rawConfig);
-
-      // 3. Build Stats (Phase 2)
-      const stats = buildStats(draws, config);
-
-      // 4. Generate (Phase 3)
-      const { tickets, warnings } = generateTickets(stats, config);
-
-      // Return simulated API response
-      return {
-        ok: true,
-        ticketsRequested: config.tickets,
-        ticketsGenerated: tickets.length,
-        config,
-        method: {
-          selection: "weighted-random-from-scores",
-          notes: [
-            "Biases toward historically frequent numbers within selected period and recency window.",
-            "Draws are independent; no guarantee."
-          ]
-        },
-        results: tickets,
-        warnings,
-        explanation: stats.explanation,
-        disclaimer: "EuroMillions draws are independent events. Historical data provides no guarantee of future results."
-      };
+      if (cached.source === "cache") return cached.value!;
+      const draws = await fetchDraws();
+      cache.set(CACHE_KEY, draws, TTL_12H);
+      return draws;
     },
+    staleTime: TTL_12H,
   });
 
+  const handleGenerate = async (config: GenerateConfig) => {
+    if (!drawsData) {
+      showError("Data layer not ready. Please wait.");
+      return;
+    }
+
+    setIsGenerating(true);
+    
+    // Simulate network delay for premium feel
+    await new Promise(resolve => setTimeout(resolve, 800));
+
+    try {
+      const stats = buildStats(drawsData, config);
+      const { tickets } = generateTickets(stats, config);
+      
+      setResults({
+        tickets,
+        explanation: stats.explanation
+      });
+      
+      showSuccess(`${tickets.length} tickets generated successfully.`);
+      
+      // Scroll to results
+      setTimeout(() => {
+        document.getElementById('results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    } catch (err) {
+      showError("Generation failed. Please check settings.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 font-sans">
-      <div className="max-w-2xl w-full bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-        <h1 className="text-2xl font-bold text-slate-900 mb-2">Lucky Engine</h1>
-        <p className="text-slate-500 mb-6">Generator engine initialized.</p>
+    <div className="min-h-screen bg-background text-foreground selection:bg-primary/30">
+      <Navbar />
+      
+      <main className="container mx-auto px-4 pb-24">
+        <Hero />
         
-        <div className="pt-6 border-t border-slate-100">
-          {isLoading ? (
-            <p className="text-sm text-slate-400 animate-pulse">Generating tickets...</p>
-          ) : error ? (
-            <p className="text-sm text-red-500">Error: {(error as Error).message}</p>
-          ) : (
-            <div className="space-y-6">
-              <div className="bg-slate-900 rounded-xl p-4 overflow-x-auto">
-                <pre className="text-[10px] text-indigo-300 font-mono">
-                  {JSON.stringify(data, null, 2)}
-                </pre>
-              </div>
-              
-              <div className="space-y-2">
-                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Sample Output</h3>
-                {data?.results.map((ticket, i) => (
-                  <div key={i} className="p-3 bg-slate-50 rounded-lg border border-slate-100 text-sm font-mono flex justify-between items-center">
-                    <span className="text-indigo-600 font-bold">{ticket.numbers.join(' ')}</span>
-                    <span className="text-amber-500 font-bold">★ {ticket.stars.join(' ')}</span>
-                  </div>
-                ))}
-              </div>
+        <div className="max-w-4xl mx-auto space-y-24">
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            <div className="lg:col-span-5 sticky top-24">
+              <GeneratorPanel onGenerate={handleGenerate} isLoading={isGenerating || isDataLoading} />
             </div>
-          )}
+            
+            <div className="lg:col-span-7 space-y-8 min-h-[400px]" id="results">
+              <AnimatePresence mode="wait">
+                {results ? (
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="space-y-6"
+                  >
+                    <div className="flex items-center justify-between px-2">
+                      <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
+                        Generated Results
+                      </h2>
+                      <span className="text-[10px] font-medium text-primary/60 italic">
+                        Weighted by statistical score
+                      </span>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      {results.tickets.map((ticket, i) => (
+                        <TicketCard key={i} ticket={ticket} index={i} />
+                      ))}
+                    </div>
+
+                    <div className="p-6 rounded-2xl bg-primary/[0.03] border border-primary/10">
+                      <p className="text-xs text-primary/80 leading-relaxed font-medium italic">
+                        {results.explanation}
+                      </p>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-20 py-20">
+                    <div className="w-16 h-16 rounded-full border-2 border-dashed border-muted-foreground" />
+                    <p className="text-sm font-medium uppercase tracking-widest">Awaiting Configuration</p>
+                  </div>
+                )}
+              </AnimatePresence>
+            </div>
+          </section>
+
+          <ExplanationSection />
+          
+          <DisclaimerSection />
         </div>
-      </div>
+      </main>
+
+      <footer className="py-12 border-t border-white/5 text-center">
+        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground/40">
+          © 2024 Lucky Engine • Analytical Systems Division
+        </p>
+      </footer>
     </div>
   );
 };

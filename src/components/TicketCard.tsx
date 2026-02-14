@@ -5,9 +5,10 @@ import { Ticket } from "@/lib/generator";
 import Ball from "./Ball";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Copy } from "lucide-react";
+import { Copy, Check } from "lucide-react";
 import { motion } from "framer-motion";
 import { copyTicketToClipboard } from "@/utils/clipboard";
+import { useState } from "react";
 
 interface TicketCardProps {
   ticket: Ticket;
@@ -15,41 +16,46 @@ interface TicketCardProps {
 }
 
 const TicketCard = ({ ticket, index }: TicketCardProps) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    await copyTicketToClipboard(ticket.numbers, ticket.stars);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <motion.div
-      initial={{ x: -20, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      transition={{ delay: index * 0.1 }}
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: index * 0.05 }}
     >
-      <Card className="group overflow-hidden border-none bg-white/80 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-300">
-        <CardContent className="p-6">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-indigo-300 mr-2">
-                Ticket #{index + 1}
+      <Card className="glass-panel overflow-hidden group">
+        <CardContent className="p-5 sm:p-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+                Ticket {index + 1}
               </span>
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2 sm:gap-3">
                 {ticket.numbers.map((n, i) => (
-                  <Ball key={`n-${i}`} value={n} delay={index * 0.1 + i * 0.05} />
+                  <Ball key={`n-${i}`} value={n} delay={index * 0.05 + i * 0.03} />
                 ))}
-              </div>
-            </div>
-            <div className="flex gap-3 items-center">
-              <div className="h-8 w-px bg-slate-200 hidden sm:block mx-2" />
-              <div className="flex gap-2">
+                <div className="w-px h-8 bg-white/10 mx-2 hidden sm:block" />
                 {ticket.stars.map((s, i) => (
-                  <Ball key={`s-${i}`} value={s} variant="star" delay={index * 0.1 + 0.3 + i * 0.05} />
+                  <Ball key={`s-${i}`} value={s} variant="star" delay={index * 0.05 + 0.2 + i * 0.03} />
                 ))}
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity rounded-full hover:bg-indigo-50 text-indigo-400 hover:text-indigo-600"
-                onClick={() => copyTicketToClipboard(ticket.numbers, ticket.stars)}
-              >
-                <Copy size={18} />
-              </Button>
             </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full hover:bg-white/5 text-muted-foreground hover:text-primary transition-colors"
+              onClick={handleCopy}
+              aria-label="Copy ticket"
+            >
+              {copied ? <Check size={18} className="text-primary" /> : <Copy size={18} />}
+            </Button>
           </div>
         </CardContent>
       </Card>
