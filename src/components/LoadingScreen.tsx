@@ -21,7 +21,8 @@ const LoadingScreen = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const logoUrl = "/lucky_engine.png"; // Updated to local asset
+  // De logoUrl is nu standaard ingesteld in de Logo component, dus hier niet meer nodig.
+  // const logoUrl = "/lucky_engine.png"; 
 
   return (
     <motion.div 
@@ -35,7 +36,12 @@ const LoadingScreen = () => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
       >
-        <Logo imgClassName="h-24" imageUrl={logoUrl} alt="Lucky Engine Laadlogo" ariaLabel="Lucky Engine Laadscherm Logo" />
+        <Logo 
+          imgClassName="h-24" 
+          // imageUrl={logoUrl} // Niet meer nodig, Logo component gebruikt nu de standaard URL
+          alt="Lucky Engine Laadlogo" 
+          ariaLabel="Lucky Engine Laadscherm Logo" 
+        />
       </motion.div>
 
       <div className="w-64 h-1 bg-border/50 rounded-full mt-12 mb-6 overflow-hidden relative">

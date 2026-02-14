@@ -12,7 +12,8 @@ interface HeroLuckProps {
 }
 
 const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
-  const logoUrl = "/lucky_engine.png"; // Updated to local asset
+  // De logoUrl is nu standaard ingesteld in de Logo component, dus hier niet meer nodig.
+  // const logoUrl = "/lucky_engine.png"; 
 
   const handleGenerateClick = () => {
     onGenerateClick();
@@ -80,7 +81,7 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
           className="flex justify-center md:justify-end relative"
         >
           <Logo
-            imageUrl={logoUrl}
+            // imageUrl={logoUrl} // Niet meer nodig, Logo component gebruikt nu de standaard URL
             imgClassName="h-64 md:h-80 w-auto"
             alt="Lucky Engine - Statistische EuroMillions Analyse en Ticket Generator"
             ariaLabel="Lucky Engine Logo - Startpagina voor EuroMillions Voorspellingen"
