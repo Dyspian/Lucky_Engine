@@ -92,7 +92,7 @@ const CloverParticles = () => {
           number: {
             density: {
               enable: true,
-              value_area: 800, // Corrected back to 'value_area' based on type error
+              area: 800, // Corrected back to 'area' based on the latest type error
             },
             value: 40, // Low density
           },
