@@ -14,7 +14,7 @@ interface LogoProps {
 const Logo = ({ 
   className, 
   imgClassName, 
-  imageUrl = "https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/lucky_engine.png", 
+  imageUrl = "https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/lucky_engine%20(1).png", 
   alt = "Lucky Engine Logo",
   ariaLabel = "Lucky Engine Logo"
 }: LogoProps) => {
