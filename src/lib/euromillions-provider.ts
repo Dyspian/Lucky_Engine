@@ -1,64 +1,79 @@
 import { z } from "zod";
 
-// Define the Zod schema for the external API response
-const ExternalDrawSchema = z.object({
+/**
+ * Internal Draw type definition
+ */
+export const DrawSchema = z.object({
   date: z.string(),
-  numbers: z.array(z.number()),
-  stars: z.array(z.number()),
+  numbers: z.array(z.number().min(1).max(50)).length(5),
+  stars: z.array(z.number().min(1).max(12)).length(2),
 });
 
-const ExternalApiResponseSchema = z.array(ExternalDrawSchema);
+export type Draw = z.infer<typeof DrawSchema>;
 
-// Define our normalized Draw type
-export type Draw = {
-  date: string;
-  numbers: number[];
-  stars: number[];
-};
+/**
+ * External API response schema (array of unknown objects)
+ */
+const ExternalApiResponseSchema = z.array(z.unknown());
 
-const EUROMILLIONS_API_URL = "https://euromillions.api.pedromealha.dev/v1/draws";
+const API_URL = "https://euromillions.api.pedromealha.dev/v1/draws";
+const FETCH_TIMEOUT_MS = 10000;
 
-export async function fetchEuroMillionsDraws(): Promise<Draw[]> {
+/**
+ * Fetches, validates, and normalizes EuroMillions draw data.
+ * Malformed draws are dropped, and a summary is logged.
+ */
+export async function fetchDraws(): Promise<Draw[]> {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
   try {
-    const response = await fetch(EUROMILLIONS_API_URL, {
+    const response = await fetch(API_URL, {
       signal: controller.signal,
       headers: {
-        "Content-Type": "application/json",
+        "Accept": "application/json",
       },
     });
 
     clearTimeout(timeoutId);
 
     if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
+      throw new Error(`EuroMillions API responded with status: ${response.status}`);
     }
 
     const rawData = await response.json();
     
-    // Validate and parse the response
-    const validatedData = ExternalApiResponseSchema.parse(rawData);
-    
-    // Normalize the data to our Draw type
-    return validatedData.map(draw => ({
-      date: draw.date,
-      numbers: draw.numbers,
-      stars: draw.stars,
-    }));
+    // Validate that we received an array
+    const parsedArray = ExternalApiResponseSchema.parse(rawData);
+
+    let droppedCount = 0;
+    const validatedDraws: Draw[] = [];
+
+    for (const item of parsedArray) {
+      const result = DrawSchema.safeParse(item);
+      if (result.success) {
+        validatedDraws.push(result.data);
+      } else {
+        droppedCount++;
+      }
+    }
+
+    if (droppedCount > 0) {
+      console.warn(`[Provider] Dropped ${droppedCount} malformed draws during normalization.`);
+    }
+
+    return validatedDraws;
   } catch (error) {
     clearTimeout(timeoutId);
     
     if (error instanceof z.ZodError) {
-      console.error("Data validation error:", error.errors);
-      throw new Error("Invalid data format from EuroMillions API");
+      throw new Error("API response format changed: Validation failed.");
     }
     
     if (error instanceof Error && error.name === "AbortError") {
-      throw new Error("Request timeout while fetching EuroMillions data");
+      throw new Error("Request timed out while fetching EuroMillions data.");
     }
-    
-    throw new Error(`Failed to fetch EuroMillions data: ${error instanceof Error ? error.message : "Unknown error"}`);
+
+    throw error;
   }
 }

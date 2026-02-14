@@ -1,43 +1,49 @@
+"use client";
+
 type CacheEntry<T> = {
-  data: T;
-  timestamp: number;
+  value: T;
+  expiresAt: number;
 };
 
 class InMemoryCache {
-  private cache: Map<string, CacheEntry<any>> = new Map();
-  private readonly TTL = 12 * 60 * 60 * 1000; // 12 hours in milliseconds
+  private store = new Map<string, CacheEntry<any>>();
+  private lastGoodStore = new Map<string, any>();
 
-  public set<T>(key: string, data: T): void {
-    this.cache.set(key, {
-      data,
-      timestamp: Date.now(),
+  /**
+   * Sets a value in the cache with a specific TTL.
+   * Also updates the 'lastGood' fallback storage.
+   */
+  public set<T>(key: string, value: T, ttlMs: number): void {
+    this.store.set(key, {
+      value,
+      expiresAt: Date.now() + ttlMs,
     });
+    this.lastGoodStore.set(key, value);
   }
 
-  public get<T>(key: string): T | null {
-    const entry = this.cache.get(key);
+  /**
+   * Retrieves a value from the cache.
+   * Returns the fresh value if available, otherwise returns the last known good value.
+   */
+  public get<T>(key: string): { value: T | null; source: "cache" | "fallback" | "none" } {
+    const entry = this.store.get(key);
     
-    if (!entry) {
-      return null;
+    if (entry && entry.expiresAt > Date.now()) {
+      return { value: entry.value, source: "cache" };
     }
 
-    // Check if entry is expired
-    if (Date.now() - entry.timestamp > this.TTL) {
-      this.cache.delete(key);
-      return null;
+    const lastGood = this.lastGoodStore.get(key);
+    if (lastGood) {
+      return { value: lastGood, source: "fallback" };
     }
 
-    return entry.data;
-  }
-
-  public has(key: string): boolean {
-    return this.get(key) !== null;
+    return { value: null, source: "none" };
   }
 
   public clear(): void {
-    this.cache.clear();
+    this.store.clear();
+    this.lastGoodStore.clear();
   }
 }
 
-const cache = new InMemoryCache();
-export default cache;
+export const cache = new InMemoryCache();
