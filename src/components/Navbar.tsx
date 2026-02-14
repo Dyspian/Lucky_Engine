@@ -6,6 +6,7 @@ import Logo from './Logo';
 import { Button } from "@/components/ui/button";
 import { History, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import SystemClock from './SystemClock';
 
 const Navbar = () => {
   const location = useLocation();
@@ -14,14 +15,20 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border/5 bg-background/80 backdrop-blur-md">
-      <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
-          <Logo 
-            imgClassName="h-8 md:h-10" 
-            alt="Lucky Engine Logo" 
-            ariaLabel="Lucky Engine Logo" 
-          />
-        </Link>
+      <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
+            <Logo 
+              imgClassName="h-8 md:h-10" 
+              alt="Lucky Engine Logo" 
+              ariaLabel="Lucky Engine Logo" 
+            />
+          </Link>
+          
+          <div className="hidden md:block">
+            <SystemClock />
+          </div>
+        </div>
 
         <div className="flex items-center gap-2 sm:gap-4">
           <Link to="/">
@@ -58,6 +65,10 @@ const Navbar = () => {
             </Button>
           </Link>
         </div>
+      </div>
+      {/* Mobile Clock */}
+      <div className="md:hidden flex justify-center pb-2 bg-background/80 backdrop-blur-md border-b border-border/5">
+        <SystemClock />
       </div>
     </nav>
   );
