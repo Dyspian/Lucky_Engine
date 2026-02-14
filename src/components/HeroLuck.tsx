@@ -36,20 +36,8 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
     visible: { opacity: 1, y: 0 }
   };
 
-  const cloverChipVariants = {
-    initial: { y: 0, rotate: 0, opacity: 0.8 },
-    animate: {
-      y: [0, -5, 0],
-      rotate: [0, 5, -5, 0],
-      transition: {
-        duration: 6,
-        repeat: Infinity,
-        ease: "easeInOut",
-        delay: Math.random() * 2
-      }
-    }
-  };
-
+  // Removed cloverChipVariants as the floating clovers are being removed
+  
   return (
     <motion.section
       className="relative py-20 md:py-32 px-4 overflow-hidden"
@@ -123,23 +111,7 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick }: HeroLuckProps) => {
             </div>
           </motion.div>
 
-          {/* Floating Clover Chips */}
-          {[...Array(5)].map((_, i) => (
-            <motion.img
-              key={i}
-              src="/clover.svg"
-              alt="Clover chip"
-              className="absolute w-8 h-8 opacity-70"
-              style={{
-                top: `${20 + i * 15}%`,
-                left: `${10 + i * 18}%`,
-                filter: `drop-shadow(0 0 5px rgba(52, 211, 153, 0.5))`
-              }}
-              variants={cloverChipVariants}
-              initial="initial"
-              animate="animate"
-            />
-          ))}
+          {/* Removed Floating Clover Chips */}
         </div>
       </div>
     </motion.section>
