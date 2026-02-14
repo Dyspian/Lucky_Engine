@@ -114,7 +114,7 @@ const Index = () => {
             <div className="absolute inset-x-0 -bottom-2 h-4 bg-emerald/10 blur-md" />
           </div>
           
-          <div className="max-w-6xl mx-auto px-6 space-y-24"> {/* Increased max-width and adjusted padding */}
+          <div className="max-w-6xl mx-auto px-6 space-y-16 md:space-y-24"> {/* Adjusted vertical spacing for responsiveness */}
             {lastDraw && (
               <section id="last-draw-section" className="mb-16">
                 <LastDraw draw={lastDraw} />
