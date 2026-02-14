@@ -7,7 +7,7 @@ const Logo = ({ className, imgClassName }: { className?: string; imgClassName?: 
   return (
     <div className={cn("relative group", className)}>
       <img 
-        src="/logo.png" 
+        src="/lucky_engine.png" 
         alt="Lucky Engine Logo" 
         className={cn("w-auto transition-transform duration-500 ease-in-out group-hover:scale-105", imgClassName)}
       />
