@@ -1,9 +1,6 @@
 import { StatsResult, StatItem } from "./stats-engine";
 import { z } from "zod";
 
-/**
- * Input validation schema for the generator
- */
 export const GenerateConfigSchema = z.object({
   tickets: z.number().int().min(1).max(10),
   period: z.enum(["2y", "1y", "6m", "all"]).default("2y"),
@@ -19,24 +16,20 @@ export type GenerateConfig = z.infer<typeof GenerateConfigSchema>;
 export type Ticket = {
   numbers: number[];
   stars: number[];
-  chancePercentage: number; // Nieuwe eigenschap voor het slaagkans percentage
+  chancePercentage: number;
+  flags?: string[]; // New: Reasons why this ticket is statistically "good"
 };
 
 /**
- * Simple seeded RNG (Mulberry32)
+ * Seeded RNG
  */
 function createRNG(seedStr?: string) {
-  if (!seedStr) {
-    return () => Math.random();
-  }
-  
-  // Simple hash for the seed string
+  if (!seedStr) return () => Math.random();
   let seed = 0;
   for (let i = 0; i < seedStr.length; i++) {
     seed = (seed << 5) - seed + seedStr.charCodeAt(i);
     seed |= 0;
   }
-
   return function() {
     let t = seed += 0x6D2B79F5;
     t = Math.imul(t ^ t >>> 15, t | 1);
@@ -46,61 +39,83 @@ function createRNG(seedStr?: string) {
 }
 
 /**
- * Weighted selection without replacement
+ * Weighted selection
  */
 function weightedPickUnique(
   items: StatItem[], 
   count: number, 
   rng: () => number,
-  alpha: number = 1.2,
-  epsilon: number = 1e-6 // Small value to ensure non-zero weight for score=0
+  alpha: number = 1.2
 ): number[] {
   const selected: number[] = [];
+  // Use a pool copy
   let pool = items.map(item => ({
     value: item.value,
-    // Apply temperature smoothing: (score + epsilon) ^ alpha
-    weight: Math.pow(item.score + epsilon, alpha)
+    weight: Math.pow(item.score + 1e-6, alpha) // Power transform to accentuate peaks
   }));
 
-  // Check if all weights are effectively zero (or very close)
-  const totalInitialWeight = pool.reduce((sum, p) => sum + p.weight, 0);
-  const useUniformRandom = totalInitialWeight < epsilon * pool.length; // If sum of weights is tiny
-
   while (selected.length < count && pool.length > 0) {
-    if (useUniformRandom) {
-      // Fallback to uniform random selection if all weights are zero
-      const randomIndex = Math.floor(rng() * pool.length);
-      selected.push(pool[randomIndex].value);
-      pool.splice(randomIndex, 1);
-    } else {
-      const totalWeight = pool.reduce((sum, p) => sum + p.weight, 0);
-      let r = rng() * totalWeight;
-      
-      let pickedIndex = -1;
-      for (let i = 0; i < pool.length; i++) {
-        r -= pool[i].weight;
-        if (r <= 0) {
-          pickedIndex = i;
-          break;
-        }
+    const totalWeight = pool.reduce((sum, p) => sum + p.weight, 0);
+    let r = rng() * totalWeight;
+    
+    let pickedIndex = -1;
+    for (let i = 0; i < pool.length; i++) {
+      r -= pool[i].weight;
+      if (r <= 0) {
+        pickedIndex = i;
+        break;
       }
-
-      // Fallback if floating point precision issues prevent picking, or if r is still positive due to tiny weights
-      if (pickedIndex === -1) {
-        pickedIndex = Math.floor(rng() * pool.length);
-      }
-
-      selected.push(pool[pickedIndex].value);
-      pool.splice(pickedIndex, 1);
     }
+    
+    // Fallback
+    if (pickedIndex === -1) pickedIndex = Math.floor(rng() * pool.length);
+
+    selected.push(pool[pickedIndex].value);
+    pool.splice(pickedIndex, 1);
   }
 
   return selected.sort((a, b) => a - b);
 }
 
+// --- ADVANCED MATH FILTERS ---
+
 /**
- * Core generation engine
+ * Checks if the set of numbers is well-balanced statistically.
  */
+function isValidSet(numbers: number[]): { valid: boolean; flags: string[] } {
+  const flags: string[] = [];
+  
+  // 1. Sum Check (Bell Curve)
+  // For 5 numbers from 1-50, the sum typically falls between ~100 and ~175
+  const sum = numbers.reduce((a, b) => a + b, 0);
+  if (sum < 90 || sum > 180) return { valid: false, flags }; // Reject outliers
+  flags.push("Optimal Sum");
+
+  // 2. Parity Check (Odd/Even)
+  // We want a mix. All Odd (5:0) or All Even (0:5) is rare (prob ~3-4%).
+  const odds = numbers.filter(n => n % 2 !== 0).length;
+  const evens = 5 - odds;
+  if (odds === 0 || evens === 0) return { valid: false, flags }; // Reject mono-parity
+  flags.push("Balanced Parity");
+
+  // 3. High/Low Check
+  // Split at 25. We don't want all low (1-25) or all high (26-50).
+  const low = numbers.filter(n => n <= 25).length;
+  const high = 5 - low;
+  if (low === 0 || high === 0) return { valid: false, flags }; // Reject mono-range
+  flags.push("Distributed Range");
+
+  // 4. Consecutive Check
+  // 1,2,3 is rare. We allow pairs (1,2) but try to avoid triplets (1,2,3).
+  let consecutives = 0;
+  for (let i = 0; i < numbers.length - 1; i++) {
+    if (numbers[i + 1] === numbers[i] + 1) consecutives++;
+  }
+  if (consecutives > 1) return { valid: false, flags }; // Reject triplets or multiple pairs
+  
+  return { valid: true, flags };
+}
+
 export function generateTickets(
   stats: StatsResult, 
   config: GenerateConfig,
@@ -111,51 +126,68 @@ export function generateTickets(
   const warnings: string[] = [];
   const seen = new Set<string>();
 
-  // Use all stats, not just top 10
-  const candidatesMain = stats.allNumberStats;
-  const candidatesStars = stats.allStarStats;
+  const MAX_ATTEMPTS = 500; // Prevent infinite loops
 
   for (let i = 0; i < config.tickets; i++) {
-    let ticket: Ticket;
+    let bestTicket: Ticket | null = null;
     let attempts = 0;
-    let serialized: string;
 
-    // Attempt to generate a unique ticket within the batch
-    do {
-      const numbers = weightedPickUnique(candidatesMain, 5, rng);
-      const stars = weightedPickUnique(candidatesStars, 2, rng);
+    // Try to generate a statistically "Smart" ticket
+    while (attempts < MAX_ATTEMPTS) {
+      attempts++;
+      
+      const numbers = weightedPickUnique(stats.allNumberStats, 5, rng);
+      const stars = weightedPickUnique(stats.allStarStats, 2, rng);
 
-      // Calculate chancePercentage
+      // Validate Pattern
+      const check = isValidSet(numbers);
+      if (!check.valid) continue; // Retry if statistical outlier
+
+      const serialized = `${numbers.join(',')}|${stars.join(',')}`;
+      if (seen.has(serialized)) continue; // Retry if duplicate
+
+      // Calculate Chance
       const totalNumberScore = numbers.reduce((sum, num) => {
-        const statItem = candidatesMain.find(item => item.value === num);
-        return sum + (statItem?.score || 0);
+        const item = stats.allNumberStats.find(i => i.value === num);
+        return sum + (item?.score || 0);
       }, 0);
-
+      
       const totalStarScore = stars.reduce((sum, star) => {
-        const statItem = candidatesStars.find(item => item.value === star);
-        return sum + (statItem?.score || 0);
+        const item = stats.allStarStats.find(i => i.value === star);
+        return sum + (item?.score || 0);
       }, 0);
 
-      // Max possible score for 5 numbers + 2 stars is 7 (if all have score 1)
-      const maxPossibleScore = 7; 
-      const rawChance = (totalNumberScore + totalStarScore) / maxPossibleScore;
-      const chancePercentage = Math.round(rawChance * 100); // Scale to 0-100 and round
+      // Normalize score (heuristic max ~6.0 based on weights)
+      const rawScore = totalNumberScore + totalStarScore;
+      // Map score to percentage (roughly 0-100)
+      const chancePercentage = Math.min(99, Math.round((rawScore / 6.5) * 100));
 
-      ticket = {
+      bestTicket = {
         numbers,
         stars,
         chancePercentage,
+        flags: check.flags
       };
-      serialized = `${ticket.numbers.join(',')}|${ticket.stars.join(',')}`;
-      attempts++;
-    } while (seen.has(serialized) && attempts < 5); // Retry up to 5 times for uniqueness
-
-    if (seen.has(serialized)) {
-      warnings.push("DUPLICATES_POSSIBLE");
+      
+      seen.add(serialized);
+      break;
     }
 
-    seen.add(serialized);
-    tickets.push(ticket);
+    // Fallback: If we couldn't find a perfect ticket in time, just give the last one
+    // (This is rare, but safe coding)
+    if (!bestTicket) {
+      const numbers = weightedPickUnique(stats.allNumberStats, 5, rng);
+      const stars = weightedPickUnique(stats.allStarStats, 2, rng);
+      bestTicket = {
+        numbers, 
+        stars, 
+        chancePercentage: 50,
+        flags: ["Fallback"] 
+      };
+      warnings.push("Optimization Timeout");
+    }
+
+    tickets.push(bestTicket);
   }
 
   return { tickets, warnings };

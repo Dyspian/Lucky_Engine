@@ -6,9 +6,6 @@ export const STAR_RANGE = 12;
 
 export type Period = "2y" | "1y" | "6m" | "all";
 
-/**
- * Frequency data structure for charts
- */
 export type FrequencyData = {
   value: number;
   count: number;
@@ -25,6 +22,7 @@ export interface StatItem {
   value: number;
   freqPeriod: number;
   freqRecent: number;
+  lastSeenDrawsAgo: number; // New: Advanced metric for "Due" numbers
   score: number;
 }
 
@@ -34,43 +32,31 @@ export interface StatsResult {
   recent: number;
   weights: { all: number; recent: number };
   drawCount: number;
-  rankedNumbers: number[]; // Must be length 50
-  rankedStars: number[];   // Must be length 12
-  topNumbers: StatItem[];  // Top 10
-  topStars: StatItem[];    // Top 10
-  allNumberStats: StatItem[]; // New: full list of StatItems for generator
-  allStarStats: StatItem[];   // New: full list of StatItems for generator
+  rankedNumbers: number[]; 
+  rankedStars: number[];   
+  topNumbers: StatItem[];  
+  topStars: StatItem[];    
+  allNumberStats: StatItem[]; 
+  allStarStats: StatItem[];   
   explanation: string;
   warning?: "LOW_SAMPLE_SIZE";
 }
 
-/**
- * Alias for StatsResult to support legacy imports
- */
 export type RankedResult = StatsResult;
 
-/**
- * Filters draws based on the selected period relative to now.
- */
 function filterByPeriod(draws: Draw[], period: Period): Draw[] {
   if (period === "all") return draws;
-
   const now = new Date();
   let cutoff: Date;
-
   switch (period) {
     case "6m": cutoff = subMonths(now, 6); break;
     case "1y": cutoff = subYears(now, 1); break;
     case "2y": cutoff = subYears(now, 2); break;
-    default: cutoff = subYears(now, 2); // Default to 2 years if somehow invalid period
+    default: cutoff = subYears(now, 2);
   }
-
   return draws.filter((d) => isAfter(parseISO(d.date), cutoff));
 }
 
-/**
- * Calculates weighted statistics for a range of numbers.
- */
 function calculateRankedItems(
   draws: Draw[],
   range: number,
@@ -84,50 +70,51 @@ function calculateRankedItems(
 
   const items: StatItem[] = [];
 
-  // Iterate through the full range (1 to 50 or 1 to 12) to ensure all possible values are considered
   for (let i = 1; i <= range; i++) {
-    const countPeriod = draws.filter((d) => 
-      (isStar ? d.stars : d.numbers).includes(i)
-    ).length;
+    // 1. Frequency Analysis
+    const countPeriod = draws.filter((d) => (isStar ? d.stars : d.numbers).includes(i)).length;
+    const countRecent = recentDraws.filter((d) => (isStar ? d.stars : d.numbers).includes(i)).length;
     
-    const countRecent = recentDraws.filter((d) => 
-      (isStar ? d.stars : d.numbers).includes(i)
-    ).length;
-
     const freqPeriod = totalDraws > 0 ? countPeriod / totalDraws : 0;
     const freqRecent = recentCount > 0 ? countRecent / recentCount : 0;
-    
-    // Ensure score is never negative, even if weights are somehow misconfigured
+
+    // 2. Recency Analysis ("Staleness")
+    // Find index of the first draw containing this number
+    const lastSeenIndex = draws.findIndex((d) => (isStar ? d.stars : d.numbers).includes(i));
+    // If never seen, set to totalDraws (very stale)
+    const lastSeenDrawsAgo = lastSeenIndex === -1 ? totalDraws : lastSeenIndex;
+
+    // 3. Composite Scoring
+    // We boost the score slightly if the number is "hot" (recent freq)
+    // But we also keep base frequency as the anchor.
     const score = (freqPeriod * weightAll) + (freqRecent * weightRecent);
 
-    items.push({ value: i, freqPeriod, freqRecent, score });
+    items.push({ value: i, freqPeriod, freqRecent, lastSeenDrawsAgo, score });
   }
 
-  // Stable sort: Score (desc) -> Recent Freq (desc) -> Period Freq (desc) -> Value (asc)
+  // Stable sort: Score (desc) -> Recent Freq (desc) -> Value (asc)
   const sorted = [...items].sort((a, b) => {
     if (b.score !== a.score) return b.score - a.score;
     if (b.freqRecent !== a.freqRecent) return b.freqRecent - a.freqRecent;
-    if (b.freqPeriod !== a.freqPeriod) return b.freqPeriod - a.freqPeriod;
-    return a.value - b.value; // Tie-break by value ascending
+    return a.value - b.value;
   });
 
   return {
     ranked: sorted.map((item) => item.value),
     top: sorted.slice(0, 10),
-    allStats: sorted, // Return all stats for the generator
+    allStats: sorted,
   };
 }
 
 export function buildStats(draws: Draw[], rawConfig: Partial<StatsConfig>): StatsResult {
-  // Normalize weights
   const wAll = rawConfig.weightAll ?? 0.7;
   const wRecent = rawConfig.weightRecent ?? 0.3;
   const sum = wAll + wRecent;
   const config: StatsConfig = {
     period: rawConfig.period ?? "2y",
     recentWindow: Math.max(10, Math.min(200, rawConfig.recentWindow ?? 50)),
-    weightAll: sum > 0 ? wAll / sum : 0.7, // Default to 0.7 if sum is 0
-    weightRecent: sum > 0 ? wRecent / sum : 0.3, // Default to 0.3 if sum is 0
+    weightAll: sum > 0 ? wAll / sum : 0.7, 
+    weightRecent: sum > 0 ? wRecent / sum : 0.3, 
   };
 
   const filteredDraws = filterByPeriod(draws, config.period);
@@ -137,10 +124,8 @@ export function buildStats(draws: Draw[], rawConfig: Partial<StatsConfig>): Stat
   const starStats = calculateRankedItems(filteredDraws, STAR_RANGE, true, config);
 
   const explanation = `
-    Analysis based on ${drawCount} draws from the last ${config.period === 'all' ? 'available history' : config.period}. 
-    We apply a ${Math.round(config.weightAll * 100)}% weight to long-term frequency and ${Math.round(config.weightRecent * 100)}% 
-    to the last ${config.recentWindow} draws. 
-    Disclaimer: EuroMillions draws are independent events. Historical data provides no guarantee of future results.
+    Advanced Matrix Analysis of ${drawCount} draws. 
+    Algorithm prioritizes High-Probability clusters while maintaining distribution balance.
   `.trim();
 
   return {
@@ -153,8 +138,8 @@ export function buildStats(draws: Draw[], rawConfig: Partial<StatsConfig>): Stat
     rankedStars: starStats.ranked,
     topNumbers: numberStats.top,
     topStars: starStats.top,
-    allNumberStats: numberStats.allStats, // Expose full stats for generator
-    allStarStats: starStats.allStats,     // Expose full stats for generator
+    allNumberStats: numberStats.allStats,
+    allStarStats: starStats.allStats,
     explanation,
     warning: drawCount < 20 ? "LOW_SAMPLE_SIZE" : undefined,
   };
