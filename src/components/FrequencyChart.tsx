@@ -51,6 +51,7 @@ const FrequencyChart = ({ data, title, color }: FrequencyChartProps) => {
                 {data.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={color} fillOpacity={0.6 + (entry.count / Math.max(...data.map(d => d.count))) * 0.4} />
                 ))}
+                <LabelList dataKey="count" position="top" fill="hsl(var(--foreground))" fontSize={10} />
               </Bar>
             </BarChart>
           </ResponsiveContainer>
