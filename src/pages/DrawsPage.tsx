@@ -110,10 +110,10 @@ const DrawsPage = () => {
     handleSubmit(onSubmit)();
   };
 
-  // Generate years from 2004 up to at least 2026 (or current year if later)
+  // Dynamically generate years from 2004 up to CURRENT YEAR only.
+  // This prevents selecting future years like 2026 if it's currently 2025.
   const currentYear = new Date().getFullYear();
-  const maxYear = Math.max(currentYear, 2026);
-  const years = Array.from({ length: maxYear - 2004 + 1 }, (_, i) => (maxYear - i).toString());
+  const years = Array.from({ length: currentYear - 2004 + 1 }, (_, i) => (currentYear - i).toString());
 
   return (
     <div className="relative min-h-screen text-foreground selection:bg-emerald/30 font-sans">
@@ -194,6 +194,7 @@ const DrawsPage = () => {
                               mode="single"
                               selected={watchedStartDate ? new Date(watchedStartDate) : undefined}
                               onSelect={(date) => setValue('startDate', date ? format(date, 'yyyy-MM-dd') : undefined)}
+                              disabled={(date) => date > new Date() || date < new Date("2004-01-01")}
                               initialFocus
                             />
                           </PopoverContent>
@@ -216,6 +217,7 @@ const DrawsPage = () => {
                               mode="single"
                               selected={watchedEndDate ? new Date(watchedEndDate) : undefined}
                               onSelect={(date) => setValue('endDate', date ? format(date, 'yyyy-MM-dd') : undefined)}
+                              disabled={(date) => date > new Date() || date < new Date("2004-01-01")}
                               initialFocus
                             />
                           </PopoverContent>
