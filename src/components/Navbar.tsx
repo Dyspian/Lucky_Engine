@@ -10,7 +10,6 @@ import SystemClock from './SystemClock';
 import { getNextDrawDate } from "@/lib/seo-utils";
 import { isSameDay } from "date-fns";
 import DisclaimerBanner from './DisclaimerBanner';
-import { ModeToggle } from './ModeToggle';
 
 const Navbar = () => {
   const location = useLocation();
@@ -102,10 +101,6 @@ const Navbar = () => {
                 <span className="sm:hidden">Wiki</span>
               </Button>
             </Link>
-
-            <div className="pl-2 border-l border-border/10 ml-1">
-              <ModeToggle />
-            </div>
           </div>
         </div>
         
