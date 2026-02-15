@@ -28,11 +28,11 @@ const LastDraw = ({ draw }: LastDrawProps) => {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4"> 
-          <div>
+          <div className="text-center sm:text-left"> {/* Centered text on mobile */}
             <p className="text-lg sm:text-2xl font-bold capitalize mb-0.5 text-foreground">{formattedDate}</p> 
             <p className="text-muted-foreground text-xs sm:text-sm">Officiële resultaten van de laatste trekking</p> 
           </div>
-          <div className="flex flex-wrap gap-1 items-center"> 
+          <div className="flex flex-wrap gap-1 items-center justify-center sm:justify-end"> {/* Centered balls on mobile */}
             <div className="flex gap-1"> 
               {draw.numbers.map((n, i) => (
                 <Link key={`last-n-${i}`} to={`/nummers/${n}`} title={`Bekijk statistieken voor nummer ${n}`}>
@@ -41,7 +41,7 @@ const LastDraw = ({ draw }: LastDrawProps) => {
               ))}
             </div>
             <div className="w-px h-6 bg-border/50 mx-1 hidden sm:block" /> 
-            <div className="flex gap-1"> 
+            <div className="flex gap-1 mt-2 sm:mt-0"> {/* Added margin-top for stars on mobile */}
               {draw.stars.map((s, i) => (
                 <Link key={`last-s-${i}`} to={`/sterren/${s}`} title={`Bekijk statistieken voor ster ${s}`}>
                    <Ball value={s} variant="star" delay={0.3 + i * 0.05} />

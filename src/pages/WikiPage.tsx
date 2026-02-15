@@ -73,7 +73,7 @@ const WikiPage = () => {
             <h1 className="text-3xl md:text-5xl font-extrabold tracking-extra-wide text-foreground">
               Getallen <span className="text-emerald">Wiki</span>
             </h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto">
               De complete index van alle EuroMillions getallen en sterren met live statistieken gebaseerd op de volledige beschikbare trekking-historie.
             </p>
           </div>
@@ -87,22 +87,22 @@ const WikiPage = () => {
               <h2 className="text-2xl font-bold text-foreground">Hoofdgetallen (1-50)</h2>
             </div>
             
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+            <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3 sm:gap-4"> {/* Adjusted grid for mobile */}
               {draws && numbers.map(num => {
                 const stats = getNumberStats(draws, num, false);
                 return (
                   <Link key={num} to={`/nummers/${num}`} className="group block h-full">
                     <Card className="bg-card/40 border-border/20 hover:border-emerald/50 hover:bg-card/80 transition-all duration-200 hover:-translate-y-1 h-full">
-                      <CardContent className="p-4 flex flex-col items-center gap-3 h-full justify-between">
+                      <CardContent className="p-3 sm:p-4 flex flex-col items-center gap-2 sm:gap-3 h-full justify-between"> {/* Adjusted padding and gap */}
                         <div className="transform group-hover:scale-110 transition-transform duration-200">
                           <Ball value={num} />
                         </div>
-                        <div className="text-center w-full space-y-2">
-                          <div className="flex justify-between items-center text-xs w-full px-1 border-b border-border/10 pb-1">
-                            <span className="text-muted-foreground">Freq</span>
-                            <span className="font-bold text-foreground">{stats.count}x</span>
+                        <div className="text-center w-full space-y-1 sm:space-y-2"> {/* Adjusted spacing */}
+                          <div className="flex justify-between items-center text-xs w-full px-0.5 border-b border-border/10 pb-0.5"> {/* Adjusted padding */}
+                            <span className="text-muted-foreground text-[10px] sm:text-xs">Freq</span> {/* Adjusted font size */}
+                            <span className="font-bold text-foreground text-xs sm:text-sm">{stats.count}x</span> {/* Adjusted font size */}
                           </div>
-                          <div className={`text-[10px] px-2 py-1 rounded-full w-full font-medium ${
+                          <div className={`text-[9px] sm:text-[10px] px-1 py-0.5 rounded-full w-full font-medium ${ /* Adjusted font size and padding */
                             stats.daysSince < 30 ? "bg-emerald/10 text-emerald" : "bg-secondary/30 text-muted-foreground"
                           }`}>
                             {stats.daysSince === -1 ? "Nog niet" : stats.daysSince === 0 ? "Vandaag!" : `${stats.daysSince}d geleden`}
@@ -125,22 +125,22 @@ const WikiPage = () => {
               <h2 className="text-2xl font-bold text-foreground">Sterren (1-12)</h2>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-3 sm:gap-4"> {/* Adjusted grid for mobile */}
               {draws && stars.map(num => {
                 const stats = getNumberStats(draws, num, true);
                 return (
                   <Link key={num} to={`/sterren/${num}`} className="group block h-full">
                     <Card className="bg-card/40 border-border/20 hover:border-gold/50 hover:bg-card/80 transition-all duration-200 hover:-translate-y-1 h-full">
-                      <CardContent className="p-4 flex flex-col items-center gap-3 h-full justify-between">
+                      <CardContent className="p-3 sm:p-4 flex flex-col items-center gap-2 sm:gap-3 h-full justify-between"> {/* Adjusted padding and gap */}
                          <div className="transform group-hover:scale-110 transition-transform duration-200">
                            <Ball value={num} variant="star" />
                          </div>
-                        <div className="text-center w-full space-y-2">
-                          <div className="flex justify-between items-center text-xs w-full px-1 border-b border-border/10 pb-1">
-                            <span className="text-muted-foreground">Freq</span>
-                            <span className="font-bold text-foreground">{stats.count}x</span>
+                        <div className="text-center w-full space-y-1 sm:space-y-2"> {/* Adjusted spacing */}
+                          <div className="flex justify-between items-center text-xs w-full px-0.5 border-b border-border/10 pb-0.5"> {/* Adjusted padding */}
+                            <span className="text-muted-foreground text-[10px] sm:text-xs">Freq</span> {/* Adjusted font size */}
+                            <span className="font-bold text-foreground text-xs sm:text-sm">{stats.count}x</span> {/* Adjusted font size */}
                           </div>
-                          <div className={`text-[10px] px-2 py-1 rounded-full w-full font-medium ${
+                          <div className={`text-[9px] sm:text-[10px] px-1 py-0.5 rounded-full w-full font-medium ${ /* Adjusted font size and padding */
                             stats.daysSince < 30 ? "bg-gold/10 text-gold" : "bg-secondary/30 text-muted-foreground"
                           }`}>
                              {stats.daysSince === -1 ? "Nog niet" : stats.daysSince === 0 ? "Vandaag!" : `${stats.daysSince}d geleden`}

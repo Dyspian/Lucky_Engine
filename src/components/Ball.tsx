@@ -17,8 +17,8 @@ const Ball = ({ value, variant = 'number' }: BallProps) => {
       className={cn(
         "flex items-center justify-center font-bold select-none",
         isStar 
-          ? "w-7 h-7 text-xs sm:w-8 sm:h-8 sm:text-sm bg-gradient-to-br from-gold-depth to-gold text-foreground rounded-md rotate-45 relative overflow-hidden border border-gold/50 shadow-inner shadow-gold/30" 
-          : "w-9 h-9 text-sm sm:w-10 sm:h-10 sm:text-base bg-gradient-to-br from-card to-background text-foreground rounded-full relative overflow-hidden border border-border/50 shadow-inner shadow-background/30"
+          ? "w-6 h-6 text-xs sm:w-8 sm:h-8 sm:text-sm bg-gradient-to-br from-gold-depth to-gold text-foreground rounded-md rotate-45 relative overflow-hidden border border-gold/50 shadow-inner shadow-gold/30" 
+          : "w-8 h-8 text-sm sm:w-10 sm:h-10 sm:text-base bg-gradient-to-br from-card to-background text-foreground rounded-full relative overflow-hidden border border-border/50 shadow-inner shadow-background/30"
       )}
       style={{
         boxShadow: isStar 

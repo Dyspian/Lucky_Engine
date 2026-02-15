@@ -36,7 +36,7 @@ const DrawCard = ({ draw, index }: DrawCardProps) => {
         style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.3), 0 1px 5px rgba(0,0,0,0.1)' }}
       >
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center justify-between text-sm font-bold text-foreground">
+          <CardTitle className="flex flex-col sm:flex-row items-center sm:justify-between text-sm font-bold text-foreground text-center sm:text-left gap-2"> {/* Adjusted for mobile stacking */}
             <div className="flex items-center gap-2">
               <span className="text-xs uppercase tracking-extra-wide text-muted-foreground text-small-caps">
                 Trekking {draw.draw_id}
@@ -51,8 +51,8 @@ const DrawCard = ({ draw, index }: DrawCardProps) => {
           </CardTitle>
         </CardHeader>
         <CardContent className="p-4 pt-0">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex flex-wrap gap-1.5 items-center">
+          <div className="flex flex-col items-center justify-between gap-4"> {/* Always column on mobile */}
+            <div className="flex flex-wrap gap-1.5 items-center justify-center"> {/* Centered balls on mobile */}
               <div className="flex gap-1.5">
                 {draw.numbers.map((n, i) => (
                   <Link key={`draw-${draw.id}-n-${i}`} to={`/nummers/${n}`} className="hover:scale-110 transition-transform">
@@ -60,8 +60,8 @@ const DrawCard = ({ draw, index }: DrawCardProps) => {
                   </Link>
                 ))}
               </div>
-              <div className="w-px h-6 bg-border/50 mx-2 hidden sm:block" />
-              <div className="flex gap-1.5">
+              <div className="w-px h-6 bg-border/50 mx-2 hidden sm:block" /> {/* Hide separator on mobile */}
+              <div className="flex gap-1.5 mt-2 sm:mt-0"> {/* Added margin-top for stars on mobile */}
                 {draw.stars.map((s, i) => (
                   <Link key={`draw-${draw.id}-s-${i}`} to={`/sterren/${s}`} className="hover:scale-110 transition-transform">
                     <Ball value={s} variant="star" delay={0.2 + i * 0.03} />
@@ -71,10 +71,10 @@ const DrawCard = ({ draw, index }: DrawCardProps) => {
             </div>
             
             {draw.prizes.length > 0 && (
-              <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full sm:w-auto">
+              <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full"> {/* Full width on mobile */}
                 <CollapsibleTrigger asChild>
                   <motion.button
-                    className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors duration-120 px-3 py-1 rounded-md bg-card/50 border border-border/20 hover:bg-card/80"
+                    className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors duration-120 px-3 py-1 rounded-md bg-card/50 border border-border/20 hover:bg-card/80 w-full justify-center" // Full width and centered
                     whileTap={{ scale: 0.98 }}
                   >
                     Prijzen Details
@@ -89,7 +89,7 @@ const DrawCard = ({ draw, index }: DrawCardProps) => {
                     className="bg-background/50 border border-border/20 rounded-md p-3"
                   >
                     <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2 text-small-caps">Prijzen Overzicht</h4>
-                    <div className="overflow-x-auto">
+                    <div className="overflow-x-auto"> {/* Added horizontal scroll for tables */}
                       <table className="w-full text-left text-xs text-secondary-foreground">
                         <thead>
                           <tr className="border-b border-border/20">

@@ -10,14 +10,14 @@ const DisclaimerBanner = () => {
         <AlertTriangle size={14} className="text-gold" />
         Disclaimer: Lucky Engine is een onafhankelijke statistiek tool.
       </span>
-      <span className="text-[10px] md:text-xs font-medium text-secondary-foreground/80 whitespace-nowrap">
+      <span className="hidden sm:inline-flex text-[10px] md:text-xs font-medium text-secondary-foreground/80 whitespace-nowrap">
         Wij zijn <strong>niet</strong> verbonden met de officiële Nationale Loterij.
       </span>
       <a 
         href="https://www.nationale-loterij.be/" 
         target="_blank" 
         rel="noopener noreferrer" 
-        className="text-[10px] md:text-xs font-bold text-emerald-400 hover:text-gold transition-colors underline decoration-emerald-500/30 underline-offset-2 whitespace-nowrap"
+        className="hidden sm:inline-flex text-[10px] md:text-xs font-bold text-emerald-400 hover:text-gold transition-colors underline decoration-emerald-500/30 underline-offset-2 whitespace-nowrap"
       >
         Bezoek de officiële website (nationale-loterij.be)
       </a>

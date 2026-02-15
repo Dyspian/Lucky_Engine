@@ -129,35 +129,37 @@ const LuckyStarsPage = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="bg-muted/20 hover:bg-muted/20">
-                        <TableHead className="w-[60px]">Rank</TableHead>
-                        <TableHead>Ster</TableHead>
-                        <TableHead>Frequentie</TableHead>
-                        <TableHead className="text-right">Laatst Gezien</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {topStars.map((item, i) => (
-                        <TableRow key={item.value} className="hover:bg-card/50">
-                          <TableCell className="font-medium text-foreground">{i + 1}</TableCell>
-                          <TableCell>
-                            <Link to={`/sterren/${item.value}`} className="flex items-center gap-2 group">
-                              <Ball value={item.value} variant="star" />
-                              <span className="text-sm font-semibold group-hover:text-gold transition-colors">{item.value}</span>
-                            </Link>
-                          </TableCell>
-                          <TableCell className="text-secondary-foreground">
-                            {(item.freqPeriod * 100).toFixed(2)}%
-                          </TableCell>
-                          <TableCell className="text-right text-muted-foreground">
-                            {getDaysSinceLastDraw(item.value) === 0 ? "Vandaag!" : `${getDaysSinceLastDraw(item.value)} dagen geleden`}
-                          </TableCell>
+                  <div className="overflow-x-auto"> {/* Added horizontal scroll */}
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="bg-muted/20 hover:bg-muted/20">
+                          <TableHead className="w-[60px]">Rank</TableHead>
+                          <TableHead>Ster</TableHead>
+                          <TableHead>Frequentie</TableHead>
+                          <TableHead className="text-right">Laatst Gezien</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                      </TableHeader>
+                      <TableBody>
+                        {topStars.map((item, i) => (
+                          <TableRow key={item.value} className="hover:bg-card/50">
+                            <TableCell className="font-medium text-foreground">{i + 1}</TableCell>
+                            <TableCell>
+                              <Link to={`/sterren/${item.value}`} className="flex items-center gap-2 group">
+                                <Ball value={item.value} variant="star" />
+                                <span className="text-sm font-semibold group-hover:text-gold transition-colors">{item.value}</span>
+                              </Link>
+                            </TableCell>
+                            <TableCell className="text-secondary-foreground">
+                              {(item.freqPeriod * 100).toFixed(2)}%
+                            </TableCell>
+                            <TableCell className="text-right text-muted-foreground">
+                              {getDaysSinceLastDraw(item.value) === 0 ? "Vandaag!" : `${getDaysSinceLastDraw(item.value)} dagen geleden`}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
                 </CardContent>
               </Card>
             )}

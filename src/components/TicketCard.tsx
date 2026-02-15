@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Copy, Check, TrendingUp, ShieldCheck, Share2, BarChart2 } from "lucide-react";
 import { copyTicketToClipboard } from "@/utils/clipboard";
 import { trackEvent } from "@/utils/analytics";
+import { motion } from "framer-motion"; // Ensure motion is imported
 
 interface TicketCardProps {
   ticket: Ticket;
@@ -54,11 +55,11 @@ const TicketCard = ({ ticket, index }: TicketCardProps) => {
       >
         <CardContent className="p-3 sm:p-4 space-y-3">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
-            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 w-full sm:w-auto"> {/* Added w-full for mobile stacking */}
               <span className="text-[9px] font-bold uppercase tracking-extra-wide text-muted-foreground text-small-caps">
                 Ticket {index + 1}
               </span>
-              <div className="flex items-center gap-1 sm:gap-2">
+              <div className="flex items-center gap-1 sm:gap-2 flex-wrap justify-center sm:justify-start"> {/* Added flex-wrap and justify-center */}
                 {ticket.numbers.map((n, i) => (
                   <Link key={`n-${i}`} to={`/nummers/${n}`} title={`Analyseer nummer ${n}`}>
                     <Ball value={n} delay={0} />
@@ -73,7 +74,7 @@ const TicketCard = ({ ticket, index }: TicketCardProps) => {
               </div>
             </div>
             
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center sm:justify-end gap-2 w-full sm:w-auto"> {/* Centered buttons on mobile */}
               <div className="flex items-center gap-1 text-xs font-semibold text-emerald bg-emerald/10 px-2 py-1 rounded-full border border-emerald/20" title="Algoritmische Waarschijnlijkheidsscore">
                 <TrendingUp size={12} />
                 <span>{ticket.chancePercentage}%</span>
@@ -104,7 +105,7 @@ const TicketCard = ({ ticket, index }: TicketCardProps) => {
           
           {/* Math Proof / Flags Section */}
           {ticket.flags && ticket.flags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-1 border-t border-border/10">
+            <div className="flex flex-wrap gap-1.5 pt-1 border-t border-border/10 justify-center sm:justify-start"> {/* Centered flags on mobile */}
               <span className="flex items-center text-[9px] text-muted-foreground mr-1">
                 <ShieldCheck size={10} className="mr-1" /> Validatie:
               </span>
@@ -120,8 +121,5 @@ const TicketCard = ({ ticket, index }: TicketCardProps) => {
     </motion.div>
   );
 };
-
-// Need framer-motion import since we added animation wrapper
-import { motion } from "framer-motion";
 
 export default TicketCard;

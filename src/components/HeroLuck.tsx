@@ -59,7 +59,7 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick, compact = false }: HeroL
         <div className="text-center lg:text-left space-y-6 md:space-y-8 z-20 relative order-2 lg:order-1">
           
           <motion.div variants={itemVariants} className="space-y-4">
-            <h1 className={cn("font-black tracking-tighter leading-none text-foreground", compact ? "text-4xl md:text-5xl" : "text-5xl md:text-7xl lg:text-8xl")}>
+            <h1 className={cn("font-black tracking-tighter leading-none text-foreground", compact ? "text-4xl md:text-5xl" : "text-4xl sm:text-5xl md:text-7xl lg:text-8xl")}> {/* Adjusted H1 size for mobile */}
               <span className="relative inline-block">
                 <span className="bg-clip-text text-transparent bg-gradient-to-b from-white via-gray-100 to-gray-400 drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)]">
                   MAXIMALISEER JOUW
@@ -82,7 +82,7 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick, compact = false }: HeroL
           </motion.div>
           
           {!compact && (
-            <motion.p variants={itemVariants} className="text-lg md:text-xl text-secondary-foreground leading-relaxed max-w-md md:max-w-none mx-auto md:mx-0">
+            <motion.p variants={itemVariants} className="text-base md:text-xl text-secondary-foreground leading-relaxed max-w-md md:max-w-none mx-auto md:mx-0"> {/* Adjusted P size for mobile */}
               Benut de kracht van frequentie-analyse en slimme algoritmen. Speel niet zomaar mee, speel met een strategie.
             </motion.p>
           )}
@@ -90,7 +90,7 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick, compact = false }: HeroL
           <motion.div variants={itemVariants} className={cn("flex flex-col sm:flex-row justify-center lg:justify-start gap-4", compact ? "pt-2" : "pt-8")}>
             <Button
               onClick={handleGenerateClick}
-              className="bg-emerald hover:bg-emerald-hover text-primary-foreground font-bold py-4 px-6 sm:py-7 sm:px-8 rounded-md text-base sm:text-lg emerald-glow transition-all duration-120 active:scale-[0.98] relative overflow-hidden group"
+              className="w-full sm:w-auto bg-emerald hover:bg-emerald-hover text-primary-foreground font-bold py-4 px-6 sm:py-7 sm:px-8 rounded-md text-base sm:text-lg emerald-glow transition-all duration-120 active:scale-[0.98] relative overflow-hidden group"
               style={{ boxShadow: '0 4px 20px rgba(0, 200, 83, 0.4), 0 1px 5px rgba(0, 200, 83, 0.2)' }}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
@@ -103,7 +103,7 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick, compact = false }: HeroL
               <Button
                 onClick={handleHowItWorksClick}
                 variant="outline"
-                className="border-border/20 text-secondary-foreground hover:bg-card/50 hover:text-foreground font-semibold py-4 px-6 sm:py-7 sm:px-8 rounded-md text-base sm:text-lg transition-colors duration-120"
+                className="w-full sm:w-auto border-border/20 text-secondary-foreground hover:bg-card/50 hover:text-foreground font-semibold py-4 px-6 sm:py-7 sm:px-8 rounded-md text-base sm:text-lg transition-colors duration-120"
               >
                 Hoe het werkt
               </Button>
@@ -136,7 +136,7 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick, compact = false }: HeroL
             <Logo
               imgClassName={cn(
                 "w-auto relative drop-shadow-[0_0_35px_rgba(198,169,95,0.5)] transition-transform duration-500", 
-                compact ? "h-48 md:h-64" : "h-72 sm:h-80 md:h-96 lg:h-[500px]" // Significantly increased sizes
+                compact ? "h-40 md:h-64" : "h-64 sm:h-80 md:h-96 lg:h-[500px]" // Significantly adjusted sizes for mobile
               )}
               alt="Lucky Engine - Statistische EuroMillions Analyse en Ticket Generator"
               ariaLabel="Lucky Engine Logo - Startpagina voor EuroMillions Voorspellingen"
