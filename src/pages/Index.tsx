@@ -137,11 +137,17 @@ const Index = () => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  // Sort by Value (1, 2, 3...) instead of Score for the Chart X-Axis
   const numberFrequencyData: FrequencyData[] = statsResult 
-    ? statsResult.allNumberStats.map(item => ({ value: item.value, count: Math.round(item.score * 1000) })) 
+    ? statsResult.allNumberStats
+        .map(item => ({ value: item.value, count: Math.round(item.score * 1000) }))
+        .sort((a, b) => a.value - b.value)
     : [];
+    
   const starFrequencyData: FrequencyData[] = statsResult 
-    ? statsResult.allStarStats.map(item => ({ value: item.value, count: Math.round(item.score * 1000) })) 
+    ? statsResult.allStarStats
+        .map(item => ({ value: item.value, count: Math.round(item.score * 1000) }))
+        .sort((a, b) => a.value - b.value)
     : [];
 
   return (
