@@ -66,9 +66,9 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick, compact = false }: HeroL
               <br />
               <span className="relative inline-block mt-2">
                 {/* Glow effect behind text */}
-                <span className="absolute -inset-4 bg-emerald-500/20 blur-3xl rounded-full opacity-40"></span>
-                {/* House Style Gradient: Emerald to Gold */}
-                <span className="relative bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-emerald to-gold drop-shadow-[0_0_25px_rgba(0,200,83,0.3)]">
+                <span className="absolute -inset-4 bg-emerald-500/20 blur-3xl rounded-full opacity-40 animate-pulse"></span>
+                {/* Animated House Style Gradient: Emerald -> Gold -> Emerald */}
+                <span className="relative bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 via-gold to-emerald-500 bg-[length:200%_auto] animate-gradient-x drop-shadow-[0_0_25px_rgba(0,200,83,0.3)]">
                   WINNENDE POTENTIEEL.
                 </span>
               </span>

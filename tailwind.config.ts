@@ -101,12 +101,28 @@ export default {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(100%)" },
         },
+        "gradient-x": {
+          "0%, 100%": {
+            "background-size": "200% 200%",
+            "background-position": "left center",
+          },
+          "50%": {
+            "background-size": "200% 200%",
+            "background-position": "right center",
+          },
+        },
+        "marquee": {
+          "0%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-100%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "pulse-emerald": "pulse-emerald 0.8s ease-in-out infinite",
         "loading-bar": "loading-bar 1.5s linear infinite",
+        "gradient-x": "gradient-x 4s ease infinite",
+        "marquee": "marquee 25s linear infinite",
       },
       letterSpacing: {
         tightest: '-.05em',
