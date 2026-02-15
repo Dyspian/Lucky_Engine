@@ -46,18 +46,20 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick, compact = false }: HeroL
     <motion.section
       className={cn(
         "relative px-6 overflow-hidden transition-all",
-        compact ? "py-8 md:py-12" : "py-16 md:py-32"
+        compact ? "py-8 md:py-12" : "py-16 md:py-24" // Reduced bottom padding slightly to fit the larger logo better
       )}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center relative z-10">
-        <div className="text-center md:text-left space-y-6 md:space-y-8">
+      {/* Increased max-width and reduced gap to bring elements closer */}
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-0 items-center relative z-10">
+        
+        {/* Text Column - Added z-index to ensure it stays on top of any logo overlap */}
+        <div className="text-center lg:text-left space-y-6 md:space-y-8 z-20 relative order-2 lg:order-1">
           
-          {/* Enhanced Header Text */}
           <motion.div variants={itemVariants} className="space-y-4">
-            <h1 className={cn("font-black tracking-tighter leading-none text-foreground", compact ? "text-4xl md:text-5xl" : "text-5xl md:text-7xl")}>
+            <h1 className={cn("font-black tracking-tighter leading-none text-foreground", compact ? "text-4xl md:text-5xl" : "text-5xl md:text-7xl lg:text-8xl")}>
               <span className="relative inline-block">
                 <span className="bg-clip-text text-transparent bg-gradient-to-b from-white via-gray-100 to-gray-400 drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)]">
                   MAXIMALISEER JOUW
@@ -67,8 +69,8 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick, compact = false }: HeroL
               <span className="relative inline-block mt-2">
                 {/* Glow effect behind text */}
                 <span className="absolute -inset-4 bg-emerald-500/20 blur-3xl rounded-full opacity-40 animate-pulse"></span>
-                {/* Animated House Style Gradient: Emerald -> Gold -> Emerald */}
-                <span className="relative bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 via-gold to-emerald-500 bg-[length:200%_auto] animate-gradient-x drop-shadow-[0_0_25px_rgba(0,200,83,0.3)]">
+                {/* House Style Gradient: Emerald -> Gold -> Emerald */}
+                <span className="relative bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-gold to-emerald-500 bg-[length:200%_auto] animate-gradient-x drop-shadow-[0_0_25px_rgba(0,200,83,0.3)]">
                   WINNENDE POTENTIEEL.
                 </span>
               </span>
@@ -85,7 +87,7 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick, compact = false }: HeroL
             </motion.p>
           )}
 
-          <motion.div variants={itemVariants} className={cn("flex flex-col sm:flex-row justify-center md:justify-start gap-4", compact ? "pt-2" : "pt-8")}>
+          <motion.div variants={itemVariants} className={cn("flex flex-col sm:flex-row justify-center lg:justify-start gap-4", compact ? "pt-2" : "pt-8")}>
             <Button
               onClick={handleGenerateClick}
               className="bg-emerald hover:bg-emerald-hover text-primary-foreground font-bold py-4 px-6 sm:py-7 sm:px-8 rounded-md text-base sm:text-lg emerald-glow transition-all duration-120 active:scale-[0.98] relative overflow-hidden group"
@@ -112,19 +114,44 @@ const HeroLuck = ({ onGenerateClick, onHowItWorksClick, compact = false }: HeroL
           </motion.p>
         </div>
 
+        {/* Logo Column - Order changed for mobile to put text first, but layout adjusted for larger screens */}
         <motion.div 
           variants={itemVariants}
-          className="flex justify-center md:justify-end relative"
+          className="flex justify-center lg:justify-start relative order-1 lg:order-2 lg:-ml-12" // Negative margin to pull logo closer to text
         >
-          {/* Subtle glow behind logo */}
-          <div className="absolute inset-0 bg-emerald-500/5 blur-3xl rounded-full scale-75" />
-          <Logo
-            imgClassName={cn("w-auto relative z-10 drop-shadow-2xl hover:scale-105 transition-transform duration-500", compact ? "h-32 md:h-48" : "h-64 md:h-80")}
-            alt="Lucky Engine - Statistische EuroMillions Analyse en Ticket Generator"
-            ariaLabel="Lucky Engine Logo - Startpagina voor EuroMillions Voorspellingen"
+          {/* Dynamic Gold/Yellow Glow Effect */}
+          <div 
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-gold/20 blur-[100px] rounded-full pointer-events-none mix-blend-screen" 
+            style={{
+              animation: 'pulse-slow 4s ease-in-out infinite alternate'
+            }}
           />
+          
+          {/* Floating Animation Wrapper */}
+          <motion.div
+            animate={{ y: [0, -20, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            className="relative z-10"
+          >
+            <Logo
+              imgClassName={cn(
+                "w-auto relative drop-shadow-[0_0_35px_rgba(198,169,95,0.5)] transition-transform duration-500", 
+                compact ? "h-48 md:h-64" : "h-72 sm:h-80 md:h-96 lg:h-[500px]" // Significantly increased sizes
+              )}
+              alt="Lucky Engine - Statistische EuroMillions Analyse en Ticket Generator"
+              ariaLabel="Lucky Engine Logo - Startpagina voor EuroMillions Voorspellingen"
+            />
+          </motion.div>
         </motion.div>
       </div>
+      
+      {/* CSS for custom slow pulse */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes pulse-slow {
+          0% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.9); }
+          100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.1); }
+        }
+      `}} />
     </motion.section>
   );
 };
