@@ -23,7 +23,7 @@ const CloverParticles = () => {
       duration: Math.random() * 20 + 15, // Slower float (15-35s)
       delay: Math.random() * -30, // Start at various points
       size: Math.random() * 40 + 20, // Larger size (20-60px)
-      opacity: Math.random() * 0.3 + 0.15, // Higher opacity (0.15 - 0.45)
+      opacity: Math.random() * 0.4 + 0.2, // Higher opacity for this detailed SVG
       rotation: Math.random() * 360,
     }));
     setParticles(newParticles);
@@ -31,10 +31,34 @@ const CloverParticles = () => {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
+      {/* Define Gradients and Filters once globally for the SVG context */}
+      <svg width="0" height="0" className="absolute">
+        <defs>
+          <radialGradient id="leafGrad" cx="50%" cy="40%" r="70%">
+            <stop offset="0%" stopColor="#9CFF6B"/>
+            <stop offset="60%" stopColor="#34D058"/>
+            <stop offset="100%" stopColor="#0B7A2A"/>
+          </radialGradient>
+
+          <linearGradient id="stemGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#7BFF5E"/>
+            <stop offset="100%" stopColor="#0A5F1F"/>
+          </linearGradient>
+
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+      </svg>
+
       {particles.map((p) => (
         <div
           key={p.id}
-          className="absolute top-[-10%] animate-float-down text-emerald-600"
+          className="absolute top-[-10%] animate-float-down"
           style={{
             left: `${p.left}%`,
             width: `${p.size}px`,
@@ -43,12 +67,36 @@ const CloverParticles = () => {
             animationDuration: `${p.duration}s`,
             animationDelay: `${p.delay}s`,
             transform: `rotate(${p.rotation}deg)`,
-            filter: 'drop-shadow(0 0 6px rgba(0, 200, 83, 0.3))'
           }}
         >
-          {/* Detailed 4-Leaf Clover Path provided by user */}
-          <svg viewBox="0 0 512 512" fill="currentColor" className="w-full h-full">
-            <path d="M512 302.3c0 35.29-28.99 63.91-64.28 63.91c-38.82 0-88.7-22.75-122.4-40.92c18.17 33.7 40.92 83.57 40.92 122.4c0 35.29-28.61 63.91-63.91 63.91c-18.1 0-34.45-7.52-46.09-19.63C244.6 504.3 228 512 209.7 512c-35.29 0-63.91-28.99-63.91-64.28c0-38.82 22.75-88.7 40.92-122.4c-33.7 18.17-83.57 40.92-122.4 40.92c-35.29 0-63.91-28.61-63.91-63.91c0-18.1 7.52-34.45 19.63-46.09C7.676 244.6 0 228 0 209.7c0-35.29 28.99-63.91 64.28-63.91c38.82 0 88.7 22.75 122.4 40.92C168.5 152.1 145.8 103.1 145.8 64.28c0-35.29 28.61-63.91 63.91-63.91c18.1 0 34.45 7.52 46.09 19.63C267.4 7.676 283.1 0 302.3 0c35.29 0 63.91 28.99 63.91 64.28c0 38.82-22.75 88.7-40.92 122.4c33.7-18.17 83.57-40.92 122.4-40.92c35.29 0 63.91 28.61 63.91 63.91c0 18.1-7.52 34.45-19.63 46.09C504.3 267.4 512 283.1 512 302.3z" />
+          <svg viewBox="0 0 512 512" fill="none" className="w-full h-full">
+             {/* Leaves */}
+            <g filter="url(#glow)">
+              <circle cx="256" cy="160" r="85" fill="url(#leafGrad)"/>
+              <circle cx="352" cy="256" r="85" fill="url(#leafGrad)"/>
+              <circle cx="256" cy="352" r="85" fill="url(#leafGrad)"/>
+              <circle cx="160" cy="256" r="85" fill="url(#leafGrad)"/>
+            </g>
+
+            {/* Center */}
+            <circle cx="256" cy="256" r="45" fill="#0B7A2A"/>
+
+            {/* Stem */}
+            <path d="M256 300 C 240 360, 280 420, 256 470"
+                  stroke="url(#stemGrad)"
+                  strokeWidth="28"
+                  fill="none"
+                  strokeLinecap="round"
+                  filter="url(#glow)"/>
+
+            {/* Swirl */}
+            <path d="M120 340 C 80 280, 120 200, 220 190
+                     C 360 175, 420 260, 390 340"
+                  stroke="#34D058"
+                  strokeWidth="18"
+                  fill="none"
+                  strokeLinecap="round"
+                  filter="url(#glow)"/>
           </svg>
         </div>
       ))}
