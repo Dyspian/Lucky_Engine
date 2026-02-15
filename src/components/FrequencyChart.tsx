@@ -43,15 +43,15 @@ const FrequencyChart = ({ data, title, color }: FrequencyChartProps) => {
                   boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
                   fontSize: '12px',
                   backgroundColor: 'hsl(var(--card))',
-                  color: 'white' // Changed to explicit white
+                  color: 'white' // This sets the default text color for the tooltip content
                 }}
+                itemStyle={{ color: 'white' }} // This specifically targets the data item text (like 'count')
                 labelFormatter={(value) => `Getal: ${value}`}
               />
               <Bar dataKey="count" radius={[4, 4, 0, 0]}>
                 {data.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={color} fillOpacity={0.6 + (entry.count / Math.max(...data.map(d => d.count))) * 0.4} />
                 ))}
-                {/* Removed LabelList here */}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
