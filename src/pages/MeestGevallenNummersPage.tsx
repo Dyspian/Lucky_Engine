@@ -19,6 +19,7 @@ import { format } from "date-fns";
 import { nl } from "date-fns/locale";
 import { Helmet } from 'react-helmet-async';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"; // Added Accordion components
+import ContentImage from '@/components/ContentImage'; // Import ContentImage
 
 const MeestGevallenNummersPage = () => {
   const { data: draws, isLoading } = useQuery<Draw[]>({
@@ -172,6 +173,12 @@ const MeestGevallenNummersPage = () => {
             <p className="text-secondary-foreground leading-relaxed">
               De 'euromillions nummer frequentie tool' op Lucky Engine stelt u in staat om de 'euromillions cijfers analyseren' over verschillende perioden. Hoewel de 'euromillions trekking analyse' op lange termijn een evenwicht toont, kunnen er op kortere termijn 'euromillions nummers trends' ontstaan. Onze algoritmen houden rekening met zowel de algehele frequentie als de recentheid om een gebalanceerd beeld te geven.
             </p>
+            <ContentImage 
+              src="https://images.unsplash.com/photo-1554224155-1696413565d3?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="Financial charts and graphs showing trends over time"
+              caption="Analyse van nummerfrequenties over verschillende tijdsperioden."
+              className="max-w-2xl mx-auto"
+            />
             <p className="text-secondary-foreground leading-relaxed">
               Bezoek onze <Link to="/wiki" className="text-emerald hover:underline">Getallen Wiki</Link> voor een gedetailleerde analyse van elk individueel nummer, inclusief de volledige 'euromillions data statistiek' en 'euromillions nummer calculator' functionaliteit.
             </p>

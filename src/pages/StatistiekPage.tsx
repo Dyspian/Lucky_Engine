@@ -12,6 +12,7 @@ import { motion } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Helmet } from 'react-helmet-async';
 import { Loader2 } from "lucide-react";
+import ContentImage from '@/components/ContentImage'; // Import ContentImage
 
 const StatistiekPage = () => {
   const faqSchema = {
@@ -87,6 +88,12 @@ const StatistiekPage = () => {
             <p className="text-secondary-foreground leading-relaxed">
               EuroMillions statistiek is de studie van historische trekkingsresultaten om inzicht te krijgen in de gedragingen van nummers en sterren over tijd. Hoewel elke trekking een onafhankelijke gebeurtenis is, kunnen we door het analyseren van grote datasets interessante frequenties, recentheidstrends en patronen ontdekken. Lucky Engine verzamelt en verwerkt deze data om u een helder overzicht te bieden.
             </p>
+            <ContentImage 
+              src="https://images.unsplash.com/photo-1518770660439-4636190af367?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="Data analysis dashboard with charts and graphs"
+              caption="Visualisatie van historische EuroMillions data en statistieken."
+              className="max-w-2xl mx-auto"
+            />
             <p className="text-secondary-foreground leading-relaxed">
               Onze analyse omvat niet alleen de 'meest gevallen nummers' en 'meest voorkomende nummers', maar ook de 'euromillions lucky stars statistiek'. We kijken naar de 'euromillions frequentie nummers' en hoe deze zich verhouden tot het theoretische gemiddelde. Dit alles helpt u om een beter begrip te krijgen van de 'euromillions cijfers statistiek'.
             </p>
