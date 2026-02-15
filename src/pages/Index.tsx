@@ -24,11 +24,16 @@ import { Database } from 'lucide-react';
 import { format } from "date-fns";
 import { nl } from "date-fns/locale";
 import { useIsEmbedded } from "@/hooks/use-embed";
+import SEO from "@/components/SEO";
+import { getNextDrawDate, formatNextDrawDateShort } from "@/lib/seo-utils";
 
 const Index = () => {
   const [results, setResults] = useState<{ tickets: Ticket[], explanation: string } | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const isEmbedded = useIsEmbedded();
+
+  // SEO Calculation
+  const nextDrawDate = formatNextDrawDateShort(getNextDrawDate());
 
   // Since data is local, this is virtually instant
   const { data: drawsData, isLoading: isDataLoading } = useQuery<Draw[]>({
@@ -103,6 +108,12 @@ const Index = () => {
 
   return (
     <>
+      <SEO 
+        title="Gratis EuroMillions Generator" 
+        description="Genereer wiskundig onderbouwde EuroMillions combinaties op basis van frequentie- en recentheidsanalyses. 100% gratis statistiek tool."
+        nextDrawDate={nextDrawDate}
+      />
+
       <AnimatePresence>
         {isDataLoading && <LoadingScreen />}
       </AnimatePresence>

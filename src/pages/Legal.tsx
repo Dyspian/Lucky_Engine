@@ -8,10 +8,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ShieldAlert, Lock, Scale, FileText } from "lucide-react";
 import { motion } from "framer-motion";
+import SEO from "@/components/SEO";
 
 const Legal = () => {
   return (
     <div className="relative min-h-screen text-foreground selection:bg-emerald/30 font-sans">
+      <SEO 
+        title="Juridische Informatie" 
+        description="Disclaimer, Algemene Voorwaarden en Privacybeleid van Lucky Engine. Wij garanderen geen winst en zijn een onafhankelijke statistiek tool."
+      />
+
       <BackgroundGrid />
       <div className="radial-spotlight" />
 

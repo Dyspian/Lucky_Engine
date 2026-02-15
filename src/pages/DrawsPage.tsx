@@ -27,6 +27,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import BackgroundGrid from "@/components/BackgroundGrid";
 import AdMockup from '@/components/AdMockup';
 import { useIsEmbedded } from "@/hooks/use-embed";
+import SEO from "@/components/SEO";
 
 const FilterFormSchema = EuromillionsQueryParamsBaseSchema.extend({
   year: z.string().optional(),
@@ -116,6 +117,11 @@ const DrawsPage = () => {
 
   return (
     <div className="relative min-h-screen text-foreground selection:bg-emerald/30 font-sans">
+      <SEO 
+        title="Uitslagen Archief" 
+        description="Bekijk de volledige historiek van EuroMillions trekkingen. Zoek op datum, jaar of specifieke uitslagen. Database bijgewerkt."
+      />
+
       <BackgroundGrid />
       <div className="radial-spotlight" />
 
