@@ -9,8 +9,7 @@ import Footer from "@/components/Footer";
 import BackgroundGrid from "@/components/BackgroundGrid";
 import SEO from "@/components/SEO";
 import { Card, CardContent } from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertTriangle, BookOpen, Star, BarChart3 } from "lucide-react";
+import { BookOpen, Star } from "lucide-react";
 import Ball from "@/components/Ball";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
@@ -55,7 +54,7 @@ const WikiPage = () => {
     <div className="relative min-h-screen text-foreground selection:bg-emerald/30 font-sans">
       <SEO 
         title="Getallen Wiki & Statistieken" 
-        description="Complete database van alle EuroMillions getallen (1-50) en sterren. Bekijk frequentie, laatste trekkingen en statistieken uit 2024-2025."
+        description="Complete database van alle EuroMillions getallen (1-50) en sterren. Bekijk frequentie, laatste trekkingen en volledige historische statistieken."
       />
 
       <BackgroundGrid />
@@ -75,21 +74,8 @@ const WikiPage = () => {
               Getallen <span className="text-emerald">Wiki</span>
             </h1>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              De complete index van alle EuroMillions getallen en sterren met live statistieken.
+              De complete index van alle EuroMillions getallen en sterren met live statistieken gebaseerd op de volledige beschikbare trekking-historie.
             </p>
-          </div>
-
-          {/* WARNING BANNER */}
-          <div className="max-w-4xl mx-auto mb-12">
-            <Alert variant="destructive" className="bg-red-950/30 border-red-500/50 text-red-200 shadow-[0_0_30px_-5px_rgba(220,38,38,0.2)]">
-              <AlertTriangle className="h-5 w-5 text-red-400" />
-              <AlertTitle className="font-bold text-lg ml-2 tracking-wide text-red-100">DATA DISCLAIMER: TIJDVAK 2024-2025</AlertTitle>
-              <AlertDescription className="mt-2 ml-2 text-sm md:text-base leading-relaxed text-red-200/80">
-                Let op: Alle statistieken op deze Wiki-pagina zijn exclusief berekend op basis van de beschikbare dataset van <strong>2024 tot heden (2025)</strong>. 
-                Historische gegevens van vóór 2024 zijn niet opgenomen in deze specifieke frequentieberekeningen. 
-                Deze data dient als indicatie van <em>recente</em> trends (Hot/Cold) en garandeert geen toekomstige resultaten.
-              </AlertDescription>
-            </Alert>
           </div>
 
           {/* Numbers Grid */}
