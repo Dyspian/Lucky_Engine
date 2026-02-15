@@ -1,7 +1,8 @@
 "use client";
 
 import React from 'react';
-import { Info, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { Info, AlertTriangle, CheckCircle2, ShieldCheck, BrainCircuit } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export const ExplanationSection = () => {
   const points = [
@@ -22,7 +23,7 @@ export const ExplanationSection = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {points.map((p, i) => (
           <div key={i} className="p-6 rounded-lg bg-card border border-border/20 space-y-2 shadow-lg"
-            style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.3), 0 1px 5px rgba(0,0,0,0.1)' }} // Deeper shadow for cards
+            style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.3), 0 1px 5px rgba(0,0,0,0.1)' }} 
           >
             <div className="flex items-center gap-2 text-emerald">
               <CheckCircle2 size={16} />
@@ -32,6 +33,34 @@ export const ExplanationSection = () => {
           </div>
         ))}
       </div>
+      
+      {/* New Educational / Trust Block */}
+      <div className="mt-12 bg-card/50 border border-border/10 rounded-lg p-6 md:p-8">
+         <div className="flex items-center gap-2 mb-6">
+            <BrainCircuit size={20} className="text-emerald" />
+            <h3 className="text-lg font-bold text-foreground">Veelgestelde Vragen & Mythes</h3>
+         </div>
+         <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1" className="border-border/10">
+              <AccordionTrigger className="text-sm font-medium hover:text-emerald text-left">Bestaan er "Warme" en "Koude" nummers?</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
+                Wiskundig gezien heeft elke bal bij elke trekking exact dezelfde kans om te vallen. Echter, statistici analyseren vaak 'deviaties' op korte termijn. Een 'warm' nummer is een getal dat recent vaker is gevallen dan het gemiddelde, terwijl een 'koud' nummer achterblijft. Lucky Engine visualiseert deze trends, maar voorspelt de toekomst niet.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-2" className="border-border/10">
+              <AccordionTrigger className="text-sm font-medium hover:text-emerald text-left">Kan een generator mijn winstkans verhogen?</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
+                Nee. De loterij is puur toeval. Wat een statistische generator wél doet, is u helpen bij het kiezen van een <strong>evenwichtige</strong> selectie (mix van hoog/laag, even/oneven) en het vermijden van patronen die door duizenden anderen worden gespeeld (zoals 1, 2, 3, 4, 5), waardoor u bij winst de pot minder vaak hoeft te delen.
+              </AccordionContent>
+            </AccordionItem>
+             <AccordionItem value="item-3" className="border-border/10">
+              <AccordionTrigger className="text-sm font-medium hover:text-emerald text-left">Waarom zijn deze statistieken gratis?</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
+                Lucky Engine is een passieproject om data-transparantie te bieden in de loterijwereld. Wij geloven dat spelers recht hebben op eerlijke, wiskundige inzichten zonder betaalmuren of valse beloftes.
+              </AccordionContent>
+            </AccordionItem>
+         </Accordion>
+      </div>
     </section>
   );
 };
@@ -39,7 +68,7 @@ export const ExplanationSection = () => {
 export const DisclaimerSection = () => {
   return (
     <section className="p-8 rounded-lg bg-card border border-border/20 space-y-4 shadow-lg"
-      style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.3), 0 1px 5px rgba(0,0,0,0.1)' }} // Deeper shadow for cards
+      style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.3), 0 1px 5px rgba(0,0,0,0.1)' }} 
     >
       <div className="flex items-center gap-2 text-muted-foreground">
         <AlertTriangle size={16} className="text-emerald" />

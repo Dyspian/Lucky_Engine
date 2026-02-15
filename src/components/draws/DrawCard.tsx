@@ -3,6 +3,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'; // Import Link
 import { Draw, DrawPrize } from "@/lib/euromillions/schemas";
 import Ball from "@/components/Ball";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -54,13 +55,17 @@ const DrawCard = ({ draw, index }: DrawCardProps) => {
             <div className="flex flex-wrap gap-1.5 items-center">
               <div className="flex gap-1.5">
                 {draw.numbers.map((n, i) => (
-                  <Ball key={`draw-${draw.id}-n-${i}`} value={n} delay={i * 0.03} />
+                  <Link key={`draw-${draw.id}-n-${i}`} to={`/nummers/${n}`} className="hover:scale-110 transition-transform">
+                    <Ball value={n} delay={i * 0.03} />
+                  </Link>
                 ))}
               </div>
               <div className="w-px h-6 bg-border/50 mx-2 hidden sm:block" />
               <div className="flex gap-1.5">
                 {draw.stars.map((s, i) => (
-                  <Ball key={`draw-${draw.id}-s-${i}`} value={s} variant="star" delay={0.2 + i * 0.03} />
+                  <Link key={`draw-${draw.id}-s-${i}`} to={`/sterren/${s}`} className="hover:scale-110 transition-transform">
+                    <Ball value={s} variant="star" delay={0.2 + i * 0.03} />
+                  </Link>
                 ))}
               </div>
             </div>
