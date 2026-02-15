@@ -19,6 +19,7 @@ import LastDraw from '@/components/LastDraw';
 import FrequencyChart from '@/components/FrequencyChart';
 import BackgroundGrid from '@/components/BackgroundGrid';
 import AdMockup from '@/components/AdMockup';
+import CloverParticles from '@/components/CloverParticles'; // Imported CloverParticles
 import { trackEvent } from "@/utils/analytics";
 import { Database } from 'lucide-react';
 import { format } from "date-fns";
@@ -26,7 +27,7 @@ import { nl } from "date-fns/locale";
 import { useIsEmbedded } from "@/hooks/use-embed";
 import SEO from "@/components/SEO";
 import { getNextDrawDate, formatNextDrawDateShort } from "@/lib/seo-utils";
-import confetti from "canvas-confetti"; // Restored import
+import confetti from "canvas-confetti"; 
 
 const Index = () => {
   const [results, setResults] = useState<{ tickets: Ticket[], explanation: string } | null>(null);
@@ -157,6 +158,7 @@ const Index = () => {
 
       <div className="relative min-h-screen text-foreground selection:bg-emerald/30 font-sans">
         <BackgroundGrid />
+        <CloverParticles /> {/* Added Clover Particles */}
         <div className="radial-spotlight" />
 
         {!isEmbedded && <Navbar />}
