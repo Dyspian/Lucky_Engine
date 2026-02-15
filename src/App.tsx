@@ -5,9 +5,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import DrawsPage from "./pages/DrawsPage";
-import Legal from "./pages/Legal"; // Import Legal page
+import Legal from "./pages/Legal"; 
 import NotFound from "./pages/NotFound";
-import NumberStatsPage from "./pages/NumberStatsPage"; // New Page
+import NumberStatsPage from "./pages/NumberStatsPage"; 
+import WikiPage from "./pages/WikiPage"; // Import Wiki Page
 import { Analytics } from "@vercel/analytics/react";
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/draws" element={<DrawsPage />} />
+          <Route path="/wiki" element={<WikiPage />} /> {/* Add Wiki Route */}
           <Route path="/legal" element={<Legal />} />
           
           {/* Programmatic SEO Routes */}

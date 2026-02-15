@@ -4,7 +4,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from './Logo';
 import { Button } from "@/components/ui/button";
-import { History, Sparkles, AlertCircle } from "lucide-react";
+import { History, Sparkles, AlertCircle, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import SystemClock from './SystemClock';
 import { getNextDrawDate } from "@/lib/seo-utils";
@@ -14,6 +14,7 @@ const Navbar = () => {
   const location = useLocation();
   const isHome = location.pathname === "/";
   const isDraws = location.pathname === "/draws";
+  const isWiki = location.pathname === "/wiki";
   
   // Check if today is draw day
   const nextDraw = getNextDrawDate();
@@ -46,7 +47,7 @@ const Navbar = () => {
           )}
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-4">
+        <div className="flex items-center gap-1 sm:gap-2">
           <Link to="/">
             <Button 
               variant="ghost" 
@@ -78,6 +79,23 @@ const Navbar = () => {
               <History size={16} className="mr-2" />
               <span className="hidden sm:inline">Trekkingen</span>
               <span className="sm:hidden">Archief</span>
+            </Button>
+          </Link>
+
+          <Link to="/wiki">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              className={cn(
+                "text-xs sm:text-sm font-medium transition-all duration-200",
+                isWiki 
+                  ? "text-emerald bg-emerald/10 hover:bg-emerald/20 hover:text-emerald" 
+                  : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+              )}
+            >
+              <BookOpen size={16} className="mr-2" />
+              <span className="hidden sm:inline">Wiki</span>
+              <span className="sm:hidden">Wiki</span>
             </Button>
           </Link>
         </div>
