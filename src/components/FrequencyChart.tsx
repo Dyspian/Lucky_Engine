@@ -43,7 +43,7 @@ const FrequencyChart = ({ data, title, color }: FrequencyChartProps) => {
                   boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
                   fontSize: '12px',
                   backgroundColor: 'hsl(var(--card))',
-                  color: 'hsl(var(--foreground))'
+                  color: 'white' // Changed to explicit white
                 }}
                 labelFormatter={(value) => `Getal: ${value}`}
               />
@@ -51,7 +51,7 @@ const FrequencyChart = ({ data, title, color }: FrequencyChartProps) => {
                 {data.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={color} fillOpacity={0.6 + (entry.count / Math.max(...data.map(d => d.count))) * 0.4} />
                 ))}
-                <LabelList dataKey="count" position="top" fill="hsl(var(--foreground))" fontSize={10} />
+                {/* Removed LabelList here */}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
