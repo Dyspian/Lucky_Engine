@@ -81,6 +81,10 @@ const DrawsPage = () => {
 
   const applyPreset = (preset: 'thisYear' | 'last30Days' | 'all2023') => {
     const today = new Date();
+    // Ensure "today" doesn't exceed our hard cap of 2025-12-31 for the logic
+    const hardCapDate = new Date("2025-12-31");
+    const effectiveToday = today > hardCapDate ? hardCapDate : today;
+
     let newStartDate: Date | undefined;
     let newEndDate: Date | undefined;
     let newYear: string | undefined;
@@ -88,12 +92,12 @@ const DrawsPage = () => {
     switch (preset) {
       case 'thisYear':
         newStartDate = new Date(2025, 0, 1); // Fixed to 2025 since that's our latest data year
-        newEndDate = new Date(); // Today
+        newEndDate = effectiveToday;
         newYear = '2025';
         break;
       case 'last30Days':
-        newStartDate = subDays(today, 30);
-        newEndDate = today;
+        newStartDate = subDays(effectiveToday, 30);
+        newEndDate = effectiveToday;
         newYear = undefined;
         break;
       case 'all2023':
@@ -111,7 +115,6 @@ const DrawsPage = () => {
   };
 
   // Generate years from 2004 up to 2025 (Max Data Year).
-  // We explicitly cap this at 2025 to prevent 2026 showing up if system time is ahead.
   const maxYear = 2025;
   const years = Array.from({ length: maxYear - 2004 + 1 }, (_, i) => (maxYear - i).toString());
 
@@ -194,7 +197,7 @@ const DrawsPage = () => {
                               mode="single"
                               selected={watchedStartDate ? new Date(watchedStartDate) : undefined}
                               onSelect={(date) => setValue('startDate', date ? format(date, 'yyyy-MM-dd') : undefined)}
-                              disabled={(date) => date > new Date() || date < new Date("2004-01-01")}
+                              disabled={(date) => date > new Date("2025-12-31") || date < new Date("2004-01-01")}
                               initialFocus
                             />
                           </PopoverContent>
@@ -217,7 +220,7 @@ const DrawsPage = () => {
                               mode="single"
                               selected={watchedEndDate ? new Date(watchedEndDate) : undefined}
                               onSelect={(date) => setValue('endDate', date ? format(date, 'yyyy-MM-dd') : undefined)}
-                              disabled={(date) => date > new Date() || date < new Date("2004-01-01")}
+                              disabled={(date) => date > new Date("2025-12-31") || date < new Date("2004-01-01")}
                               initialFocus
                             />
                           </PopoverContent>
