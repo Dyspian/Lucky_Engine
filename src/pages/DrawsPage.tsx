@@ -87,9 +87,9 @@ const DrawsPage = () => {
 
     switch (preset) {
       case 'thisYear':
-        newStartDate = new Date(today.getFullYear(), 0, 1);
-        newEndDate = today;
-        newYear = today.getFullYear().toString();
+        newStartDate = new Date(2025, 0, 1); // Fixed to 2025 since that's our latest data year
+        newEndDate = new Date(); // Today
+        newYear = '2025';
         break;
       case 'last30Days':
         newStartDate = subDays(today, 30);
@@ -110,10 +110,10 @@ const DrawsPage = () => {
     handleSubmit(onSubmit)();
   };
 
-  // Dynamically generate years from 2004 up to CURRENT YEAR only.
-  // This prevents selecting future years like 2026 if it's currently 2025.
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: currentYear - 2004 + 1 }, (_, i) => (currentYear - i).toString());
+  // Generate years from 2004 up to 2025 (Max Data Year).
+  // We explicitly cap this at 2025 to prevent 2026 showing up if system time is ahead.
+  const maxYear = 2025;
+  const years = Array.from({ length: maxYear - 2004 + 1 }, (_, i) => (maxYear - i).toString());
 
   return (
     <div className="relative min-h-screen text-foreground selection:bg-emerald/30 font-sans">
