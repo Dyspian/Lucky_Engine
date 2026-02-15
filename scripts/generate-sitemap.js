@@ -9,6 +9,16 @@ const staticRoutes = [
   '/',
   '/draws',
   '/legal',
+  '/wiki',
+  '/generator', // Alias
+  '/historiek', // Alias
+  '/statistiek', // New SEO page
+  '/meest-gevallen-nummers', // New SEO page
+  '/lucky-stars', // New SEO page
+  '/kansberekening', // New SEO page
+  '/patronen', // New SEO page
+  '/ai-analyse', // New SEO page
+  '/analyse-tool', // New SEO page
 ];
 
 const generateSitemap = () => {
