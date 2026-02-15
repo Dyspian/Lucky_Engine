@@ -122,7 +122,7 @@ export default {
         "pulse-emerald": "pulse-emerald 0.8s ease-in-out infinite",
         "loading-bar": "loading-bar 1.5s linear infinite",
         "gradient-x": "gradient-x 4s ease infinite",
-        "marquee": "marquee 25s linear infinite",
+        "marquee": "marquee 60s linear infinite",
       },
       letterSpacing: {
         tightest: '-.05em',
