@@ -3,6 +3,7 @@
 import React from 'react';
 import { Info, AlertTriangle, CheckCircle2, ShieldCheck, BrainCircuit } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Helmet } from 'react-helmet-async';
 
 export const ExplanationSection = () => {
   const points = [
@@ -12,8 +13,45 @@ export const ExplanationSection = () => {
     { title: "Onafhankelijke Trekkingen", desc: "Handhaaft de integriteit van het systeem door te erkennen dat elke trekking een unieke gebeurtenis is." }
   ];
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Bestaan er \"Warme\" en \"Koude\" nummers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Wiskundig gezien heeft elke bal bij elke trekking exact dezelfde kans om te vallen. Echter, statistici analyseren vaak 'deviaties' op korte termijn. Een 'warm' nummer is een getal dat recent vaker is gevallen dan het gemiddelde, terwijl een 'koud' nummer achterblijft. Lucky Engine visualiseert deze trends, maar voorspelt de toekomst niet."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Kan een generator mijn winstkans verhogen?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nee. De loterij is puur toeval. Wat een statistische generator wél doet, is u helpen bij het kiezen van een evenwichtige selectie (mix van hoog/laag, even/oneven) en het vermijden van patronen die door duizenden anderen worden gespeeld."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Waarom zijn deze statistieken gratis?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Lucky Engine is een passieproject om data-transparantie te bieden in de loterijwereld. Wij geloven dat spelers recht hebben op eerlijke, wiskundige inzichten zonder betaalmuren of valse beloftes."
+        }
+      }
+    ]
+  };
+
   return (
     <section className="space-y-8">
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(faqSchema)}
+        </script>
+      </Helmet>
+
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-md bg-emerald-depth flex items-center justify-center text-emerald shadow-md">
           <Info size={20} />

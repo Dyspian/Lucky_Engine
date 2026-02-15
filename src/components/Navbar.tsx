@@ -4,14 +4,20 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from './Logo';
 import { Button } from "@/components/ui/button";
-import { History, Sparkles } from "lucide-react";
+import { History, Sparkles, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import SystemClock from './SystemClock';
+import { getNextDrawDate } from "@/lib/seo-utils";
+import { isSameDay } from "date-fns";
 
 const Navbar = () => {
   const location = useLocation();
   const isHome = location.pathname === "/";
   const isDraws = location.pathname === "/draws";
+  
+  // Check if today is draw day
+  const nextDraw = getNextDrawDate();
+  const isDrawDay = isSameDay(new Date(), nextDraw);
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border/5 bg-background/80 backdrop-blur-md">
@@ -28,6 +34,16 @@ const Navbar = () => {
           <div className="hidden md:block">
             <SystemClock />
           </div>
+          
+          {isDrawDay && (
+            <div className="hidden lg:flex items-center gap-1.5 px-2 py-1 rounded-full bg-emerald/10 border border-emerald/20 animate-pulse">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald"></span>
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald">Vandaag Trekking!</span>
+            </div>
+          )}
         </div>
 
         <div className="flex items-center gap-2 sm:gap-4">
@@ -67,8 +83,17 @@ const Navbar = () => {
         </div>
       </div>
       {/* Mobile Clock */}
-      <div className="md:hidden flex justify-center pb-2 bg-background/80 backdrop-blur-md border-b border-border/5">
+      <div className="md:hidden flex justify-between items-center px-4 py-2 bg-background/80 backdrop-blur-md border-b border-border/5">
         <SystemClock />
+        {isDrawDay && (
+            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald/10 border border-emerald/20">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald"></span>
+              </span>
+              <span className="text-[9px] font-bold uppercase tracking-wider text-emerald">Vandaag!</span>
+            </div>
+          )}
       </div>
     </nav>
   );

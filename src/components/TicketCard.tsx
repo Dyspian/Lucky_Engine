@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Ticket } from "@/lib/generator";
 import Ball from "./Ball";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Copy, Check, TrendingUp, ShieldCheck } from "lucide-react";
+import { Copy, Check, TrendingUp, ShieldCheck, Share2, BarChart2 } from "lucide-react";
 import { copyTicketToClipboard } from "@/utils/clipboard";
+import { trackEvent } from "@/utils/analytics";
 
 interface TicketCardProps {
   ticket: Ticket;
@@ -22,9 +24,32 @@ const TicketCard = ({ ticket, index }: TicketCardProps) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleShare = async () => {
+    const text = `Mijn Lucky Engine EuroMillions Ticket: Nummers ${ticket.numbers.join(', ')} + Sterren ${ticket.stars.join(', ')}. Kans-score: ${ticket.chancePercentage}%`;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Lucky Engine Ticket',
+          text: text,
+          url: window.location.href,
+        });
+        trackEvent("Ticket Shared", { method: "WebShare" });
+      } catch (err) {
+        console.log('Share canceled');
+      }
+    } else {
+      // Fallback to copy
+      handleCopy();
+    }
+  };
+
   return (
-    <div>
-      <Card className="bg-card border border-border/20 overflow-hidden rounded-lg shadow-lg"
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: index * 0.1 }}
+    >
+      <Card className="bg-card border border-border/20 overflow-hidden rounded-lg shadow-lg hover:border-emerald/30 transition-colors duration-300"
         style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.3), 0 1px 5px rgba(0,0,0,0.1)' }} 
       >
         <CardContent className="p-3 sm:p-4 space-y-3">
@@ -35,28 +60,45 @@ const TicketCard = ({ ticket, index }: TicketCardProps) => {
               </span>
               <div className="flex items-center gap-1 sm:gap-2">
                 {ticket.numbers.map((n, i) => (
-                  <Ball key={`n-${i}`} value={n} delay={0} />
+                  <Link key={`n-${i}`} to={`/nummers/${n}`} title={`Analyseer nummer ${n}`}>
+                    <Ball value={n} delay={0} />
+                  </Link>
                 ))}
                 <div className="w-px h-6 bg-border/50 mx-1 hidden sm:block" />
                 {ticket.stars.map((s, i) => (
-                  <Ball key={`s-${i}`} value={s} variant="star" delay={0} />
+                  <Link key={`s-${i}`} to={`/sterren/${s}`} title={`Analyseer ster ${s}`}>
+                    <Ball value={s} variant="star" delay={0} />
+                  </Link>
                 ))}
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1 text-xs font-semibold text-emerald bg-emerald/10 px-2 py-1 rounded-full border border-emerald/20">
+            
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 text-xs font-semibold text-emerald bg-emerald/10 px-2 py-1 rounded-full border border-emerald/20" title="Algoritmische Waarschijnlijkheidsscore">
                 <TrendingUp size={12} />
-                <span>{ticket.chancePercentage}% Score</span>
+                <span>{ticket.chancePercentage}%</span>
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full w-8 h-8 hover:bg-card/50 text-secondary-foreground hover:text-emerald transition-colors duration-120"
-                onClick={handleCopy}
-                aria-label="Kopieer ticket"
-              >
-                {copied ? <Check size={16} className="text-emerald" /> : <Copy size={16} />}
-              </Button>
+              
+              <div className="flex gap-1">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full w-8 h-8 hover:bg-card/50 text-secondary-foreground hover:text-emerald transition-colors duration-120"
+                  onClick={handleCopy}
+                  aria-label="Kopieer ticket"
+                >
+                  {copied ? <Check size={14} className="text-emerald" /> : <Copy size={14} />}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full w-8 h-8 hover:bg-card/50 text-secondary-foreground hover:text-blue-400 transition-colors duration-120"
+                  onClick={handleShare}
+                  aria-label="Deel ticket"
+                >
+                  <Share2 size={14} />
+                </Button>
+              </div>
             </div>
           </div>
           
@@ -75,8 +117,11 @@ const TicketCard = ({ ticket, index }: TicketCardProps) => {
           )}
         </CardContent>
       </Card>
-    </div>
+    </motion.div>
   );
 };
+
+// Need framer-motion import since we added animation wrapper
+import { motion } from "framer-motion";
 
 export default TicketCard;
