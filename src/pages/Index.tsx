@@ -201,7 +201,7 @@ const Index = () => {
             <AdMockup 
               size="leaderboard" 
               imageUrl="https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/ads1.png"
-              linkUrl="https://partner.bybit.com/b/luckyengine"
+              linkUrl="https://partner.bybit.eu/b/luckyengine"
               label="Partner van Lucky Engine"
             />
           </div>
@@ -286,7 +286,7 @@ const Index = () => {
             <AdMockup 
               size="auto"
               imageUrl="https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/ads2.png"
-              linkUrl="https://partner.bybit.com/b/VOKXWXAC47826"
+              linkUrl="https://partner.bybit.eu/b/VOKXWXAC47826"
               label="Exclusieve Partner Aanbieding"
             />
 
@@ -300,7 +300,7 @@ const Index = () => {
             <AdMockup 
               size="leaderboard" 
               imageUrl="https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/ads1.png"
-              linkUrl="https://partner.bybit.com/b/luckyengine"
+              linkUrl="https://partner.bybit.eu/b/luckyengine"
               label="Partner van Lucky Engine"
             />
           </div>

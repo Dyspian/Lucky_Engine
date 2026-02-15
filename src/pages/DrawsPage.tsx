@@ -249,7 +249,7 @@ const DrawsPage = () => {
               size="auto" 
               className="mb-6 w-full"
               imageUrl="https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/ads1.png"
-              linkUrl="https://partner.bybit.com/b/luckyengine"
+              linkUrl="https://partner.bybit.eu/b/luckyengine"
               label="Partner van Lucky Engine"
             />
 
