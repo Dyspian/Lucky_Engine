@@ -3,9 +3,9 @@ import { z } from "zod";
 
 export const GenerateConfigSchema = z.object({
   tickets: z.number().int().min(1).max(10),
-  period: z.enum(["2y", "1y", "6m", "all"]).default("2y"),
+  period: z.enum(["2y", "1y", "6m", "all"]).default("all"), // Changed default from "2y" to "all"
   recent: z.number().int().min(10).max(200).default(50),
-  riskFactor: z.number().min(0.1).max(5.0).default(1.5), // Controls the power curve (Alpha)
+  riskFactor: z.number().min(0.1).max(5.0).default(1.5), 
   weights: z.object({
     all: z.number().min(0).max(1).default(0.7),
     recent: z.number().min(0).max(1).default(0.3),
@@ -18,7 +18,7 @@ export type Ticket = {
   numbers: number[];
   stars: number[];
   chancePercentage: number;
-  flags?: string[]; // Reasons why this ticket is statistically "good"
+  flags?: string[]; 
 };
 
 /**
@@ -49,9 +49,7 @@ function weightedPickUnique(
   alpha: number
 ): number[] {
   const selected: number[] = [];
-  // Use a pool copy with adjusted weights based on Alpha (Risk Factor)
-  // Higher Alpha (>1) = Exaggerates differences (Rich get richer) -> Conservative/Top Heavy
-  // Lower Alpha (<1) = Flattens differences (Equalizes chances) -> Adventurous/Chaos
+  
   let pool = items.map(item => ({
     value: item.value,
     weight: Math.pow(item.score + 1e-6, alpha) 
@@ -82,39 +80,32 @@ function weightedPickUnique(
 
 // --- ADVANCED MATH FILTERS ---
 
-/**
- * Checks if the set of numbers is well-balanced statistically.
- */
 function isValidSet(numbers: number[]): { valid: boolean; flags: string[] } {
   const flags: string[] = [];
   
   // 1. Sum Check (Bell Curve)
-  // For 5 numbers from 1-50, the sum typically falls between ~100 and ~175
   const sum = numbers.reduce((a, b) => a + b, 0);
-  if (sum < 90 || sum > 180) return { valid: false, flags }; // Reject outliers
+  if (sum < 90 || sum > 180) return { valid: false, flags }; 
   flags.push("Optimale Som");
 
   // 2. Parity Check (Odd/Even)
-  // We want a mix. All Odd (5:0) or All Even (0:5) is rare (prob ~3-4%).
   const odds = numbers.filter(n => n % 2 !== 0).length;
   const evens = 5 - odds;
-  if (odds === 0 || evens === 0) return { valid: false, flags }; // Reject mono-parity
+  if (odds === 0 || evens === 0) return { valid: false, flags }; 
   flags.push("Evenwichtige Pariteit");
 
   // 3. High/Low Check
-  // Split at 25. We don't want all low (1-25) or all high (26-50).
   const low = numbers.filter(n => n <= 25).length;
   const high = 5 - low;
-  if (low === 0 || high === 0) return { valid: false, flags }; // Reject mono-range
+  if (low === 0 || high === 0) return { valid: false, flags }; 
   flags.push("Gespreid Bereik");
 
   // 4. Consecutive Check
-  // 1,2,3 is rare. We allow pairs (1,2) but try to avoid triplets (1,2,3).
   let consecutives = 0;
   for (let i = 0; i < numbers.length - 1; i++) {
     if (numbers[i + 1] === numbers[i] + 1) consecutives++;
   }
-  if (consecutives > 1) return { valid: false, flags }; // Reject triplets or multiple pairs
+  if (consecutives > 1) return { valid: false, flags }; 
   
   return { valid: true, flags };
 }
@@ -129,7 +120,7 @@ export function generateTickets(
   const warnings: string[] = [];
   const seen = new Set<string>();
 
-  const MAX_ATTEMPTS = 500; // Prevent infinite loops
+  const MAX_ATTEMPTS = 500; 
 
   for (let i = 0; i < config.tickets; i++) {
     let bestTicket: Ticket | null = null;
@@ -144,10 +135,10 @@ export function generateTickets(
 
       // Validate Pattern
       const check = isValidSet(numbers);
-      if (!check.valid) continue; // Retry if statistical outlier
+      if (!check.valid) continue; 
 
       const serialized = `${numbers.join(',')}|${stars.join(',')}`;
-      if (seen.has(serialized)) continue; // Retry if duplicate
+      if (seen.has(serialized)) continue; 
 
       // Calculate Chance
       const totalNumberScore = numbers.reduce((sum, num) => {
@@ -160,9 +151,8 @@ export function generateTickets(
         return sum + (item?.score || 0);
       }, 0);
 
-      // Normalize score (heuristic max ~6.0 based on weights)
+      // Normalize score
       const rawScore = totalNumberScore + totalStarScore;
-      // Map score to percentage (roughly 0-100)
       const chancePercentage = Math.min(99, Math.round((rawScore / 6.5) * 100));
 
       bestTicket = {
@@ -176,10 +166,9 @@ export function generateTickets(
       break;
     }
 
-    // Fallback: If we couldn't find a perfect ticket in time, just give the last one
-    // (This is rare, but safe coding)
+    // Fallback
     if (!bestTicket) {
-      const numbers = weightedPickUnique(stats.allNumberStats, 5, rng, 1.0); // Reset risk for fallback
+      const numbers = weightedPickUnique(stats.allNumberStats, 5, rng, 1.0); 
       const stars = weightedPickUnique(stats.allStarStats, 2, rng, 1.0);
       bestTicket = {
         numbers, 

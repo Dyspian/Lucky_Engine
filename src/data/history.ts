@@ -234,5 +234,51 @@ export const LOCAL_HISTORY: Draw[] = [
     stars: [3, 9],
     has_winner: true,
     prizes: []
+  },
+  // --- Extended History (Nov 2024) ---
+  {
+    id: 1686,
+    draw_id: 1686,
+    date: "2024-11-19",
+    numbers: [4, 13, 20, 28, 49],
+    stars: [7, 12],
+    has_winner: false,
+    prizes: []
+  },
+  {
+    id: 1685,
+    draw_id: 1685,
+    date: "2024-11-15",
+    numbers: [7, 8, 34, 39, 44],
+    stars: [2, 6],
+    has_winner: false,
+    prizes: []
+  },
+  {
+    id: 1684,
+    draw_id: 1684,
+    date: "2024-11-12",
+    numbers: [10, 11, 12, 22, 50],
+    stars: [1, 10],
+    has_winner: false,
+    prizes: []
+  },
+  {
+    id: 1683,
+    draw_id: 1683,
+    date: "2024-11-08",
+    numbers: [2, 33, 35, 42, 48],
+    stars: [1, 3],
+    has_winner: false,
+    prizes: []
+  },
+  {
+    id: 1682,
+    draw_id: 1682,
+    date: "2024-11-05",
+    numbers: [1, 8, 19, 36, 50],
+    stars: [4, 9],
+    has_winner: false,
+    prizes: []
   }
 ];

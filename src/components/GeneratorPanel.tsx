@@ -18,9 +18,10 @@ interface GeneratorPanelProps {
 
 const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
   const [tickets, setTickets] = useState([3]);
-  const [period, setPeriod] = useState<Period>("2y");
+  // DEFAULT TO ALL HISTORY
+  const [period, setPeriod] = useState<Period>("all");
   const [recent, setRecent] = useState("50");
-  const [riskFactor, setRiskFactor] = useState([1.5]); // Default Balanced
+  const [riskFactor, setRiskFactor] = useState([1.5]); 
   const [isOpen, setIsOpen] = useState(false);
 
   const getRiskLabel = (val: number) => {
@@ -65,7 +66,6 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
           />
         </div>
 
-        {/* New Strategy Section */}
         <div className="space-y-4 p-4 rounded-md bg-card/50 border border-border/20">
            <div className="flex justify-between items-center mb-2">
             <div className="flex items-center gap-2">
@@ -106,10 +106,10 @@ const GeneratorPanel = ({ onGenerate, isLoading }: GeneratorPanelProps) => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="rounded-md bg-card border-border/20 text-foreground">
-                    <SelectItem value="6m">Laatste 6 Maanden</SelectItem>
-                    <SelectItem value="1y">Laatste Jaar</SelectItem>
+                    <SelectItem value="all">Alle Historie (Aanbevolen)</SelectItem>
                     <SelectItem value="2y">Laatste 2 Jaar</SelectItem>
-                    <SelectItem value="all">Alle Historie</SelectItem>
+                    <SelectItem value="1y">Laatste Jaar</SelectItem>
+                    <SelectItem value="6m">Laatste 6 Maanden</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
