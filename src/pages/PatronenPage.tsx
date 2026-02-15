@@ -145,19 +145,19 @@ const PatronenPage = () => {
               <AccordionItem value="item-1" className="border-border/10">
                 <AccordionTrigger className="text-sm font-medium hover:text-emerald text-left">Bestaan er echte patronen in EuroMillions trekkingen?</AccordionTrigger>
                 <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
-                  Wiskundig gezien zijn EuroMillions trekkingen volledig willekeurig, wat betekent dat er geen voorspelbare patronen zijn die toekomstige resultaten kunnen garanderen. Echter, door 'euromillions patronen analyse' van historische data kunnen we wel 'statistische patronen' identificeren, zoals de verdeling van even/oneven nummers of hoog/laag nummers, die vaak voorkomen in willekeurige reeksen.
+                  Wiskundig gezien zijn EuroMillions trekkingen volledig willekeurig, wat betekent dat er geen voorspelbare patronen zijn die toekomstige resultaten kunnen garanderen. Echter, door 'euromillions patronen analyse' van historische data kunnen we wel 'statistische patronen' identificeren, zoals de verdeling van even/oneven nummers of hoog/laag nummers, die vaak voorkomen in willekeurige reeksen."
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-2" className="border-border/10">
                 <AccordionTrigger className="text-sm font-medium hover:text-emerald text-left">Hoe helpt Lucky Engine bij het analyseren van patronen?</AccordionTrigger>
                 <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
-                  Lucky Engine analyseert historische trekkingen om veelvoorkomende 'euromillions nummers trends' en 'euromillions data analyse' te identificeren. Onze generator gebruikt deze inzichten om tickets te creëren die een gebalanceerde mix van nummers bevatten, zoals een goede verhouding tussen even en oneven, en hoge en lage nummers, wat statistisch gezien vaker voorkomt in winnende combinaties.
+                  Lucky Engine analyseert historische trekkingen om veelvoorkomende 'euromillions nummers trends' en 'euromillions data analyse' te identificeren. Onze generator gebruikt deze inzichten om tickets te creëren die een gebalanceerde mix van nummers bevatten, zoals een goede verhouding tussen even en oneven, en hoge en lage nummers, wat statistisch gezien vaker voorkomt in winnende combinaties."
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-3" className="border-border/10">
                 <AccordionTrigger className="text-sm font-medium hover:text-emerald text-left">Moet ik patronen vermijden bij het kiezen van mijn nummers?</AccordionTrigger>
                 <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
-                  Het vermijden van overduidelijke patronen (zoals 1-2-3-4-5) kan nuttig zijn, niet omdat het uw winstkansen verhoogt, maar omdat u bij een eventuele winst de pot minder snel hoeft te delen met andere spelers die dezelfde populaire patronen kiezen. Lucky Engine helpt u bij het genereren van unieke en statistisch gebalanceerde combinaties.
+                  Het vermijden van overduidelijke patronen (zoals 1-2-3-4-5) kan nuttig zijn, niet omdat het uw winstkansen verhoogt, maar omdat u bij een eventuele winst de pot minder snel hoeft te delen met andere spelers die dezelfde populaire patronen kiezen. Lucky Engine helpt u bij het genereren van unieke en statistisch gebalanceerde combinaties."
                 </AccordionContent>
               </AccordionItem>
             </Accordion>

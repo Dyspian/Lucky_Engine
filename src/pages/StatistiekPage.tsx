@@ -10,8 +10,8 @@ import { Button } from "@/components/ui/button";
 import { BarChart3, Lightbulb, TrendingUp, ShieldCheck, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Helmet } from 'react-helmet-async'; // Added import
-import { Loader2 } from "lucide-react"; // Added import for Loader2, though not used here, it's a common utility.
+import { Helmet } from 'react-helmet-async';
+import { Loader2 } from "lucide-react";
 
 const StatistiekPage = () => {
   const faqSchema = {
