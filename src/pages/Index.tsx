@@ -26,6 +26,7 @@ import { nl } from "date-fns/locale";
 import { useIsEmbedded } from "@/hooks/use-embed";
 import SEO from "@/components/SEO";
 import { getNextDrawDate, formatNextDrawDateShort } from "@/lib/seo-utils";
+import confetti from "canvas-confetti"; // Restored import
 
 const Index = () => {
   const [results, setResults] = useState<{ tickets: Ticket[], explanation: string } | null>(null);
@@ -78,6 +79,36 @@ const Index = () => {
       });
       
       showSuccess(`${tickets.length} tickets succesvol gegenereerd.`);
+
+      // Trigger Confetti Celebration (Restored)
+      const duration = 2000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 50 };
+
+      const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+
+      const interval: any = setInterval(function() {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        const particleCount = 50 * (timeLeft / duration);
+        // since particles fall down, start a bit higher than random
+        confetti({
+          ...defaults, 
+          particleCount,
+          origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+          colors: ['#00C853', '#C6A95F', '#ffffff'] // Emerald, Gold, White
+        });
+        confetti({
+          ...defaults, 
+          particleCount,
+          origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+          colors: ['#00C853', '#C6A95F', '#ffffff']
+        });
+      }, 250);
 
       trackEvent("Ticket Generated", {
         numTickets: config.tickets,
