@@ -4,12 +4,13 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from './Logo';
 import { Button } from "@/components/ui/button";
-import { History, Sparkles, AlertCircle, BookOpen } from "lucide-react";
+import { History, Sparkles, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import SystemClock from './SystemClock';
 import { getNextDrawDate } from "@/lib/seo-utils";
 import { isSameDay } from "date-fns";
 import DisclaimerBanner from './DisclaimerBanner';
+import { ModeToggle } from './ModeToggle';
 
 const Navbar = () => {
   const location = useLocation();
@@ -17,13 +18,11 @@ const Navbar = () => {
   const isDraws = location.pathname === "/draws";
   const isWiki = location.pathname === "/wiki";
   
-  // Check if today is draw day
   const nextDraw = getNextDrawDate();
   const isDrawDay = isSameDay(new Date(), nextDraw);
 
   return (
     <div className="sticky top-0 z-50 flex flex-col w-full">
-      {/* Banner sits above the main navbar */}
       <DisclaimerBanner />
       
       <nav className="w-full border-b border-border/5 bg-background/80 backdrop-blur-md">
@@ -61,7 +60,7 @@ const Navbar = () => {
                   "text-xs sm:text-sm font-medium transition-all duration-200",
                   isHome 
                     ? "text-emerald bg-emerald/10 hover:bg-emerald/20 hover:text-emerald" 
-                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                    : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"
                 )}
               >
                 <Sparkles size={16} className="mr-2" />
@@ -78,7 +77,7 @@ const Navbar = () => {
                   "text-xs sm:text-sm font-medium transition-all duration-200",
                   isDraws 
                     ? "text-emerald bg-emerald/10 hover:bg-emerald/20 hover:text-emerald" 
-                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                    : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"
                 )}
               >
                 <History size={16} className="mr-2" />
@@ -95,7 +94,7 @@ const Navbar = () => {
                   "text-xs sm:text-sm font-medium transition-all duration-200",
                   isWiki 
                     ? "text-emerald bg-emerald/10 hover:bg-emerald/20 hover:text-emerald" 
-                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                    : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"
                 )}
               >
                 <BookOpen size={16} className="mr-2" />
@@ -103,9 +102,14 @@ const Navbar = () => {
                 <span className="sm:hidden">Wiki</span>
               </Button>
             </Link>
+
+            <div className="pl-2 border-l border-border/10 ml-1">
+              <ModeToggle />
+            </div>
           </div>
         </div>
-        {/* Mobile Clock */}
+        
+        {/* Mobile Clock & Status */}
         <div className="md:hidden flex justify-between items-center px-4 py-2 bg-background/80 backdrop-blur-md border-b border-border/5">
           <SystemClock />
           {isDrawDay && (
