@@ -85,7 +85,13 @@ const Index = () => {
       });
       
       setTimeout(() => {
-        document.getElementById('results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Scroll adjustment for better visibility on mobile/desktop
+        const element = document.getElementById('results');
+        if (element) {
+           const yOffset = -100; // Offset to not hide behind sticky header
+           const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+           window.scrollTo({top: y, behavior: 'smooth'});
+        }
       }, 100);
     } catch (err) {
       console.error("Generatie mislukt:", err);
@@ -192,8 +198,9 @@ const Index = () => {
                   </section>
                 )}
 
-                <section id="generator-section" className="grid grid-cols-1 lg:col-span-12 gap-6 md:gap-12 items-start pt-12 md:pt-16">
-                  {/* Changed to lg:sticky so it doesn't stick on mobile */}
+                {/* UPDATED GRID CLASS HERE: Added lg:grid-cols-12 */}
+                <section id="generator-section" className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-12 items-start pt-12 md:pt-16">
+                  
                   <div className="lg:col-span-5 lg:sticky lg:top-24 z-30">
                     <GeneratorPanel onGenerate={handleGenerate} isLoading={isGenerating} />
                   </div>
@@ -256,7 +263,7 @@ const Index = () => {
             
             <DisclaimerSection />
             
-            {/* AD 3: Before Footer - Updated to match AD 1 */}
+            {/* AD 3: Before Footer */}
             <AdMockup 
               size="leaderboard" 
               imageUrl="https://jxysvqcivgshyhkquoib.supabase.co/storage/v1/object/public/logo/ads1.png"
